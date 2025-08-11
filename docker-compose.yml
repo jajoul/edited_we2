@@ -1,0 +1,170 @@
+version: "3.9"
+
+services:
+  db:
+    container_name: db
+    image: postgres:alpine
+    volumes:
+      - ./postgre/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    restart: always
+    ports:
+      - 5432:5432
+    networks:
+      - internal_network
+
+  backend:
+    build: 
+      context: ./backend 
+      dockerfile: dockerfiles/dev/django/Dockerfile
+    container_name: backend    
+    command: >
+            sh -c "pwd && ls &&
+                   echo Migrating... && python manage.py makemigrations --noinput &&
+                   echo Second... && python manage.py migrate && 
+                   echo Third... && python manage.py initial_users_fake_data &&
+                   echo Collecting statics... && python manage.py collectstatic --noinput &&
+                   echo Forth... && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./backend/core:/app
+      - static_volume:/app/static
+      - media_volume:/app/media
+    ports:
+      - "8000:8000"
+    # environment:
+    #   - SECRET_KEY=test
+    #   - DEBUG=True
+    #   - COMINGSOON=False
+    #   - SHOW_SWAGGER=True
+    networks:
+      - internal_network
+    env_file:
+      - ./backend/envs/dev/django/.env
+    restart: always
+    depends_on:
+      - redis
+      - elasticsearch
+  
+  elasticsearch:
+    # image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+    image: elasticsearch:7.14.1
+    container_name: elasticsearch
+    networks:
+      - internal_network
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - discovery.type=single-node
+    #ulimits:
+      #memlock:
+        #soft: -1
+        #hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    # Increase memory settings
+    #mem_limit: 2g
+    #memswap_limit: 2g
+
+  redis:
+    container_name: backend_redis
+    image: redis
+    restart: always
+    networks:
+      - internal_network
+    ports:
+    - "6378:6379"
+    command: redis-server --save 60 1 --loglevel warning
+
+  # nodejs:
+  #   container_name: nodejs
+  #   build: 
+  #     context: ./live/example1
+  #     dockerfile: Dockerfile
+  #   restart: always
+  #   networks:
+  #     - internal_network
+  #   ports:
+  #     - "3000:3000"
+  #     - "5000:5000"
+  #     - "2000-2020:2000-2020"
+  #   command:  >
+  #           sh -c "node --version && npm --version && pwd && ls && \
+  #           node app.js"
+  #   volumes:
+  #     - ./live/example1:/app
+  #     - ./certbot/conf:/app/ssl
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: always
+    networks:
+      - internal_network
+    command: >
+        sh -c "node --version && yarn --version && pwd && ls && \
+        yarn start"
+    ports:
+      - "3000:3000"
+
+  certbot:
+    container_name: certbot
+    image: certbot/certbot:latest
+    networks:
+      - internal_network
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    ports:
+      - 80:80
+      - 443:443
+    restart: always
+    networks:
+      - internal_network
+    volumes:
+      - ./nginx/conf/default.conf:/etc/nginx/conf.d/default.conf
+      - ./jitsi/docker-jitsi-meet-stable-9584-1/watermark.svg:/usr/share/nginx/html/images/watermark.svg
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+      - static_volume:/app/static
+      - media_volume:/app/media
+
+  # nginx:
+  #   container_name: nginx
+  #   image: nginx:latest
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   volumes:
+  #     - ./nginx/conf/:/etc/nginx/conf.d/:ro
+  #     - ./certbot/www:/var/www/certbot/:ro
+  #     - ./certbot/conf/:/etc/nginx/ssl/:ro
+  #     - static_volume:/home/app/static
+  #     - media_volume:/home/app/media
+  #   restart: always
+  #   networks:
+  #     - internal_network
+  #   depends_on:
+  #     - backend
+  #     - frontend
+
+volumes:
+  static_volume:
+  media_volume:
+  esdata:
+    driver: local
+
+networks:
+  internal_network: # Define the custom network
+    external: true
+    name: internal-network 
+    driver: bridge # Specify the network driver (bridge is the default)

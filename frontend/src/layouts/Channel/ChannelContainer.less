@@ -1,0 +1,160 @@
+.WeTooChannelContainer {
+  flex: 1;
+  display: flex;
+
+  &__header{
+    margin-bottom: -80px;
+  }
+
+  &__followBtn{
+    z-index: 5;
+    max-width: 240px;
+  }
+
+  &__headerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    padding: 0 20px;
+    
+    width: 100%;
+  }
+
+  &__loader{
+    margin: 24px auto;
+  }
+
+  &__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 30px 35px;
+    height: 100%;
+    overflow: auto;
+
+    @media screen and (max-width: 767px) {
+      padding: 0;
+    }
+  }
+
+  &__template.WeTooPageTemplate {
+    flex: initial;
+    padding-bottom: 0;
+    height: auto;
+    overflow: initial;
+    padding: 0;
+
+    .WeTooPageTemplate__box{
+      @media screen and (max-width: 767px) {
+        margin: 0;
+        border-radius: 0;
+        background-color: transparent;
+      }
+    }
+
+    .WeTooPageTemplate__title{
+      @media screen and (max-width: 767px) {
+        margin-bottom: -1px;
+        background-color: #630094;
+        color: #fff;
+
+        img {
+          filter: brightness(20);
+        }
+      }
+    }
+  }
+
+  &__list {
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+
+    @media screen and (max-width: 767px){
+      padding: 0 18px 30px;
+    }
+
+    &__card {
+      margin-bottom: 10px;
+    }
+
+    &__message {
+      width: 100%;
+      text-align: center;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 18px;
+      color: #2d2d2d;
+    }
+  }
+
+  &__title {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    color: #535353;
+    margin: 0 auto 10px 0;
+  }
+
+  &__description {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    text-align: center;
+    margin: 0 0 25px;
+    color: #2d2d2d;
+  }
+
+  &__addBtn {
+    position: fixed;
+    background: linear-gradient(107.19deg, #300048 0%, #650196 100%);
+    border: 2px solid #ffffff;
+    bottom: 35px;
+    right: 405px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50px;
+    color: #fff;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+
+    @media screen and (max-width: 1365px) {
+      right: 330px;
+    }
+
+    @media screen and (max-width: 1023px) {
+      width: 50px;
+      height: 50px;
+      bottom: 100px;
+    }
+
+    @media screen and (max-width: 767px) {
+      right: 25px;
+      bottom: 90px;
+    }
+
+    &::after,
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #ffffff;
+    }
+
+    &::after {
+      width: 1.5px;
+      height: 14px;
+    }
+
+    &::before {
+      width: 14px;
+      height: 1.5px;
+    }
+  }
+}

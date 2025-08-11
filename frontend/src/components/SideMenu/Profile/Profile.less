@@ -1,0 +1,266 @@
+.WeTooProfile {
+  width: 100%;
+  height: 100%;
+  // position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+
+  &__questionTitle {
+    margin-top: 20px;
+    color: #630094;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  &__headerImg {
+    width: 100%;
+    height: 350px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+  }
+
+  &__header {
+    z-index: 5;
+
+    .WeTooViewHeader__backIcon {
+      filter: brightness(5);
+    }
+
+    .WeTooViewHeader__title {
+      color: #fff;
+    }
+
+    .WeTooViewHeader__closeIcon {
+      background: #fff;
+      color: #650196;
+    }
+  }
+
+  &__avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 12px;
+    padding: 3px;
+    background-color: #fff;
+    z-index: 5;
+    margin: 10px auto;
+    position: relative;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    &--container{
+      img {
+        object-fit: contain;
+      }
+    }
+
+    &__changeBtn {
+      position: absolute;
+      right: 15px;
+      bottom: 15px;
+      width: 23px;
+      height: 23px;
+      padding: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    &__input {
+      display: none;
+    }
+  }
+
+  &__editBtn {
+    margin: 10px auto;
+    padding: 4px 20px;
+    background-color: #eee;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+
+    img {
+      width: 24px;
+    }
+  }
+
+  &__name {
+    margin: 10px auto;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: #000;
+    position: relative;
+    width: 100%;
+  }
+
+  &__dataBox {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    margin-top: 15px;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.04);
+    border-radius: 15px;
+    padding: 25px 35px;
+
+    &__data {
+      display: flex;
+      flex-direction: column;
+
+      label {
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      span {
+        font-size: 14px;
+        font-weight: 400;
+      }
+
+      &:first-child {
+        margin-bottom: 25px;
+      }
+    }
+  }
+}
+
+.weTooProfileEditBox {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.04);
+  border-radius: 15px;
+  padding: 20px 30px;
+
+  &:not(:first-child) {
+    margin-top: 18px;
+  }
+
+  .weTooProfileEditInput {
+    &:not(:first-child) {
+      margin-top: 20px;
+    }
+  }
+}
+
+.weTooProfileEditGender {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 20px;
+
+  &__label {
+    color: #535353;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  &__selectionList {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 15px;
+
+    input {
+      display: none;
+    }
+
+    &__label {
+      color: #535353;
+      font-size: 13px;
+      font-weight: 400;
+      cursor: pointer;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 5px;
+
+      &--active {
+        color: #630094;
+        border-color: #630094;
+      }
+    }
+  }
+}
+
+.weTooProfileEditInfoBox {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &:not(:first-child) {
+    margin-top: 15px;
+  }
+
+  &__label {
+    color: #535353;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    img {
+      width: 18px;
+      cursor: pointer;
+    }
+  }
+
+  &__content {
+    color: #070707;
+    font-size: 14px;
+    font-weight: 400;
+    border-bottom: 1px solid #b3b3b3;
+    padding-bottom: 9px;
+  }
+}
+
+.weTooProfileEditBtn {
+  margin-top: 18px;
+}
+
+.weTooChangeInfoByToken {
+  &__otp {
+    margin-bottom: 25px;
+    margin-top: 15px;
+  }
+
+  &__btn {
+    margin-top: 25px;
+  }
+
+  &__title {
+    color: #535353;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 15px;
+    text-align: center;
+  }
+
+  &__description {
+    margin: 10px 0 0;
+    font-size: 12px;
+    font-weight: 400;
+    text-align: center;
+    line-height: normal;
+  }
+}

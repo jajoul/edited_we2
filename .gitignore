@@ -1,0 +1,31 @@
+# PostgreSQL
+postgre/data/
+
+# SQLite
+backend/core/_db.sqlite3
+
+# Logs
+backend/core/log.django
+nginx/access.log
+nginx/error.log
+
+# Python
+backend/venv/
+**/__pycache__/
+*.pyc
+
+# Node.js
+frontend/node_modules/
+frontend/dist/
+frontend/.umi/
+frontend/.umi-production/
+
+# Environment variables
+.env
+*.env
+jitsi/docker-jitsi-meet-stable-9584-1/.env
+live/.env
+
+# Other
+nginx/temp/
+certbot/

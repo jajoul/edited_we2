@@ -1,0 +1,35 @@
+import Title, { size } from "@/components/Title/Title";
+import React from "react";
+import "./RowView.less";
+import TopicCard from "./TopicCard.tsx/TopicCard";
+import avatar from "@/assets/images/main3.png";
+import { Link } from "umi";
+import { getFilesBaseOnLanguages } from "../../../language/language";
+import { Topic } from "@/assets/Provider/types";
+
+const RowView = (props: { title: string; id: string; topics: Topic[] }) => {
+  const lang = getFilesBaseOnLanguages();
+  const { title, id, topics } = props;
+
+  if (!!topics?.length)
+    return (
+      <div className="WeTooRowView">
+        <div className="WeTooRowView__header">
+          <Title size={size.small} title={title} />
+          <Link to={`/topics/${id}`} className="WeTooRowView__header__btn">
+            {lang["see_all"]}
+          </Link>
+        </div>
+        <div className="WeTooRowView__row">
+          {topics?.map((item, index) => (
+            <TopicCard className="WeTooRowView__row__topicCard" key={index} data={item} />
+          ))}
+
+          <div className="WeTooRowView__row__endShadow" />
+        </div>
+      </div>
+    );
+  else return <></>;
+};
+
+export default RowView;

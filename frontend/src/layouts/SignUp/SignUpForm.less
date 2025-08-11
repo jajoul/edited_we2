@@ -1,0 +1,114 @@
+.WeTooSignUpForm {
+  width: 650px;
+  padding: 0 65px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #f6f7fb;
+  height: 100%;
+  min-height: 100vh;
+
+  &__mobileTopBackground {
+    display: none;
+
+    @media screen and (max-width: 767px) {
+      display: flex;
+      width: 100%;
+      height: 33vh;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      background: linear-gradient(
+        180deg,
+        #630094 0%,
+        #821cb4 25.45%,
+        rgba(128, 27, 178) 50.11%,
+        rgba(126, 25, 175, 0.93531) 74.17%,
+        #630094 100%
+      );
+      &__header {
+        z-index: 1;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          180deg,
+          #630094 0%,
+          #821cb4 23.45%,
+          transparent 74.17%,
+          #630094 100%
+        );
+      }
+      &__image {
+        width: 100%;
+        height: 100%;
+        background-image: url("../../assets/images/mobileTopBg.png");
+        opacity: 14%;
+      }
+    }
+  }
+
+  @media screen and (max-width: 1919px) {
+    width: 550px;
+  }
+
+  @media screen and (max-width: 1365px) {
+    width: 450px;
+  }
+
+  @media screen and (max-width: 1279px) {
+    padding: 0 45px;
+  }
+
+  @media screen and (max-width: 1023px) {
+    padding: 0 25px;
+    width: 350px;
+  }
+
+  @media screen and (max-width: 767px) {
+    width: 100%;
+  }
+
+  &__body {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+
+    @media screen and (max-width: 767px) {
+      max-width: 400px;
+    }
+  }
+
+  &__flag {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+
+    @media screen and (max-width: 767px) {
+      display: none;
+    }
+  }
+
+  &__form {
+    padding: 30px;
+    background: #ffffff;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.04);
+    border-radius: 15px;
+  }
+
+  &__steps {
+    margin-top: 70px;
+  }
+
+  &__title.WeTooTitle  {
+    width: 100%;
+    text-transform: capitalize;
+
+    @media screen and (max-width: 767px) {
+      color: #fff;
+    }
+  }
+}

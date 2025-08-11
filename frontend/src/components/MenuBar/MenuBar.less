@@ -1,0 +1,177 @@
+.WeTooMenuBar {
+  width: 310px;
+  background-color: #fff;
+
+  @media screen and (max-width: 1919px) {
+    width: 240px;
+  }
+
+  @media screen and (max-width: 1365px) {
+    width: 180px;
+  }
+
+  @media screen and (max-width: 1023px) {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    box-shadow: 0px -1px 4px rgba(196, 196, 196, 0.3);
+  }
+
+  &__inputContainer {
+    margin-top: 40px;
+    padding: 0 10px;
+    width: 100%;
+    display: flex;
+    position: relative;
+
+    @media screen and (max-width: 1023px) {
+      display: none;
+    }
+  }
+
+  &__input {
+    width: 100%;
+    background: #f5f5f5;
+    border-radius: 39px;
+    border: none;
+    padding: 13px 13px 13px 40px;
+    outline: none;
+    font-weight: 500;
+    font-size: 13px;
+
+    @media screen and (max-width: 1365px) {
+      padding: 8px 10px 8px 30px;
+    }
+  }
+
+  &__searchIcon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 20px;
+
+    @media screen and (max-width: 1365px) {
+      width: 15px;
+    }
+  }
+
+  &__cancelIcon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 15px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50px;
+    background-color: #fff;
+    cursor: pointer;
+
+    &::after,
+    &::before {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      content: "";
+      background-color: #a3a3a3;
+      width: 2px;
+      height: 10px;
+      transform-origin: center;
+    }
+
+    &::after {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+    &::before {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+  }
+
+  &__title {
+    font-size: 12px;
+    line-height: 14px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #808080;
+    margin-top: 30px;
+    margin-left: 50px;
+
+    @media screen and (max-width: 1365px) {
+      margin-left: 25px;
+    }
+
+    @media screen and (max-width: 1023px) {
+      display: none;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+
+    @media screen and (max-width: 1023px) {
+      flex-direction: row;
+      justify-content: center;
+      margin: 15px 0;
+      align-items: stretch;
+    }
+
+    &__label {
+      margin-left: 10px;
+      font-weight: 500;
+      font-size: 13px;
+      line-height: 15px;
+      color: #000000;
+
+      @media screen and (max-width: 1023px) {
+        font-size: 10px;
+        margin: 4px 0 0;
+
+        display: none;
+      }
+    }
+
+    &__item {
+      display: flex;
+      align-items: center;
+      padding: 13px;
+      padding-left: 45px;
+      cursor: pointer;
+      border-left: 5px solid transparent;
+
+      @media screen and (max-width: 1365px) {
+        padding-left: 20px;
+      }
+
+      @media screen and (max-width: 1023px) {
+        border: none;
+        padding: 3px 12px;
+        flex-direction: column;
+        border-radius: 10px;
+        background: #6c929d0d;
+        margin: 0 15px;
+        justify-content: center;
+      }
+
+      &:hover {
+        background-color: #f0f0f0;
+      }
+
+      &--active {
+        background-color: #e0ccea;
+        border-color: #630094;
+
+        .WeTooMenuBar__list__label {
+          color: #630094;
+
+          @media screen and (max-width: 1023px) {
+            display: flex;
+            padding: 0 20px;
+          }
+        }
+      }
+    }
+  }
+}

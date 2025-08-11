@@ -1,0 +1,33 @@
+.WeTooOTPComponent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__input {
+    text-align: center;
+    width: 31px;
+    height: 49px;
+    border-radius: 5px;
+    font-size: 24px;
+    font-weight: 600;
+    border: 1px solid #B3B3B3;
+    margin: 0 5px;
+
+    &:focus {
+      border-color: #818181;
+      outline: none;
+    }
+  }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}

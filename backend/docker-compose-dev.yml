@@ -1,0 +1,62 @@
+version: "3.9"
+
+services:
+  # db:
+  #   container_name: db
+  #   image: postgres:alpine
+  #   volumes:
+  #     - ./postgre/data:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_DB=postgres
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgres
+  #   restart: always
+  #   ports:
+  #     - 5432:5432
+
+  backend:
+    build: 
+      context: . 
+      dockerfile: dockerfiles/dev/django/Dockerfile
+    container_name: backend    
+    command: >
+            sh -c "python manage.py makemigrations --noinput && 
+                   python manage.py migrate && 
+                   python manage.py initial_users_fake_data &&
+                   python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./core:/app
+    ports:
+      - "8000:8000"
+    # environment:
+    #   - SECRET_KEY=test
+    #   - DEBUG=True
+    #   - COMINGSOON=False
+    #   - SHOW_SWAGGER=True
+    env_file:
+      - envs/dev/django/.env
+    restart: always
+    depends_on:
+      - redis
+  
+  redis:
+    container_name: redis
+    image: redis
+    restart: always
+    ports:
+    - "6379:6379"
+    command: redis-server --save 60 1 --loglevel warning
+
+  # nodejs:
+  #   container_name: nodejs
+  #   build: 
+  #     context: ../../NodeJS/first/example1
+  #     dockerfile: ./Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #     - "5000:5000"
+  #     - "2000-2020:2000-2020"
+  #   volumes:
+  #     - ../../NodeJS/first/example1:/app
+
+

@@ -1,0 +1,37 @@
+.WeTooHome {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  min-height: 100vh;
+
+  &__pageCover.WeTooPageCover {
+    @media screen and (max-width: 767px) {
+      display: none;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 650px;
+    background-color: #f6f7fb;
+    position: relative;
+
+    @media screen and (max-width: 1919px) {
+      width: 550px;
+    }
+
+    @media screen and (max-width: 1365px) {
+      width: 450px;
+    }
+
+    @media screen and (max-width: 1023px) {
+      width: 350px;
+    }
+
+    @media screen and (max-width: 767px) {
+      width: 100%;
+    }
+  }
+}

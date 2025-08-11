@@ -1,0 +1,39 @@
+.WeTooActivityCard {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  padding: 15px 10px;
+  width: 100%;
+  background-color: #ebebeb;
+  border-bottom: 1px solid #300048;
+
+  &__imgContainer {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #630094;
+    margin-right: 12px;
+    border-radius: 12px;
+    background: conic-gradient(from 1.9rad, #63009433, #ffffff);
+  }
+
+  &__title {
+    color: #000;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 150%;
+  }
+
+  &__description {
+    color: #555;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 150%;
+  }
+}
+
+.WeTooActivityCard--active {
+  background-color: #f4deff;
+}

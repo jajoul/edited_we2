@@ -1,0 +1,21 @@
+.WeTooStepViewer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__step {
+    flex: 1;
+    height: 5px;
+    border-radius: 20px;
+    background-color: #b3b3b3;
+
+    &:not(:last-child) {
+      margin-right: 6px;
+    }
+
+    &--active {
+      background-color: #630094;
+    }
+  }
+}

@@ -1,0 +1,97 @@
+(index) {
+	# Default /
+	handle_path /* {
+		root * /var/www/
+		file_server
+	}
+}
+(general_rules) {
+	# LiveKit API
+	@openvidu path /twirp/* /rtc/* /rtc
+	handle @openvidu {
+		reverse_proxy http://openvidu:7880
+	}
+
+	# OpenVidu v2 Custom layout
+	redir /openvidu/layouts /openvidu/layouts/
+	handle_path /openvidu/layouts/* {
+		uri strip_prefix /openvidu/layouts
+		root * /var/www/custom-layout
+		file_server
+	}
+
+	# Minio console
+	redir /minio-console /minio-console/
+	handle_path /minio-console/* {
+		uri strip_prefix /minio-console
+		reverse_proxy http://minio:9001
+	}
+
+	# OpenVidu Dashboard
+	redir /dashboard /dashboard/
+	handle_path /dashboard/* {
+		rewrite * {path}
+		reverse_proxy http://dashboard:5000
+	}
+
+	# OpenVidu Call (Default App)
+	redir /openvidu-call /openvidu-call/
+	handle_path /openvidu-call/* {
+		rewrite * {path}
+		reverse_proxy http://default-app:6080
+	}
+}
+(application_client) {
+	handle_errors {
+		@502 expression {http.error.status_code} == 502
+		rewrite @502 /app502client.html
+		file_server {
+			root /var/www
+		}
+	}
+	reverse_proxy http://host.docker.internal:5080
+}
+
+(application_server) {
+	handle_errors {
+		@502 expression {http.error.status_code} == 502
+		rewrite @502 /app502server.html
+		file_server {
+			root /var/www
+		}
+	}
+	reverse_proxy http://host.docker.internal:6080
+}
+
+# Servers
+:7880 {
+	import general_rules
+	import index
+}
+
+live.me2we2.com {
+	tls alirezamortezaei50@gmail.com
+	reverse_proxy https://62-60-164-69.openvidu-local.dev:7443
+}
+
+https://62-60-164-69.openvidu-local.dev:7443 {
+	tls internal {
+		get_certificate http https://certs.openvidu-local.dev/caddy.pem
+	}
+	import general_rules
+	import index
+}
+
+https://62-60-164-69.openvidu-local.dev:5443 {
+	tls internal {
+		get_certificate http https://certs.openvidu-local.dev/caddy.pem
+	}
+	import application_client
+}
+
+https://62-60-164-69.openvidu-local.dev:6443 {
+	tls internal {
+		get_certificate http https://certs.openvidu-local.dev/caddy.pem
+	}
+	import application_server
+}

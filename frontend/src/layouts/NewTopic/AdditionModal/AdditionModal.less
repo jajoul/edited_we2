@@ -1,0 +1,86 @@
+.WeTooAdditionModal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 300px;
+  position: relative;
+
+  &__backBtn{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 2;
+    cursor: pointer;
+    filter: brightness(100);
+  }
+
+  &__borderTop {
+    width: 226px;
+    height: 5px;
+    background-color: #630094;
+    border-radius: 0 0 15px 15px;
+  }
+
+  &__title {
+    margin-top: 9px;
+  }
+
+  &__list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    input {
+      display: none;
+    }
+
+    &__item {
+      padding: 5px 10px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      background-color: #d1d1d133;
+      border-bottom: 1px solid #66019833;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 21px;
+      color: #535353;
+      cursor: pointer;
+    }
+
+    &__icon {
+      width: 20px;
+      margin-right: 10px;
+      object-fit: contain;
+    }
+
+    &__preview {
+      height: 45px;
+      min-width: 46px;
+      margin-left: auto;
+
+      img , 
+      video{
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+
+  &__btn {
+    max-width: 240px;
+    margin: 12px auto 20px;
+  }
+}
+
+.WeTooAdditionModal--map{
+    max-width: 1000px;
+    max-height: 600px;
+    width: 95vw;
+    height: 95vh;
+}

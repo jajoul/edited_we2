@@ -1,0 +1,39 @@
+.WeTooSwitchButton {
+    width: 65px;
+    height: 30px;
+    border: 1px solid #848484;
+    border-radius: 40px;
+    background-color: #FDFDFD;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.WeTooSwitchButton::after {
+    position: absolute;
+    content: '';
+    top: 50%;
+    transform: translateY(-50%);
+    left: 3px;
+    // right: auto;
+    width: 22px;
+    height: 22px;
+    background-color: #535353;
+    border-radius: 20px;
+    transition: all 0.2s;
+}
+
+.WeTooSwitchButtonInput {
+  display: none;
+}
+
+.WeTooSwitchButtonInput:checked + .WeTooSwitchButton {
+ background-color: #F6EEF6;
+ border-color: #420834;   
+}
+
+.WeTooSwitchButtonInput:checked + .WeTooSwitchButton::after {
+    background-color: #630094;
+    left: auto;
+    right: 3px;
+}

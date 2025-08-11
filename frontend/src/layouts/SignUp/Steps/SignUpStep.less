@@ -1,0 +1,175 @@
+.WeTooSignUpStepOne {
+  display: flex;
+  flex-direction: column;
+
+  &__text {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    margin: 12px auto 0;
+
+    a {
+      text-decoration: none;
+      color: #00a3ff;
+    }
+  }
+
+  &__rules{
+    max-height: 100px;
+    overflow: auto;
+    border: 1px solid #b1b1b1;
+    margin-top: 16px;
+    border-radius: 12px;
+  }
+
+  &__accept{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    margin-top: 16px;
+    font-weight: 500;
+
+    input {
+      margin-right: 10px;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+  }
+}
+
+.WeTooSignUpStepTwo {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+
+  &__imagePicker {
+    width: 100%;
+    display: flex;
+
+    label {
+      display: inline-block;
+      width: 95px;
+      height: 95px;
+      border-radius: 100px;
+      border: 5px solid #630094;
+      margin: 12px auto 0;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 100px;
+    }
+
+    input {
+      display: none;
+    }
+  }
+
+  &__input {
+    margin: 10px 0 20px;
+  }
+
+  &__subTitle {
+    margin-top: 20px;
+    text-transform: capitalize;
+  }
+
+  &__selectionList {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 15px;
+
+    &__label {
+      color: #535353;
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 20px;
+      cursor: pointer;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 5px;
+      text-transform: capitalize;
+
+      &--active {
+        color: #630094;
+        border-color: #630094;
+      }
+    }
+
+    input {
+      display: none;
+    }
+  }
+}
+
+.WeTooSignUpStep__input {
+  margin-bottom: 13px;
+  width: 100%;
+}
+
+.WeTooSignUpStep__btn {
+  margin-top: 25px;
+}
+
+.WeTooSignUpStep__spinner {
+  margin-left: 10px;
+}
+
+.SignUpStepThreeModal {
+  .WeTooModal__content{
+    @media screen and (max-width: 767px) {
+      border-radius: 0;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 130px 25px;
+
+    @media screen and (max-width: 767px) {
+      width: 100vw;
+      height: 100vh;
+      padding: 20px;
+    }
+  }
+
+  &__image {
+    width: 233px;
+  }
+
+  &__subTitle {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 27px;
+    color: #404040;
+    text-align: center;
+    text-transform: capitalize;
+  }
+
+  &__description {
+    margin: 5px 0 0;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #404040;
+    text-align: center;
+  }
+
+  &__btn{
+    margin-top: 35px;
+
+    @media screen and (max-width: 767px) {
+      max-width: 250px;
+      margin: 35px auto 0;
+    }
+  }
+}

@@ -1,0 +1,75 @@
+.WeTooCreateComment {
+  width: 100%;
+  margin-top: 13px;
+  background-color: #fff;
+  padding: 16px;
+  border: 0.09px solid #878787;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.04);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &__stars {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 18px;
+
+    svg {
+      cursor: pointer;
+      path {
+        stroke: #bebebe;
+        transition: all 0.2s;
+      }
+    }
+
+    svg&__active {
+      path{
+        fill: #ffa500;
+        stroke: #ffa500;
+      }
+    }
+  }
+
+  &__header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    color: #535353;
+
+    &--like {
+      cursor: pointer;
+      fill: #ff0000;
+      path {
+        stroke: #ff0000;
+      }
+    }
+
+    &--unlike {
+      fill: transparent;
+
+      path {
+        stroke: #535353;
+      }
+    }
+  }
+
+  &__body {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 12px;
+
+    &__btn {
+      margin-top: 20px;
+    }
+  }
+}

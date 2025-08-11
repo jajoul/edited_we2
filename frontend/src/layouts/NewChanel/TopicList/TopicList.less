@@ -1,0 +1,25 @@
+.WeTooTopicList {
+    width: 370px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    padding: 0 50px;
+    height: 100%;
+    overflow: auto;
+
+    @media screen and (max-width: 1365px) {
+        padding: 0 30px;
+        width: 300px;
+    }
+
+    @media screen and (max-width: 767px) {
+        display: none;
+    }
+
+    &__card.WeTooTopicCard{
+        width: 100%;
+        flex: none;
+        margin-bottom: 12px;
+    }
+}

@@ -1,0 +1,38 @@
+.weTooSupportList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+
+  &__item {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    padding: 20px 0;
+
+    &__img {
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: linear-gradient(to right, #650196, #300048);
+      margin-right: 10px;
+
+      img {
+        filter: grayscale(1) brightness(20);
+      }
+    }
+
+    &__content {
+      flex: 1;
+      color: #6b6b6b;
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: -0.3px;
+      padding-top: 15px;
+    }
+  }
+}

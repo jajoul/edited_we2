@@ -1,0 +1,80 @@
+.WeTooProfileLogoNav--mobileShow {
+    width: 100%;
+    background: linear-gradient(180deg,
+            #630094 0%,
+            #821cb4 50%,
+            rgba(128, 27, 178, 0.85) 100%);
+    padding: 25px 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 250px;
+    position: absolute;
+
+    @media screen and (min-width: 767px) {
+        display: none;
+    }
+}
+
+.WeTooProfileLogoNav {
+    &__profileContainer {
+        width: 200px;
+        height: 172px;
+        background-color: #fff;
+        border-radius: 20px;
+        margin: auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+
+        &__logo {
+            transform: scale(7);
+
+            path {
+                fill: #821cb4;
+            }
+        }
+    }
+
+    &__burgerManuContainer {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 57px;
+        left: 30px;
+    }
+
+    &__burgerManu {
+        position: relative;
+        width: 20px;
+        height: 2px;
+        background-color: #fff;
+
+        &::after,
+        &::before {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            top: -6px;
+            left: 0;
+            content: "";
+        }
+
+        &::before {
+            top: 6px;
+        }
+
+    }
+
+    &__profileModal {
+        position: absolute;
+        top: 80px;
+        left: 300px;
+    }
+}

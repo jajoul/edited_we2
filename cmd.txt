@@ -1,0 +1,1 @@
+nginx.exe -p "D:\G\jajoul.me\Coding with jajoul\Ponisha Projects\we2\backup\new we 2\wetoo\wetoo\nginx" -c conf\default.conf

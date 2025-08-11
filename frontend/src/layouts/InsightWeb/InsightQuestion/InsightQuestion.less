@@ -1,0 +1,137 @@
+.WeTooInsightQuestion {
+  width: 380px;
+  padding: 0 35px;
+  height: 100%;
+  overflow: auto;
+
+  @media screen and (max-width: 1919px) {
+    width: 315px;
+  }
+
+  @media screen and (max-width: 1365px) {
+    width: 270px;
+    padding: 0 25px;
+  }
+
+  @media screen and (max-width: 1239px) {
+    width: 100%;
+    height: auto;
+    padding: 0;
+    overflow: unset;
+  }
+
+  &__title {
+    @media screen and (max-width: 1239px) {
+      margin: 0 25px;
+    }
+
+    @media screen and (max-width: 767px) {
+      margin: 0 15px;
+    }
+  }
+
+  &__questionBox {
+    padding: 10px;
+    background-color: #fdfdfd;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    @media screen and (max-width: 1239px) {
+      margin: 0 25px;
+    }
+
+    @media screen and (max-width: 767px) {
+      margin: 0 15px;
+    }
+
+    &__question {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 18px;
+      color: #2d2d2d;
+    }
+
+    &__btn.WeTooBtn {
+      margin: 18px auto 0;
+      font-size: 12px;
+      padding: 7px;
+      max-width: 210px;
+    }
+
+    &__bgImg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    &__answers {
+      display: grid;
+      width: 100%;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    &__answer {
+      display: flex;
+      align-items: start;
+      justify-content: start;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 18px;
+      color: #4d4d4d;
+      margin-bottom: 10px;
+      width: 100%;
+      cursor: pointer;
+
+      label {
+        flex: 1;
+      }
+    }
+  }
+
+  &__imgList {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    @media screen and (max-width: 1239px) {
+      flex-direction: row;
+      overflow-x: auto;
+      align-items: start;
+      justify-content: start;
+      height: 125px;
+      padding: 0;
+    }
+
+    &__image {
+      width: 100%;
+      margin-bottom: 25px;
+
+      @media screen and (max-width: 1239px) {
+        height: 100%;
+        margin-bottom: 0;
+        padding: 7px;
+      }
+
+      img {
+        width: 100%;
+        border-radius: 20px;
+
+        @media screen and (max-width: 1239px) {
+          width: auto;
+          height: 100%;
+        }
+      }
+    }
+  }
+}
+
+.WeTooInsightQuestion--mobileHide {
+  @media screen and (max-width: 1239px) {
+    display: none;
+  }
+}

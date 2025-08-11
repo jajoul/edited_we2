@@ -1,0 +1,107 @@
+.WeTooLogin {
+  display: flex;
+  flex-direction: row;
+  background-color: #f6f7fb;
+
+  &__pageCover.WeTooPageCover {
+    @media screen and (max-width: 767px) {
+      display: none;
+    }
+  }
+
+  &__titleColor.WeTooTitle {
+    text-transform: capitalize;
+
+    @media screen and (max-width: 767px) {
+      color: #fff;
+    }
+  }
+
+  &__mobileTopBackground {
+    display: none;
+
+    @media screen and (max-width: 767px) {
+      display: flex;
+      width: 100%;
+      height: 33vh;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      background: linear-gradient(
+        180deg,
+        #630094 0%,
+        #821cb4 25.45%,
+        rgba(128, 27, 178) 50.11%,
+        rgba(126, 25, 175, 0.93531) 74.17%,
+        #630094 100%
+      );
+      &__header {
+        z-index: 1;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          180deg,
+          #630094 0%,
+          #821cb4 23.45%,
+          transparent 74.17%,
+          #630094 100%
+        );
+      }
+      &__image {
+        width: 100%;
+        height: 100%;
+        background-image: url("../../assets/images/mobileTopBg.png");
+        opacity: 14%;
+      }
+    }
+  }
+
+  &__formContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    min-height: 100vh;
+    width: 650px;
+    padding: 65px;
+    z-index: 1;
+
+    @media screen and (max-width: 1919px) {
+      width: 550px;
+    }
+
+    @media screen and (max-width: 1365px) {
+      width: 450px;
+    }
+
+    @media screen and (max-width: 1279px) {
+      padding: 0 45px;
+    }
+
+    @media screen and (max-width: 1023px) {
+      padding: 0 25px;
+      width: 350px;
+    }
+
+    @media screen and (max-width: 767px) {
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+  }
+
+  &__flag {
+    margin-left: auto;
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    cursor: pointer;
+
+    @media screen and (max-width: 767px) {
+      display: none;
+    }
+  }
+}

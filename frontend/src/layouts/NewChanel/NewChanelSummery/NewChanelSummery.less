@@ -1,0 +1,61 @@
+.WeTooNewChanelSummery {
+  .WeTooPageTemplate__box {
+    position: relative;
+
+    @media screen and (max-width: 767px) {
+      margin: 0;
+      background-color: transparent;
+      border-radius: 0;
+    }
+  }
+
+  .WeTooPageTemplate__title {
+    @media screen and (max-width: 767px) {
+      background-color: #630094;
+      margin-bottom: -1px;
+      color: #fff;
+    }
+
+    img {
+      @media screen and (max-width: 767px) {
+        filter: brightness(20);
+      }
+    }
+  }
+
+  &__textContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    padding: 0 20px;
+    margin-top: -80px;
+    width: 100%;
+  }
+
+  &__title {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 21px;
+    color: #535353;
+    margin: 0;
+    margin-bottom: 8px;
+  }
+
+  &__description {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #2d2d2d;
+    margin: 0 0 30px 0;
+
+    &--center {
+      text-align: center;
+    }
+  }
+
+  &__btn {
+    max-width: 240px;
+    margin: 0 auto 30px;
+  }
+}

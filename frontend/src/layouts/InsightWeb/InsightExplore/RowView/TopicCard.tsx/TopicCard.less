@@ -1,0 +1,94 @@
+.WeTooTopicCard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #fdfdfd;
+  border-radius: 11px;
+  padding: 15px;
+  height: auto;
+  transition: all 0.2s;
+
+  @media screen and (max-width: 767px) {
+    padding: 10px; 
+  }
+
+  &:hover{
+    box-shadow: 0 4px 6px #e0e0e0;
+    transform: scale(1.02);
+  }
+
+  &__header,
+  &__footer {
+    width: 100%;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+  }
+
+  &__logo {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+    border: 1px solid #630094;
+    border-radius: 100px;
+    padding: 2px;
+  }
+
+  &__avatar {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50px;
+    margin-right: 6px;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    margin-right: auto;
+
+    &__title {
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 22px;
+      color: #5b5b5b;
+    }
+
+    &__date {
+      font-weight: 400;
+      font-size: 11px;
+      line-height: 16px;
+      color: #5b5b5b;
+      margin-top: 5px;
+    }
+  }
+
+  &__description {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 18px;
+    color: #2d2d2d;
+    margin-top: 10px;
+  }
+
+  &__footer {
+    margin-top: 30px;
+
+    @media screen and (max-width: 767px) {
+      margin-top: 20px;
+    }
+
+    &__item {
+      font-weight: 400;
+      font-size: 9px;
+      line-height: 14px;
+      color: #9f9f9f;
+      display: flex;
+      align-items: center;
+
+      img {
+        margin-right: 5px;
+      }
+    }
+  }
+}
