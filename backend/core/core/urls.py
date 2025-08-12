@@ -42,6 +42,11 @@ urlpatterns = [
     path("api/admin/", admin.site.urls),
 ]
 
+if settings.DEBUG is False:
+    urlpatterns += [
+        re_path(r"^(?:.*)/?$", TemplateView.as_view(template_name="index.html")),
+    ]
+
 if settings.COMINGSOON:
     urlpatterns.insert(
         0, re_path(r"^", TemplateView.as_view(template_name="comingsoon.html"))
