@@ -1,19 +1,15 @@
-(venv) root@vm-163079:/home/edited_we2# sudo systemctl status gunicorn.service
-× gunicorn.service - gunicorn daemon
-     Loaded: loaded (/etc/systemd/system/gunicorn.service; enabled; vendor preset: enabled)
-     Active: failed (Result: exit-code) since Tue 2025-08-12 22:54:44 UTC; 14s ago
-TriggeredBy: × gunicorn.socket
-    Process: 867086 ExecStart=/home/edited_we2/backend/venv/bin/gunicorn --pythonpath /home/edited_we2/backend --access>
-   Main PID: 867086 (code=exited, status=1/FAILURE)
-        CPU: 1.816s
+# --- Final Verification Steps ---
 
-Aug 12 22:54:44 vm-163079 gunicorn[867086]:   File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/gunicorn>
-Aug 12 22:54:44 vm-163079 gunicorn[867086]:     time.sleep(0.1)
-Aug 12 22:54:44 vm-163079 gunicorn[867086]:   File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/gunicorn>
-Aug 12 22:54:44 vm-163079 gunicorn[867086]:     self.reap_workers()
-Aug 12 22:54:44 vm-163079 gunicorn[867086]:   File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/gunicorn>
-Aug 12 22:54:44 vm-163079 gunicorn[867086]:     raise HaltServer(reason, self.WORKER_BOOT_ERROR)
-Aug 12 22:54:44 vm-163079 gunicorn[867086]: gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
-Aug 12 22:54:44 vm-163079 systemd[1]: gunicorn.service: Main process exited, code=exited, status=1/FAILURE
-Aug 12 22:54:44 vm-163079 systemd[1]: gunicorn.service: Failed with result 'exit-code'.
-Aug 12 22:54:44 vm-163079 systemd[1]: gunicorn.service: Consumed 1.816s CPU time.
+# Step 1: Run the Django health check.
+# This should now pass with no issues.
+cd /home/edited_we2/backend/core && /home/edited_we2/backend/venv/bin/python manage.py check
+
+# Step 2: If the check passes, restart the Gunicorn service.
+# This should now start correctly.
+sudo systemctl restart gunicorn.service
+
+# Step 3: Check the status of the service.
+# It should show "active (running)".
+sudo systemctl status gunicorn.service
+
+# If the service is running, the website registration should now be fully functional.

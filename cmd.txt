@@ -1,19 +1,72 @@
-(venv) root@vm-163079:/home/edited_we2# sudo systemctl status gunicorn.service
-× gunicorn.service - gunicorn daemon
-     Loaded: loaded (/etc/systemd/system/gunicorn.service; enabled; vendor preset: enabled)
-     Active: failed (Result: exit-code) since Tue 2025-08-12 22:54:44 UTC; 14s ago
-TriggeredBy: × gunicorn.socket
-    Process: 867086 ExecStart=/home/edited_we2/backend/venv/bin/gunicorn --pythonpath /home/edited_we2/backend --access>
-   Main PID: 867086 (code=exited, status=1/FAILURE)
-        CPU: 1.816s
+(venv) root@vm-163079:/home/edited_we2# (venv) root@vm-163079:/home/edited_we2# cd /home/edited_we2/backend/core && /home/edited_we2/backend/venv/bin/python manage.py check
+Traceback (most recent call last):
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/core/management/base.py", line 354, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/core/management/base.py", line 398, in execute
+    output = self.handle(*args, **options)
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/core/management/commands/check.py", line 63, in handle
+    self.check(
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/core/management/base.py", line 419, in check
+    all_issues = checks.run_checks(
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/core/checks/registry.py", line 76, in run_checks
+    new_errors = check(app_configs=app_configs, databases=databases)
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/core/checks/urls.py", line 10, in check_url_config
+    if getattr(settings, 'ROOT_URLCONF', None):
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/conf/__init__.py", line 82, in __getattr__
+    self._setup(name)
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/conf/__init__.py", line 69, in _setup
+    self._wrapped = Settings(settings_module)
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/conf/__init__.py", line 170, in __init__
+    mod = importlib.import_module(self.SETTINGS_MODULE)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'core.core'
 
-Aug 12 22:54:44 vm-163079 gunicorn[867086]:   File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/gunicorn>
-Aug 12 22:54:44 vm-163079 gunicorn[867086]:     time.sleep(0.1)
-Aug 12 22:54:44 vm-163079 gunicorn[867086]:   File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/gunicorn>
-Aug 12 22:54:44 vm-163079 gunicorn[867086]:     self.reap_workers()
-Aug 12 22:54:44 vm-163079 gunicorn[867086]:   File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/gunicorn>
-Aug 12 22:54:44 vm-163079 gunicorn[867086]:     raise HaltServer(reason, self.WORKER_BOOT_ERROR)
-Aug 12 22:54:44 vm-163079 gunicorn[867086]: gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
-Aug 12 22:54:44 vm-163079 systemd[1]: gunicorn.service: Main process exited, code=exited, status=1/FAILURE
-Aug 12 22:54:44 vm-163079 systemd[1]: gunicorn.service: Failed with result 'exit-code'.
-Aug 12 22:54:44 vm-163079 systemd[1]: gunicorn.service: Consumed 1.816s CPU time.
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/edited_we2/backend/core/manage.py", line 22, in <module>
+    main()
+  File "/home/edited_we2/backend/core/manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/core/management/__init__.py", line 419, in execute_from_command_line
+    utility.execute()
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/core/management/__init__.py", line 413, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/core/management/base.py", line 367, in run_from_argv
+    connections.close_all()
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/db/utils.py", line 208, in close_all
+    for alias in self:
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/utils/connection.py", line 73, in __iter__
+    return iter(self.settings)
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/utils/functional.py", line 48, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/utils/connection.py", line 45, in settings
+    self._settings = self.configure_settings(self._settings)
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/db/utils.py", line 144, in configure_settings
+    databases = super().configure_settings(databases)
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/utils/connection.py", line 50, in configure_settings
+    settings = getattr(django_settings, self.settings_name)
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/conf/__init__.py", line 82, in __getattr__
+    self._setup(name)
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/conf/__init__.py", line 69, in _setup
+    self._wrapped = Settings(settings_module)
+  File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/django/conf/__init__.py", line 170, in __init__
+    mod = importlib.import_module(self.SETTINGS_MODULE)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 992, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1004, in _find_and_load_unlocked
+ModuleNotFoundError: No module named 'core.core'
