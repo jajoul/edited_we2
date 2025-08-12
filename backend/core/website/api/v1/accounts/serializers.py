@@ -37,9 +37,9 @@ class UserCreationSerializer(serializers.ModelSerializer):
         except Exception as e:
             raise serializers.ValidationError({"password": e.args})
             
+        attrs.pop('password2')
         return attrs
     
-
     def create(self, validated_data):
         user = User.objects.create_user(
             username=validated_data['username'],
