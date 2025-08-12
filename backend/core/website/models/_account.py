@@ -2,7 +2,7 @@ from rest_framework import status
 from django.utils.translation import gettext_lazy as _
 from django.dispatch import receiver
 from django.db.models.signals import post_save
-from django.db import models
+from django.db import models, IntegrityError
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from website.tools.exceptions import CustomException
@@ -35,10 +35,9 @@ class UserManager(BaseUserManager):
             user.set_password(password)
             user.save()
             return user
-
-        except Exception as e:
+        except IntegrityError:
             raise CustomException(
-                e,
+                _("User with this username or email already exists."),
                 "error",
                 status_code=status.HTTP_400_BAD_REQUEST,
             )
