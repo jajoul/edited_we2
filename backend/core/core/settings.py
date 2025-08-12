@@ -104,12 +104,12 @@ WSGI_APPLICATION = "core.wsgi.application"
 
 DATABASES = {
         "default": {
-            "ENGINE": config("DB_ENGINE", default="django.db.backends.postgresql"),
-            "NAME": config("DB_NAME", default="postgres"),
-            "USER": config("DB_USER", default="postgres"),
-            "PASSWORD": config("DB_PASS", default="postgres"),
+            "ENGINE": config("DB_ENGINE", default="django.db.backends.mysql"),
+            "NAME": config("DB_NAME", default="mysql"),
+            "USER": config("DB_USER", default="mysql"),
+            "PASSWORD": config("DB_PASS", default="mysql"),
             "HOST": config("DB_HOST", default="db"),
-            "PORT": config("DB_PORT", cast=int, default=5432),
+            "PORT": config("DB_PORT", cast=int, default=3306),
         }
 }
 

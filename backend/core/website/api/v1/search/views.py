@@ -9,7 +9,7 @@ from .serializers import (
     SearchChannelSerializer, SearchTopicSerializer,
     SearchChannel2Serializer
 )
-from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+
 
 
 class SearchChannelView2(GenericAPIView):
@@ -20,19 +20,21 @@ class SearchChannelView2(GenericAPIView):
         
         if query:
             print("####################################")
-            search_vector = SearchVector('title', weight='A') + SearchVector('about', weight='B')
-            search_query = SearchQuery(query)
-            channels = Channel.objects.annotate(
-                rank=SearchRank(search_vector, search_query)
-            ).filter(rank__gte=0.1).order_by('-rank')
+            # MySQL-compatible fallback: simple icontains search
+            channels = Channel.objects.filter(
+                title__icontains=query
+            ) | Channel.objects.filter(
+                about__icontains=query
+            )
+            channels = channels.distinct()
             serializer = SearchChannel2Serializer(
                 channels, 
                 many=True, 
                 context={"user":request.user}
             )
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=200)
         else:
-            return Response({}, status=status.HTTP_200_OK)
+            return Response({}, status=200)
         
 
 class SearchChannelView(DocumentViewSet):
