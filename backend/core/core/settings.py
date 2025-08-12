@@ -279,37 +279,19 @@ LOGGING = {
     "disable_existing_loggers": False,
     "formatters": {
         "verbose": {
-            "format": "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
-            "datefmt": "%d/%b/%Y %H:%M:%S",
+            "format": "[%(asctime)s] {levelname} {name} {message}",
+            "style": "{",
         },
-        "simple": {"format": "%(levelname)s %(message)s"},
     },
     "handlers": {
-        "file": {
-            "level": "INFO",
-            "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR.parent / "logs" / "backend.log",
-            "maxBytes": 1024 * 1024 * 5,  # 5 MB
-            "backupCount": 5,
+        "console": {
+            "class": "logging.StreamHandler",
             "formatter": "verbose",
         },
-        "console": {
-            "level": "DEBUG",
-            "class": "logging.StreamHandler",
-            "formatter": "simple",
-        },
     },
-    "loggers": {
-        "django": {
-            "handlers": ["console", "file"],
-            "level": config("DJANGO_LOG_LEVEL", default="INFO"),
-            "propagate": False,
-        },
-        "website": {
-            "handlers": ["console", "file"],
-            "level": config("DJANGO_LOG_LEVEL", default="INFO"),
-            "propagate": False,
-        },
+    "root": {
+        "handlers": ["console"],
+        "level": "DEBUG",
     },
 }
 

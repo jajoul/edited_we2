@@ -1,4 +1,4 @@
-from rest_framework import status
+from rest_framework import status, serializers
 from django.utils.translation import gettext_lazy as _
 from django.dispatch import receiver
 from django.db.models.signals import post_save
@@ -36,10 +36,8 @@ class UserManager(BaseUserManager):
             user.save()
             return user
         except IntegrityError:
-            raise CustomException(
-                _("User with this username or email already exists."),
-                "error",
-                status_code=status.HTTP_400_BAD_REQUEST,
+            raise serializers.ValidationError(
+                {"detail": "User with this username or email already exists."}
             )
         
 

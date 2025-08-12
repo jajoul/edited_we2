@@ -1,52 +1,101 @@
-### Final Nginx Configuration for /etc/nginx/sites-available/wetoo
-
-# This server block redirects all HTTP traffic to HTTPS.
-server {
-    listen 80;
-    server_name social.me2we2.com;
-    return 301 https://$host$request_uri;
-}
-
-# This server block handles all HTTPS traffic.
-server {
-    listen 443 ssl http2;
-    server_name social.me2we2.com;
-
-    # --- SSL Configuration ---
-    # IMPORTANT: Replace these paths with the actual paths to your SSL certificate files.
-    # These are the standard paths provided by Certbot (Let's Encrypt).
-    ssl_certificate /etc/letsencrypt/live/social.me2we2.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/social.me2we2.com/privkey.pem;
-    # The following two lines are recommended for strong security. Ensure these files exist.
-    include /etc/letsencrypt/options-ssl-nginx.conf;
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
-
-
-    # --- Frontend Application --- 
-    # Serves your compiled React/UmiJS application.
-    location / {
-        root /home/edited_we2/frontend/dist;
-        try_files $uri /index.html;
-    }
-
-    # --- Backend API --- 
-    # Forwards all requests starting with /api/ to your Gunicorn/Django application.
-    location /api/ {
-        proxy_pass http://127.0.0.1:8000/api/;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    # --- Django Static & Media Files ---
-    # Serves files collected by Django's 'collectstatic' command.
-    location /static-files/ {
-        alias /home/edited_we2/backend/core/static/;
-    }
-
-    # Serves user-uploaded files (e.g., profile pictures).
-    location /media-files/ {
-        alias /home/edited_we2/backend/core/media/;
-    }
-}
+(venv) root@vm-163079:/home/edited_we2/backend/core# sudo journalctl -u gunicorn.service -n 100 --no-pager
+Aug 12 14:50:47 vm-163079 gunicorn[817209]:  - - [12/Aug/2025:14:50:47 +0000] "GET /.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w HTTP/1.0" 404 2664 "http://social.me2we2.com/.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w" "cert-manager-challenges/v1.16.3 (linux/amd64) cert-manager/1694b110a182d8866d1471b32468b1696797259a"
+Aug 12 14:51:10 vm-163079 gunicorn[817209]: Not Found: /.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w
+Aug 12 14:51:10 vm-163079 gunicorn[817209]:  - - [12/Aug/2025:14:51:10 +0000] "GET /.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w HTTP/1.0" 404 2664 "http://social.me2we2.com/.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w" "cert-manager-challenges/v1.16.3 (linux/amd64) cert-manager/1694b110a182d8866d1471b32468b1696797259a"
+Aug 12 14:51:34 vm-163079 gunicorn[817207]: Not Found: /.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w
+Aug 12 14:51:34 vm-163079 gunicorn[817207]:  - - [12/Aug/2025:14:51:34 +0000] "GET /.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w HTTP/1.0" 404 2664 "http://social.me2we2.com/.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w" "cert-manager-challenges/v1.16.3 (linux/amd64) cert-manager/1694b110a182d8866d1471b32468b1696797259a"
+Aug 12 14:51:59 vm-163079 gunicorn[817209]: Not Found: /.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w
+Aug 12 14:51:59 vm-163079 gunicorn[817209]:  - - [12/Aug/2025:14:51:59 +0000] "GET /.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w HTTP/1.0" 404 2664 "http://social.me2we2.com/.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w" "cert-manager-challenges/v1.16.3 (linux/amd64) cert-manager/1694b110a182d8866d1471b32468b1696797259a"
+Aug 12 14:52:28 vm-163079 gunicorn[817208]: Not Found: /.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w
+Aug 12 14:52:28 vm-163079 gunicorn[817208]:  - - [12/Aug/2025:14:52:28 +0000] "GET /.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w HTTP/1.0" 404 2664 "http://social.me2we2.com/.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w" "cert-manager-challenges/v1.16.3 (linux/amd64) cert-manager/1694b110a182d8866d1471b32468b1696797259a"
+Aug 12 14:52:53 vm-163079 gunicorn[817208]: Not Found: /.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w
+Aug 12 14:52:53 vm-163079 gunicorn[817208]:  - - [12/Aug/2025:14:52:53 +0000] "GET /.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w HTTP/1.0" 404 2664 "http://social.me2we2.com/.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w" "cert-manager-challenges/v1.16.3 (linux/amd64) cert-manager/1694b110a182d8866d1471b32468b1696797259a"
+Aug 12 14:53:19 vm-163079 gunicorn[817208]: Not Found: /.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w
+Aug 12 14:53:19 vm-163079 gunicorn[817208]:  - - [12/Aug/2025:14:53:19 +0000] "GET /.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w HTTP/1.0" 404 2664 "http://social.me2we2.com/.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w" "cert-manager-challenges/v1.16.3 (linux/amd64) cert-manager/1694b110a182d8866d1471b32468b1696797259a"
+Aug 12 14:53:44 vm-163079 gunicorn[817208]: Not Found: /.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w
+Aug 12 14:53:44 vm-163079 gunicorn[817208]:  - - [12/Aug/2025:14:53:44 +0000] "GET /.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w HTTP/1.0" 404 2664 "http://social.me2we2.com/.well-known/acme-challenge/8d7WSE9kk3Eyx2oBdJ_CdG08lTub_PKyFwgjwKRiE5w" "cert-manager-challenges/v1.16.3 (linux/amd64) cert-manager/1694b110a182d8866d1471b32468b1696797259a"
+Aug 12 15:01:41 vm-163079 systemd[1]: Stopping gunicorn daemon...
+Aug 12 15:01:41 vm-163079 gunicorn[817207]: [2025-08-12 15:01:41 +0000] [817207] [INFO] Worker exiting (pid: 817207)
+Aug 12 15:01:41 vm-163079 gunicorn[817208]: [2025-08-12 15:01:41 +0000] [817208] [INFO] Worker exiting (pid: 817208)
+Aug 12 15:01:41 vm-163079 gunicorn[817204]: [2025-08-12 15:01:41 +0000] [817204] [INFO] Handling signal: term
+Aug 12 15:01:41 vm-163079 gunicorn[817209]: [2025-08-12 15:01:41 +0000] [817209] [INFO] Worker exiting (pid: 817209)
+Aug 12 15:01:42 vm-163079 gunicorn[817204]: [2025-08-12 15:01:42 +0000] [817204] [INFO] Shutting down: Master
+Aug 12 15:01:42 vm-163079 systemd[1]: gunicorn.service: Deactivated successfully.
+Aug 12 15:01:42 vm-163079 systemd[1]: Stopped gunicorn daemon.
+Aug 12 15:01:42 vm-163079 systemd[1]: gunicorn.service: Consumed 8.089s CPU time.
+Aug 12 15:01:42 vm-163079 systemd[1]: Started gunicorn daemon.
+Aug 12 15:01:42 vm-163079 gunicorn[820524]: [2025-08-12 15:01:42 +0000] [820524] [INFO] Starting gunicorn 20.1.0
+Aug 12 15:01:42 vm-163079 gunicorn[820524]: [2025-08-12 15:01:42 +0000] [820524] [INFO] Listening at: unix:/run/gunicorn.sock (820524)
+Aug 12 15:01:42 vm-163079 gunicorn[820524]: [2025-08-12 15:01:42 +0000] [820524] [INFO] Using worker: sync
+Aug 12 15:01:42 vm-163079 gunicorn[820525]: [2025-08-12 15:01:42 +0000] [820525] [INFO] Booting worker with pid: 820525
+Aug 12 15:01:43 vm-163079 gunicorn[820526]: [2025-08-12 15:01:42 +0000] [820526] [INFO] Booting worker with pid: 820526
+Aug 12 15:01:43 vm-163079 gunicorn[820527]: [2025-08-12 15:01:43 +0000] [820527] [INFO] Booting worker with pid: 820527
+Aug 12 20:06:05 vm-163079 systemd[1]: Stopping gunicorn daemon...
+Aug 12 20:06:05 vm-163079 gunicorn[820526]: [2025-08-12 20:06:05 +0000] [820526] [INFO] Worker exiting (pid: 820526)
+Aug 12 20:06:05 vm-163079 gunicorn[820527]: [2025-08-12 20:06:05 +0000] [820527] [INFO] Worker exiting (pid: 820527)
+Aug 12 20:06:05 vm-163079 gunicorn[820524]: [2025-08-12 20:06:05 +0000] [820524] [INFO] Handling signal: term
+Aug 12 20:06:05 vm-163079 gunicorn[820525]: [2025-08-12 20:06:05 +0000] [820525] [INFO] Worker exiting (pid: 820525)
+Aug 12 20:06:05 vm-163079 gunicorn[820524]: [2025-08-12 20:06:05 +0000] [820524] [WARNING] Worker with pid 820527 was terminated due to signal 15
+Aug 12 20:06:05 vm-163079 gunicorn[820524]: [2025-08-12 20:06:05 +0000] [820524] [WARNING] Worker with pid 820526 was terminated due to signal 15
+Aug 12 20:06:06 vm-163079 gunicorn[820524]: [2025-08-12 20:06:06 +0000] [820524] [INFO] Shutting down: Master
+Aug 12 20:06:06 vm-163079 systemd[1]: gunicorn.service: Deactivated successfully.
+Aug 12 20:06:06 vm-163079 systemd[1]: Stopped gunicorn daemon.
+Aug 12 20:06:06 vm-163079 systemd[1]: gunicorn.service: Consumed 9.746s CPU time.
+Aug 12 20:06:06 vm-163079 systemd[1]: Started gunicorn daemon.
+Aug 12 20:06:06 vm-163079 gunicorn[850762]: [2025-08-12 20:06:06 +0000] [850762] [INFO] Starting gunicorn 20.1.0
+Aug 12 20:06:06 vm-163079 gunicorn[850762]: [2025-08-12 20:06:06 +0000] [850762] [INFO] Listening at: unix:/run/gunicorn.sock (850762)
+Aug 12 20:06:06 vm-163079 gunicorn[850762]: [2025-08-12 20:06:06 +0000] [850762] [INFO] Using worker: sync
+Aug 12 20:06:06 vm-163079 gunicorn[850763]: [2025-08-12 20:06:06 +0000] [850763] [INFO] Booting worker with pid: 850763
+Aug 12 20:06:06 vm-163079 gunicorn[850764]: [2025-08-12 20:06:06 +0000] [850764] [INFO] Booting worker with pid: 850764
+Aug 12 20:06:06 vm-163079 gunicorn[850765]: [2025-08-12 20:06:06 +0000] [850765] [INFO] Booting worker with pid: 850765
+Aug 12 20:17:07 vm-163079 systemd[1]: Stopping gunicorn daemon...
+Aug 12 20:17:07 vm-163079 gunicorn[850764]: [2025-08-12 20:17:07 +0000] [850764] [INFO] Worker exiting (pid: 850764)
+Aug 12 20:17:07 vm-163079 gunicorn[850763]: [2025-08-12 20:17:07 +0000] [850763] [INFO] Worker exiting (pid: 850763)
+Aug 12 20:17:07 vm-163079 gunicorn[850762]: [2025-08-12 20:17:07 +0000] [850762] [INFO] Handling signal: term
+Aug 12 20:17:07 vm-163079 gunicorn[850765]: [2025-08-12 20:17:07 +0000] [850765] [INFO] Worker exiting (pid: 850765)
+Aug 12 20:17:07 vm-163079 gunicorn[850762]: [2025-08-12 20:17:07 +0000] [850762] [INFO] Shutting down: Master
+Aug 12 20:17:07 vm-163079 systemd[1]: gunicorn.service: Deactivated successfully.
+Aug 12 20:17:07 vm-163079 systemd[1]: Stopped gunicorn daemon.
+Aug 12 20:17:07 vm-163079 systemd[1]: gunicorn.service: Consumed 4.256s CPU time.
+Aug 12 20:17:07 vm-163079 systemd[1]: Started gunicorn daemon.
+Aug 12 20:17:08 vm-163079 gunicorn[851829]: [2025-08-12 20:17:08 +0000] [851829] [INFO] Starting gunicorn 20.1.0
+Aug 12 20:17:08 vm-163079 gunicorn[851829]: [2025-08-12 20:17:08 +0000] [851829] [INFO] Listening at: unix:/run/gunicorn.sock (851829)
+Aug 12 20:17:08 vm-163079 gunicorn[851829]: [2025-08-12 20:17:08 +0000] [851829] [INFO] Using worker: sync
+Aug 12 20:17:08 vm-163079 gunicorn[851830]: [2025-08-12 20:17:08 +0000] [851830] [INFO] Booting worker with pid: 851830
+Aug 12 20:17:08 vm-163079 gunicorn[851831]: [2025-08-12 20:17:08 +0000] [851831] [INFO] Booting worker with pid: 851831
+Aug 12 20:17:08 vm-163079 gunicorn[851832]: [2025-08-12 20:17:08 +0000] [851832] [INFO] Booting worker with pid: 851832
+Aug 12 21:49:45 vm-163079 gunicorn[851831]: [2025-08-12 21:49:45 +0000] [851831] [INFO] Worker exiting (pid: 851831)
+Aug 12 21:49:45 vm-163079 gunicorn[851832]: [2025-08-12 21:49:45 +0000] [851832] [INFO] Worker exiting (pid: 851832)
+Aug 12 21:49:45 vm-163079 systemd[1]: Stopping gunicorn daemon...
+Aug 12 21:49:45 vm-163079 gunicorn[851830]: [2025-08-12 21:49:45 +0000] [851830] [INFO] Worker exiting (pid: 851830)
+Aug 12 21:49:45 vm-163079 gunicorn[851829]: [2025-08-12 21:49:45 +0000] [851829] [INFO] Handling signal: term
+Aug 12 21:49:46 vm-163079 gunicorn[851829]: [2025-08-12 21:49:46 +0000] [851829] [WARNING] Worker with pid 851830 was terminated due to signal 15
+Aug 12 21:49:46 vm-163079 gunicorn[851829]: [2025-08-12 21:49:46 +0000] [851829] [WARNING] Worker with pid 851831 was terminated due to signal 15
+Aug 12 21:49:46 vm-163079 gunicorn[851829]: [2025-08-12 21:49:46 +0000] [851829] [WARNING] Worker with pid 851832 was terminated due to signal 15
+Aug 12 21:49:46 vm-163079 gunicorn[851829]: [2025-08-12 21:49:46 +0000] [851829] [INFO] Shutting down: Master
+Aug 12 21:49:46 vm-163079 systemd[1]: gunicorn.service: Deactivated successfully.
+Aug 12 21:49:46 vm-163079 systemd[1]: Stopped gunicorn daemon.
+Aug 12 21:49:46 vm-163079 systemd[1]: gunicorn.service: Consumed 5.040s CPU time.
+Aug 12 21:49:46 vm-163079 systemd[1]: Started gunicorn daemon.
+Aug 12 21:49:46 vm-163079 gunicorn[860910]: [2025-08-12 21:49:46 +0000] [860910] [INFO] Starting gunicorn 20.1.0
+Aug 12 21:49:46 vm-163079 gunicorn[860910]: [2025-08-12 21:49:46 +0000] [860910] [INFO] Listening at: unix:/run/gunicorn.sock (860910)
+Aug 12 21:49:46 vm-163079 gunicorn[860910]: [2025-08-12 21:49:46 +0000] [860910] [INFO] Using worker: sync
+Aug 12 21:49:46 vm-163079 gunicorn[860911]: [2025-08-12 21:49:46 +0000] [860911] [INFO] Booting worker with pid: 860911
+Aug 12 21:49:46 vm-163079 gunicorn[860912]: [2025-08-12 21:49:46 +0000] [860912] [INFO] Booting worker with pid: 860912
+Aug 12 21:49:46 vm-163079 gunicorn[860913]: [2025-08-12 21:49:46 +0000] [860913] [INFO] Booting worker with pid: 860913
+Aug 12 21:56:52 vm-163079 gunicorn[860911]: [2025-08-12 21:56:52 +0000] [860911] [INFO] Worker exiting (pid: 860911)
+Aug 12 21:56:52 vm-163079 gunicorn[860912]: [2025-08-12 21:56:52 +0000] [860912] [INFO] Worker exiting (pid: 860912)
+Aug 12 21:56:52 vm-163079 systemd[1]: Stopping gunicorn daemon...
+Aug 12 21:56:52 vm-163079 gunicorn[860913]: [2025-08-12 21:56:52 +0000] [860913] [INFO] Worker exiting (pid: 860913)
+Aug 12 21:56:52 vm-163079 gunicorn[860910]: [2025-08-12 21:56:52 +0000] [860910] [INFO] Handling signal: term
+Aug 12 21:56:53 vm-163079 gunicorn[860910]: [2025-08-12 21:56:53 +0000] [860910] [INFO] Shutting down: Master
+Aug 12 21:56:53 vm-163079 systemd[1]: gunicorn.service: Deactivated successfully.
+Aug 12 21:56:53 vm-163079 systemd[1]: Stopped gunicorn daemon.
+Aug 12 21:56:53 vm-163079 systemd[1]: gunicorn.service: Consumed 3.924s CPU time.
+Aug 12 21:56:53 vm-163079 systemd[1]: Started gunicorn daemon.
+Aug 12 21:56:53 vm-163079 gunicorn[861914]: [2025-08-12 21:56:53 +0000] [861914] [INFO] Starting gunicorn 20.1.0
+Aug 12 21:56:53 vm-163079 gunicorn[861914]: [2025-08-12 21:56:53 +0000] [861914] [INFO] Listening at: unix:/run/gunicorn.sock (861914)
+Aug 12 21:56:53 vm-163079 gunicorn[861914]: [2025-08-12 21:56:53 +0000] [861914] [INFO] Using worker: sync
+Aug 12 21:56:53 vm-163079 gunicorn[861917]: [2025-08-12 21:56:53 +0000] [861917] [INFO] Booting worker with pid: 861917
+Aug 12 21:56:53 vm-163079 gunicorn[861918]: [2025-08-12 21:56:53 +0000] [861918] [INFO] Booting worker with pid: 861918
+Aug 12 21:56:53 vm-163079 gunicorn[861919]: [2025-08-12 21:56:53 +0000] [861919] [INFO] Booting worker with pid: 861919

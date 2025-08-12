@@ -18,43 +18,34 @@ class UserCreationSerializer(serializers.ModelSerializer):
     """
     First Step of signup: create user instance and save user information
     """
-    password2 = serializers.CharField(required=True)
+    password2 = serializers.CharField(write_only=True, required=True)
     class Meta:
         model = User
         fields = ("username", "email", "password", "password2")
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
 
     def validate(self, attrs):
         # check if password2 is the same as password
         if attrs["password2"] != attrs["password"]:
-            raise CustomException(
-                "Passwords do not match",
-                "error",
-                status_code=status.HTTP_400_BAD_REQUEST,
-            )
-
-        # password2 is no longer needed
-        attrs.pop("password2")
+            raise serializers.ValidationError({"password": "Passwords do not match"})
 
         # validate password
         try:
             validate_password(attrs["password"])
         except Exception as e:
-            raise CustomException(
-                f"password is not valid: {e}",
-                "error",
-                status_code=status.HTTP_400_BAD_REQUEST,
-            )
-        return super().validate(attrs)
+            raise serializers.ValidationError({"password": e.args})
+            
+        return attrs
     
 
     def create(self, validated_data):
-        
-        user = User.objects.create(
+        user = User.objects.create_user(
             username=validated_data['username'],
-            email=validated_data['email']
-            )
-        user.set_password(validated_data['password'])
-        user.save()
+            email=validated_data['email'],
+            password=validated_data['password']
+        )
         return user
 
 
