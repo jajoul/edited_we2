@@ -75,8 +75,12 @@ const SignUpStepOne = (props: {
           setStep((pre) => pre + 1);
         } else {
           let errorMessage: any = lang["toast_error"];
-          if (res?.response?.data)
-            errorMessage = Object.values(res.response?.data)[0];
+          if (res?.response?.data) {
+            const errorValues = Object.values(res.response?.data);
+            if (errorValues.length > 0) {
+              errorMessage = errorValues.map((error: any) => error.join(' ')).join('\n');
+            }
+          }
 
           toast(`${errorMessage}`, {
             type: "error",
