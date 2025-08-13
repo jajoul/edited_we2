@@ -1,7 +1,7 @@
-from rest_framework_simplejwt.views import TokenRefreshView
+from django.contrib.auth.views import LoginView
 from django.urls import path
 from .views import (
-    CreateUserView, CreateProfileView, CreatePersonalDetailView, LoginView,
+    register, CreateProfileView, CreatePersonalDetailView,
     ForgetPasswordView, GetUserTokenView, ChangePasswordView, GetUserTypeView,
     UserFullInfoView, SettingEditProfileView, SettingUsernameSendEmailView,
     SettingEditUsernameView, SettingProfileView, SettingEditProfileAvatarView,
@@ -13,7 +13,7 @@ app_name = 'v1/accounts'
 
 urlpatterns = [
     #  User related endpoints
-    path("user/create/", CreateUserView.as_view(), name="create_user"),
+    path("user/create/", register, name="create_user"),
     path("profile/create/", CreateProfileView.as_view(), name="create_profile"),
     path("user-detail/create/", CreatePersonalDetailView.as_view(), name="create_personal_detail"),
     path("user/type/", GetUserTypeView.as_view(), name="get_user_type"),
@@ -25,7 +25,6 @@ urlpatterns = [
     path("forget-password/change/", ChangePasswordView.as_view(), name="change_password"),
 
     path("login/", LoginView.as_view(), name="login"),
-    path('refresh/', TokenRefreshView.as_view(), name='refresh'),
     
     # Profile
     path("setting/profile/", SettingProfileView.as_view(), name="setting-profile"),
