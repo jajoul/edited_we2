@@ -20,6 +20,30 @@ class DebugJWTAuthentication(JWTAuthentication):
     def authenticate(self, request):
         print(f"DebugJWTAuthentication - Authorization header: {request.headers.get('Authorization')}")
         try:
+            # First, let's decode the token manually to see what's in it
+            auth_header = request.headers.get('Authorization')
+            if auth_header and auth_header.startswith('Bearer '):
+                token = auth_header.split(' ')[1]
+                print(f"DebugJWTAuthentication - Token: {token}")
+                
+                # Decode the token to see the payload
+                from rest_framework_simplejwt.tokens import AccessToken
+                try:
+                    access_token = AccessToken(token)
+                    print(f"DebugJWTAuthentication - Token payload: {access_token.payload}")
+                    user_id = access_token.payload.get('user_id')
+                    print(f"DebugJWTAuthentication - User ID from token: {user_id}")
+                    
+                    # Try to find the user manually
+                    from website.models import User
+                    try:
+                        user = User.objects.get(id=user_id)
+                        print(f"DebugJWTAuthentication - Found user: {user}")
+                    except User.DoesNotExist:
+                        print(f"DebugJWTAuthentication - User with ID {user_id} not found in database")
+                except Exception as decode_error:
+                    print(f"DebugJWTAuthentication - Token decode error: {decode_error}")
+            
             result = super().authenticate(request)
             print(f"DebugJWTAuthentication - Authentication result: {result}")
             return result
