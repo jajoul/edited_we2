@@ -64,10 +64,16 @@ def register(request):
     user = serializer.save()
     login(request, user)
     
+    # Generate token for the new user
+    token_serializer = MyTokenObtainPairSerializer()
+    token = token_serializer.get_token(user)
+    
     return Response({
         "detail": "Successfully registered.",
         "user_id": user.id,
-        "username": user.username
+        "username": user.username,
+        "access": str(token.access_token),
+        "refresh": str(token)
     }, status=status.HTTP_201_CREATED)
 
 
@@ -75,7 +81,7 @@ class CreateProfileView(GenericAPIView):
     """
     Signup Step2: update profile info
     """
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]  # Only authenticated users can access
     serializer_class = ProfileCreationSerializer
 
     def post(self, request, *args, **kwargs):
