@@ -15,15 +15,7 @@ from website.tools.auth import check_username_validation
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-
-        # Add custom claims
-        token['username'] = user.username
-        # ...
-
-        return token
+    username_field = User.EMAIL_FIELD
 
 
 class UserCreationSerializer(serializers.ModelSerializer):
