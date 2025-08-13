@@ -88,7 +88,7 @@ defaultApi.interceptors.response.use(
 export const generate_refresh_token = (refresh: string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}token/refresh/`,
+    url: `token/refresh/`,
     data: {
       refresh,
     },
@@ -105,7 +105,7 @@ export const createUser = (
 ) => {
   return defaultApi({
     method: "post",
-    url: `accounts/user/create/`,
+    url: `website/v1/accounts/user/create/`,
     data: {
       username,
       email,
@@ -140,7 +140,7 @@ export const createProfile = (
   }
   return defaultApi({
     method: "post",
-    url: `accounts/profile/create/`,
+    url: `website/v1/accounts/profile/create/`,
     data: bodyFormData,
     headers: {
       "Content-Type": " multipart/form-data",
@@ -158,7 +158,7 @@ export const createUserDetail = (
 ) => {
   return defaultApi({
     method: "post",
-    url: `accounts/user-detail/create/`,
+    url: `website/v1/accounts/user-detail/create/`,
     data: {
       favorites,
       difficulties,
@@ -173,7 +173,7 @@ export const createUserDetail = (
 export const loginUser = (email: string, password: string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}token/`,
+    url: `token/`,
     data: {
       email,
       password,
