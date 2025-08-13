@@ -62,13 +62,19 @@ class ProfileCreationSerializer(serializers.ModelSerializer):
         fields = ("first_name", "last_name", "avatar", "gender")
 
     def create(self, validated_data):
-        # Get user from request context
         request = self.context.get('request')
-        if not request or not request.user.is_authenticated:
-            raise serializers.ValidationError("Authentication required")
-            
-        # attach user to profile validated data
-        validated_data["user"] = request.user
+        user = None
+        if request and hasattr(request, 'user') and request.user.is_authenticated:
+            user = request.user
+        elif 'user_id' in validated_data:
+            from website.models import User
+            try:
+                user = User.objects.get(id=validated_data.pop('user_id'))
+            except User.DoesNotExist:
+                raise serializers.ValidationError("User does not exist")
+        else:
+            raise serializers.ValidationError("Authentication required or user_id must be provided")
+        validated_data["user"] = user
         profile = super().create(validated_data)
         return {"message": "user profile created successfully"}
     
