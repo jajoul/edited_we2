@@ -1,4 +1,4 @@
-import { createUser, updateAccessToken } from "@/assets/Api";
+import { createUser, updateAccessToken, updateLocalData } from "@/assets/Api";
 import Buttons, { buttonTheme } from "@/components/Buttons/Buttons";
 import Inputs, { inputType } from "@/components/Inputs/Inputs";
 import SwitchButton from "@/components/SwitchButton/SwitchButton";
@@ -70,8 +70,12 @@ const SignUpStepOne = (props: {
         info.password2.value
       ).then((res) => {
         setLoading(false);
+        console.log("Registration response:", res);
         if (res?.status === 201) {
-          updateAccessToken(res.data);
+          console.log("Storing tokens:", res.data);
+          // Use the same approach as login
+          localStorage.setItem("WeTooAccessToken", JSON.stringify(res.data));
+          updateLocalData();
           setStep((pre) => pre + 1);
         } else {
           let errorMessage: any = lang["toast_error"];

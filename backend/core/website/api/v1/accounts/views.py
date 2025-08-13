@@ -30,11 +30,13 @@ def register(request):
     # Generate JWT tokens for the newly created user
     refresh = RefreshToken.for_user(user)
     
-    return Response({
+    response_data = {
         "detail": "Successfully registered.",
         "access": str(refresh.access_token),
         "refresh": str(refresh)
-    }, status=status.HTTP_201_CREATED)
+    }
+    print(f"Registration - Returning tokens: {response_data}")
+    return Response(response_data, status=status.HTTP_201_CREATED)
 
 
 class CreateProfileView(GenericAPIView):
@@ -45,6 +47,10 @@ class CreateProfileView(GenericAPIView):
     serializer_class = ProfileCreationSerializer
 
     def post(self, request, *args, **kwargs):
+        print(f"CreateProfileView - Authorization header: {request.headers.get('Authorization')}")
+        print(f"CreateProfileView - User: {request.user}")
+        print(f"CreateProfileView - User is authenticated: {request.user.is_authenticated}")
+        
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         data = serializer.save()

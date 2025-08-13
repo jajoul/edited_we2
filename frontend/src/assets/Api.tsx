@@ -22,10 +22,14 @@ let isAlreadyFetchingAccessToken = false;
 export let accessRefreshData: { access: string } | null = null;
 
 export const updateAccessToken = (acc: { access: string, refresh: string }) => {
+  console.log("updateAccessToken called with:", acc);
   if (acc && acc.access) {
     accessRefreshData = acc;
     user = acc;
     localStorage.setItem("WeTooAccessToken", JSON.stringify(acc));
+    console.log("Tokens stored in localStorage and user variable");
+  } else {
+    console.log("No access token provided to updateAccessToken");
   }
 };
 
@@ -43,6 +47,9 @@ defaultApi.interceptors.request.use((config) => {
   }
   if (user && user.access) {
     config.headers.Authorization = `Bearer ${user.access}`;
+    console.log("Request interceptor - Setting Authorization header for:", config.url);
+  } else {
+    console.log("Request interceptor - No access token available for:", config.url);
   }
   return config;
 });
