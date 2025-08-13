@@ -14,6 +14,18 @@ from website.services.auth_services import (
 from website.tools.auth import check_username_validation
 
 
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['username'] = user.username
+        # ...
+
+        return token
+
+
 class UserCreationSerializer(serializers.ModelSerializer):
     """
     First Step of signup: create user instance and save user information

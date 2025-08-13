@@ -4,15 +4,19 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.db.models import Subquery, OuterRef
 from website.models import User, ProfileQuestion, ProfileAnswer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from django.contrib.auth import login
 from rest_framework.decorators import api_view, permission_classes
 
 from .serializers import (
-    UserCreationSerializer, ProfileCreationSerializer, PersonalDetailCreationSerializer, ForgetPasswordSerializer, GetUserTokenSerializer, ChangePasswordSerializer, UserSerializer, ProfileSerializer, SettingProfileInfoSerializer, SettingProfileChangeSerializer, SettingUsernameSendEmailSerializer, SettingEditUsernameSerializer, SettingProfileSerializer, SettingEditProfileAvatarSerializer, SettingEmailSendEmailSerializer, SettingEditEmailSerializer, ProfileAnswerSerializer, SettingProfileAnswerSerializer
+    MyTokenObtainPairSerializer, UserCreationSerializer, ProfileCreationSerializer, PersonalDetailCreationSerializer, ForgetPasswordSerializer, GetUserTokenSerializer, ChangePasswordSerializer, UserSerializer, ProfileSerializer, SettingProfileInfoSerializer, SettingProfileChangeSerializer, SettingUsernameSendEmailSerializer, SettingEditUsernameSerializer, SettingProfileSerializer, SettingEditProfileAvatarSerializer, SettingEmailSendEmailSerializer, SettingEditEmailSerializer, ProfileAnswerSerializer, SettingProfileAnswerSerializer
 )
 from website.services import ForgetPasswordAuthenticationService
 
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
