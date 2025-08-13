@@ -144,6 +144,9 @@ export const createProfile = (
     method: "post",
     url: `website/v1/accounts/profile/create/`,
     data: bodyFormData,
+    headers:{
+      Authorization: undefined
+    }
   })
     .then((res: any) => res)
     .catch((err: any) => err);
