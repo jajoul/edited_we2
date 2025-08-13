@@ -124,7 +124,12 @@ export const createUser = (
       Authorization: undefined
     }
   })
-    .then((res: any) => res)
+    .then((res: any) => {
+      if (res?.status === 201) {
+        localStorage.setItem("WeTooAccessToken", JSON.stringify(res.data));
+      }
+      return res;
+    })
     .catch((err: any) => err);
 };
 
