@@ -125,12 +125,14 @@ export const createUser = (
 };
 
 export const createProfile = (
+  user_id: number,
   first_name: string,
   last_name: string,
   gender: number,
   avatar?: string
 ) => {
   var bodyFormData = new FormData();
+  bodyFormData.append("user_id", `${user_id}`);
   bodyFormData.append("first_name", first_name);
   bodyFormData.append("last_name", last_name);
   bodyFormData.append("gender", `${gender}`);

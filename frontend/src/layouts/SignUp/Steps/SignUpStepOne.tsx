@@ -75,6 +75,7 @@ const SignUpStepOne = (props: {
           console.log("Registration successful:", res.data);
           // For session authentication, we don't need to store tokens
           // The session cookie is automatically handled by the browser
+          props.setUserId(res.data.user_id);
           setStep((pre) => pre + 1);
         } else {
           let errorMessage: any = lang["toast_error"];

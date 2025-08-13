@@ -54,9 +54,10 @@ const SignUpStepTwo = (props: {
   ];
 
   const goNext = () => {
-    if (info.first_name.trim().length > 1 && info.last_name.trim().length > 1) {
+    if (info.first_name.trim().length > 1 && info.last_name.trim().length > 1 && props.userId) {
       setLoading(true);
       createProfile(
+        props.userId,
         info.first_name,
         info.last_name,
         info.gender,
