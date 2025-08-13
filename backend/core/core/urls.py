@@ -92,7 +92,7 @@ if settings.SHOW_SWAGGER:
 
 # list your api urls here
 urlpatterns += [
-    path("website/",include('website.urls')),
+    path("api/website/",include('website.urls')),
 ]
 
 urlpatterns += [
