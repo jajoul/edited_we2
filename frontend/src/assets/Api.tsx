@@ -21,9 +21,11 @@ let counter = 0;
 let isAlreadyFetchingAccessToken = false;
 export let accessRefreshData: { access: string } | null = null;
 
-export const updateAccessToken = (acc: { access: string }) => {
+export const updateAccessToken = (acc: { access: string, refresh: string }) => {
   if (acc && acc.access) {
     accessRefreshData = acc;
+    user = acc;
+    localStorage.setItem("WeTooAccessToken", JSON.stringify(acc));
   }
 };
 
