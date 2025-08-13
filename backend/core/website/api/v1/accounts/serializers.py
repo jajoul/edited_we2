@@ -64,8 +64,6 @@ class ProfileCreationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, user=None):
         # attach user (as required field) to profile validated data
-        print(f"ProfileCreationSerializer - Context user: {self.context['request'].user}")
-        print(f"ProfileCreationSerializer - Context user is authenticated: {self.context['request'].user.is_authenticated}")
         validated_data["user"] = self.context["request"].user
         profile = super().create(validated_data)
         return {"message": "user profile created successfully"}

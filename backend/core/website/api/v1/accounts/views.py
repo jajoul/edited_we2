@@ -45,23 +45,12 @@ class CreateProfileView(GenericAPIView):
     serializer_class = ProfileCreationSerializer
 
     def post(self, request, *args, **kwargs):
-        print(f"CreateProfileView - Method: {request.method}")
-        print(f"CreateProfileView - User: {request.user}")
-        print(f"CreateProfileView - User is authenticated: {request.user.is_authenticated}")
-        print(f"CreateProfileView - Authorization header: {request.headers.get('Authorization')}")
-        print(f"CreateProfileView - Request data: {request.data}")
-        
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         data = serializer.save()
         return Response(data, status=status.HTTP_201_CREATED)
     
-    def get(self, request, *args, **kwargs):
-        print(f"CreateProfileView GET - Method: {request.method}")
-        print(f"CreateProfileView GET - User: {request.user}")
-        print(f"CreateProfileView GET - User is authenticated: {request.user.is_authenticated}")
-        print(f"CreateProfileView GET - Authorization header: {request.headers.get('Authorization')}")
-        return Response({"detail": "GET method not allowed"}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
 
 
 class CreatePersonalDetailView(GenericAPIView):

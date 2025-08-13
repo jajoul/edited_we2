@@ -56,28 +56,24 @@ const SignUpStepTwo = (props: {
   const goNext = () => {
     if (info.first_name.trim().length > 1 && info.last_name.trim().length > 1) {
       setLoading(true);
-      
-      // Add a small delay to ensure tokens are properly stored
-      setTimeout(() => {
-        createProfile(
-          info.first_name,
-          info.last_name,
-          info.gender,
-          info.avatar?.file
-        ).then((res) => {
-          setLoading(false);
-          if (res?.status === 201) {
-            setStep((pre) => pre + 1);
-          } else {
-            let errorMessage: any = lang;
-            if (res.response?.data)
-              errorMessage = Object.values(res.response?.data)[0];
-            toast(`${errorMessage}`, {
-              type: "error",
-            });
-          }
-        });
-      }, 100);
+      createProfile(
+        info.first_name,
+        info.last_name,
+        info.gender,
+        info.avatar?.file
+      ).then((res) => {
+        setLoading(false);
+        if (res?.status === 201) {
+          setStep((pre) => pre + 1);
+        } else {
+          let errorMessage: any = lang;
+          if (res.response?.data)
+            errorMessage = Object.values(res.response?.data)[0];
+          toast(`${errorMessage}`, {
+            type: "error",
+          });
+        }
+      });
     } else {
       setError(true);
     }

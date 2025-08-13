@@ -70,7 +70,7 @@ const SignUpStepOne = (props: {
         info.password2.value
       ).then((res) => {
         setLoading(false);
-        if (res?.status === 200) {
+        if (res?.status === 201) {
           updateAccessToken(res.data);
           setStep((pre) => pre + 1);
         } else {

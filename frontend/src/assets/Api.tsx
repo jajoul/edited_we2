@@ -43,9 +43,6 @@ defaultApi.interceptors.request.use((config) => {
   }
   if (user && user.access) {
     config.headers.Authorization = `Bearer ${user.access}`;
-    console.log("Request interceptor - Setting Authorization header:", `Bearer ${user.access}`);
-  } else {
-    console.log("Request interceptor - No access token available");
   }
   return config;
 });
@@ -122,18 +119,6 @@ export const createUser = (
     }
   })
     .then((res: any) => {
-      if (res?.status === 201 && res?.data?.access) {
-        // Store the JWT tokens returned from registration
-        const tokenData = {
-          access: res.data.access,
-          refresh: res.data.refresh
-        };
-        localStorage.setItem("WeTooAccessToken", JSON.stringify(tokenData));
-        // Update both the global user variable and accessToken
-        user = tokenData;
-        accessToken = tokenData.access;
-        console.log("Tokens stored after registration:", tokenData);
-      }
       return res;
     })
     .catch((err: any) => err);
@@ -152,9 +137,6 @@ export const createProfile = (
   if (avatar) {
     bodyFormData.append("avatar", avatar);
   }
-  
-  console.log("Creating profile with user data:", user);
-  console.log("Current access token:", accessToken);
   
   return defaultApi({
     method: "post",
