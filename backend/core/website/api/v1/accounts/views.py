@@ -4,30 +4,22 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.db.models import Subquery, OuterRef
 from website.models import User, ProfileQuestion, ProfileAnswer
-from .forms import CustomUserCreationForm
+
 from django.contrib.auth import login
 from rest_framework.decorators import api_view, permission_classes
 
-from .serializers import (
-    GetUserTokenSerializer, ForgetPasswordSerializer, ProfileCreationSerializer,
-    PersonalDetailCreationSerializer, ChangePasswordSerializer, UserSerializer,
-    ProfileSerializer, SettingProfileInfoSerializer, SettingProfileChangeSerializer,
-    SettingUsernameSendEmailSerializer, SettingEditUsernameSerializer, SettingProfileSerializer,
-    SettingEditProfileAvatarSerializer, SettingEmailSendEmailSerializer, SettingEditEmailSerializer,
-    ProfileAnswerSerializer, SettingProfileAnswerSerializer
-)
+
 from website.services import ForgetPasswordAuthenticationService
 
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register(request):
-    form = CustomUserCreationForm(request.POST)
-    if form.is_valid():
-        user = form.save()
-        login(request, user)
-        return Response({"detail": "Successfully registered."}, status=status.HTTP_201_CREATED)
-    return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer = UserCreationSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    user = serializer.save()
+    login(request, user)
+    return Response({"detail": "Successfully registered."}, status=status.HTTP_201_CREATED)
 
 
 class CreateProfileView(GenericAPIView):
