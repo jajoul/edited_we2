@@ -105,7 +105,7 @@ export const createUser = (
 ) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}website/v1/accounts/user/create/`,
+    url: `accounts/user/create/`,
     data: {
       username,
       email,
@@ -140,11 +140,10 @@ export const createProfile = (
   }
   return defaultApi({
     method: "post",
-    url: `${base_url}website/v1/accounts/profile/create/`,
+    url: `accounts/profile/create/`,
     data: bodyFormData,
     headers: {
       "Content-Type": " multipart/form-data",
-      Authorization: undefined
     },
   })
     .then((res: any) => res)
@@ -159,16 +158,13 @@ export const createUserDetail = (
 ) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}website/v1/accounts/user-detail/create/`,
+    url: `accounts/user-detail/create/`,
     data: {
       favorites,
       difficulties,
       experiences,
       about,
     },
-    headers:{
-      Authorization: undefined
-    }
   })
     .then((res: any) => res)
     .catch((err: any) => err);
