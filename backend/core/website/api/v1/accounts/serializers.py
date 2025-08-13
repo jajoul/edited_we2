@@ -57,9 +57,11 @@ class ProfileCreationSerializer(serializers.ModelSerializer):
     """
     Second Step of signup: create profile instance and save profile information
     """
+    user_id = serializers.IntegerField(write_only=True, required=False, help_text="User ID from registration step if not authenticated.")
+
     class Meta:
         model = Profile
-        fields = ("first_name", "last_name", "avatar", "gender")
+        fields = ("first_name", "last_name", "avatar", "gender", "user_id")
 
     def create(self, validated_data):
         request = self.context.get('request')
