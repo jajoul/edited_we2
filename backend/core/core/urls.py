@@ -21,6 +21,10 @@ from django.views.generic import TemplateView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -87,10 +91,15 @@ if settings.SHOW_SWAGGER:
     ]
 
 # list your api urls here
-api_urlpatterns += [
-    path("website/",include('website.urls'))
+urlpatterns += [
+    path("website/",include('website.urls')),
 ]
-urlpatterns += [path('api/', include(api_urlpatterns))]
+
+urlpatterns += [
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/', include(api_urlpatterns))
+]
     
 
 handler400 = "core.error_views.error_400"  # bad_request
