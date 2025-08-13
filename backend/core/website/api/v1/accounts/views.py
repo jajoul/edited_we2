@@ -64,16 +64,10 @@ def register(request):
     user = serializer.save()
     login(request, user)
     
-    # Generate token for the new user
-    token_serializer = MyTokenObtainPairSerializer()
-    token = token_serializer.get_token(user)
-    
     return Response({
         "detail": "Successfully registered.",
         "user_id": user.id,
-        "username": user.username,
-        "access": str(token.access_token),
-        "refresh": str(token)
+        "username": user.username
     }, status=status.HTTP_201_CREATED)
 
 
@@ -81,10 +75,14 @@ class CreateProfileView(GenericAPIView):
     """
     Signup Step2: update profile info
     """
-    permission_classes = [IsAuthenticated]  # Only authenticated users can access
+    permission_classes = [AllowAny]
     serializer_class = ProfileCreationSerializer
 
     def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response({"detail": "Please complete step 1 first"}, 
+                          status=status.HTTP_400_BAD_REQUEST)
+                          
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         data = serializer.save()
