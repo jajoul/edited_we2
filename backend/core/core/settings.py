@@ -102,16 +102,24 @@ WSGI_APPLICATION = "core.wsgi.application"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 
-DATABASES = {
+if DEBUG:
+    DATABASES = {
         "default": {
-            "ENGINE": config("DB_ENGINE", default="django.db.backends.mysql"),
-            "NAME": config("DB_NAME", default="mysql"),
-            "USER": config("DB_USER", default="mysql"),
-            "PASSWORD": config("DB_PASS", default="mysql"),
-            "HOST": config("DB_HOST", default="db"),
-            "PORT": config("DB_PORT", cast=int, default=3306),
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
-}
+    }
+else:
+    DATABASES = {
+            "default": {
+                "ENGINE": config("DB_ENGINE", default="django.db.backends.mysql"),
+                "NAME": config("DB_NAME", default="mysql"),
+                "USER": config("DB_USER", default="mysql"),
+                "PASSWORD": config("DB_PASS", default="mysql"),
+                "HOST": config("DB_HOST", default="db"),
+                "PORT": config("DB_PORT", cast=int, default=3306),
+            }
+    }
 
 # ELASTIC SEARCH
 ES_URI = config("ELASTIC_URI", cast=str, default="http://elasticsearch:9200")
@@ -225,10 +233,8 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.AllowAny",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
-        "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
     ],
 }
 if config("DISABLE_BROWSEABLE_API", cast=bool, default=False):
