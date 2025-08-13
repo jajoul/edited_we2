@@ -6,6 +6,7 @@ from django.db.models import Subquery, OuterRef
 from website.models import User, ProfileQuestion, ProfileAnswer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from django.contrib.auth import login
 from rest_framework.decorators import api_view, permission_classes
@@ -14,6 +15,17 @@ from .serializers import (
     MyTokenObtainPairSerializer, UserCreationSerializer, ProfileCreationSerializer, PersonalDetailCreationSerializer, ForgetPasswordSerializer, GetUserTokenSerializer, ChangePasswordSerializer, UserSerializer, ProfileSerializer, SettingProfileInfoSerializer, SettingProfileChangeSerializer, SettingUsernameSendEmailSerializer, SettingEditUsernameSerializer, SettingProfileSerializer, SettingEditProfileAvatarSerializer, SettingEmailSendEmailSerializer, SettingEditEmailSerializer, ProfileAnswerSerializer, SettingProfileAnswerSerializer
 )
 from website.services import ForgetPasswordAuthenticationService
+
+class DebugJWTAuthentication(JWTAuthentication):
+    def authenticate(self, request):
+        print(f"DebugJWTAuthentication - Authorization header: {request.headers.get('Authorization')}")
+        try:
+            result = super().authenticate(request)
+            print(f"DebugJWTAuthentication - Authentication result: {result}")
+            return result
+        except Exception as e:
+            print(f"DebugJWTAuthentication - Authentication error: {e}")
+            return None
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -44,6 +56,7 @@ class CreateProfileView(GenericAPIView):
     Signup Step2: update profile info
     """
     permission_classes = [IsAuthenticated]
+    authentication_classes = [DebugJWTAuthentication]
     serializer_class = ProfileCreationSerializer
 
     def post(self, request, *args, **kwargs):
