@@ -57,21 +57,18 @@ class ProfileCreationSerializer(serializers.ModelSerializer):
     """
     Second Step of signup: create profile instance and save profile information
     """
-    user_id = serializers.IntegerField(write_only=True)
-
     class Meta:
         model = Profile
-        fields = ("first_name", "last_name", "avatar", "gender", "user_id")
+        fields = ("first_name", "last_name", "avatar", "gender")
 
-    def create(self, validated_data, user=None):
-        user_id = validated_data.pop('user_id')
-        try:
-            user = User.objects.get(id=user_id)
-        except User.DoesNotExist:
-            raise serializers.ValidationError("User does not exist")
+    def create(self, validated_data):
+        # Get user from request context
+        request = self.context.get('request')
+        if not request or not request.user.is_authenticated:
+            raise serializers.ValidationError("Authentication required")
             
-        # attach user (as required field) to profile validated data
-        validated_data["user"] = user
+        # attach user to profile validated data
+        validated_data["user"] = request.user
         profile = super().create(validated_data)
         return {"message": "user profile created successfully"}
     

@@ -1,6 +1,1 @@
-first_name
-sin
-last_name
-efw
-gender
-1
+703.dff64ed3.async.js:1  POST https://social.me2we2.com/api/website/v1/accounts/profile/create/ 400 (Bad Request)
