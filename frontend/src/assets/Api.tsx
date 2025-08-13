@@ -33,6 +33,8 @@ export const updateLocalData = () => {
   localStorageData = localStorage.getItem("WeTooAccessToken");
   userDataObject = localStorageData ? JSON.parse(localStorageData) : {};
   accessToken = userDataObject?.access;
+  // Also update the global user variable that the interceptor uses
+  user = userDataObject;
 };
 
 defaultApi.interceptors.request.use((config) => {
@@ -41,6 +43,9 @@ defaultApi.interceptors.request.use((config) => {
   }
   if (user && user.access) {
     config.headers.Authorization = `Bearer ${user.access}`;
+    console.log("Request interceptor - Setting Authorization header:", `Bearer ${user.access}`);
+  } else {
+    console.log("Request interceptor - No access token available");
   }
   return config;
 });
@@ -119,11 +124,15 @@ export const createUser = (
     .then((res: any) => {
       if (res?.status === 201 && res?.data?.access) {
         // Store the JWT tokens returned from registration
-        localStorage.setItem("WeTooAccessToken", JSON.stringify({
+        const tokenData = {
           access: res.data.access,
           refresh: res.data.refresh
-        }));
-        updateLocalData();
+        };
+        localStorage.setItem("WeTooAccessToken", JSON.stringify(tokenData));
+        // Update both the global user variable and accessToken
+        user = tokenData;
+        accessToken = tokenData.access;
+        console.log("Tokens stored after registration:", tokenData);
       }
       return res;
     })
@@ -143,6 +152,10 @@ export const createProfile = (
   if (avatar) {
     bodyFormData.append("avatar", avatar);
   }
+  
+  console.log("Creating profile with user data:", user);
+  console.log("Current access token:", accessToken);
+  
   return defaultApi({
     method: "post",
     url: `website/v1/accounts/profile/create/`,
