@@ -118,7 +118,7 @@ export const createUser = (
   })
     .then((res: any) => {
       if (res?.status === 201) {
-        loginUser(email, password)
+        return loginUser(email, password)
       }
       return res;
     })
