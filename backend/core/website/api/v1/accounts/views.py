@@ -75,18 +75,21 @@ class CreateProfileView(GenericAPIView):
     """
     Signup Step2: update profile info
     """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     serializer_class = ProfileCreationSerializer
 
     def post(self, request, *args, **kwargs):
-        print(f"CreateProfileView - Authorization header: {request.headers.get('Authorization')}")
-        print(f"CreateProfileView - User: {request.user}")
-        print(f"CreateProfileView - User is authenticated: {request.user.is_authenticated}")
-        
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         data = serializer.save()
         return Response(data, status=status.HTTP_201_CREATED)
+
+
+
+class CreatePersonalDetailView(GenericAPIView):
+    """
+    Create detail user info view
+    """
     
 
 
