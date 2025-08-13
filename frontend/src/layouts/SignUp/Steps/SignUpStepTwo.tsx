@@ -7,9 +7,12 @@ import { getFilesBaseOnLanguages } from "@/layouts/language/language";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 
-const SignUpStepTwo = (props: {
+interface SignUpStepTwoProps {
   setStep: React.Dispatch<React.SetStateAction<number>>;
-}) => {
+  userId: number | null;
+}
+
+const SignUpStepTwo = (props: SignUpStepTwoProps) => {
   const lang = getFilesBaseOnLanguages();
 
   const { setStep } = props;
@@ -54,7 +57,13 @@ const SignUpStepTwo = (props: {
   ];
 
   const goNext = () => {
-    if (info.first_name.trim().length > 1 && info.last_name.trim().length > 1 && props.userId) {
+    if (!props.userId) {
+      setError(true);
+      toast("User ID is missing. Please complete step 1 again.", { type: "error" });
+      console.error("User ID is missing in SignUpStepTwo. Props:", props);
+      return;
+    }
+    if (info.first_name.trim().length > 1 && info.last_name.trim().length > 1) {
       setLoading(true);
       console.log("User ID being sent:", props.userId);
       createProfile(
