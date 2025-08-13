@@ -79,10 +79,6 @@ class CreateProfileView(GenericAPIView):
     serializer_class = ProfileCreationSerializer
 
     def post(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return Response({"detail": "Please complete step 1 first"}, 
-                          status=status.HTTP_400_BAD_REQUEST)
-                          
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         data = serializer.save()
