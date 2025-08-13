@@ -2,7 +2,7 @@ import axios from "axios";
 import { logout } from "./functions";
 import { newChannelData } from "./Provider/types";
 
-export const base_url = `https://social.me2we2.com/api/website/v1/`;
+export const base_url = `https://social.me2we2.com/api/`;
 
 let localStorageData = localStorage.getItem("WeTooAccessToken");
 let userDataObject = localStorageData ? JSON.parse(localStorageData) : {};
@@ -39,20 +39,10 @@ defaultApi.interceptors.request.use((config) => {
   if (typeof localStorage !== "undefined") {
     user = JSON.parse(localStorage.getItem("WeTooAccessToken") || "{}");
   }
-  if (config.url?.includes("/create/")) {
-    if (accessRefreshData && !!accessRefreshData.access)
-      config.headers.Authorization = `Bearer ${accessRefreshData.access}`;
-    return config;
-  } else if (user === null || !user.access || !user.refresh) {
-    return config;
-  } else if (
-    !!user?.access &&
-    !config.url?.includes("/create") &&
-    !config.url?.includes("/login")
-  ) {
+  if (user && user.access) {
     config.headers.Authorization = `Bearer ${user.access}`;
-    return config;
-  } else return config;
+  }
+  return config;
 });
 
 defaultApi.interceptors.response.use(
@@ -66,21 +56,21 @@ defaultApi.interceptors.response.use(
     if (
       (response?.status === 401 || response?.status === 403) &&
       counter <= 5 &&
-      !config.url.includes(`${base_url}refresh`) // refresh
+      !config.url.includes(`${base_url}token/refresh`)
     ) {
       counter++;
       if (!isAlreadyFetchingAccessToken && user?.refresh) {
         isAlreadyFetchingAccessToken = true;
         generate_refresh_token(user.refresh).then((data) => {
           isAlreadyFetchingAccessToken = false;
-          if (data?.data?.result === "success") {
+          if (data?.data?.access) {
             user = {
               access: data?.data?.access,
-              refresh: data?.data?.refresh,
+              refresh: user.refresh,
             };
             localStorage.setItem("WeTooAccessToken", JSON.stringify(user));
           } else {
-            // logout();
+            logout();
           }
         });
       }
@@ -98,7 +88,7 @@ defaultApi.interceptors.response.use(
 export const generate_refresh_token = (refresh: string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}refresh`, //TODO:
+    url: `${base_url}token/refresh/`,
     data: {
       refresh,
     },
@@ -115,7 +105,7 @@ export const createUser = (
 ) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}accounts/user/create/`,
+    url: `${base_url}website/v1/accounts/user/create/`,
     data: {
       username,
       email,
@@ -128,7 +118,7 @@ export const createUser = (
   })
     .then((res: any) => {
       if (res?.status === 201) {
-        localStorage.setItem("WeTooAccessToken", JSON.stringify(res.data));
+        loginUser(email, password)
       }
       return res;
     })
@@ -183,16 +173,19 @@ export const createUserDetail = (
 export const loginUser = (email: string, password: string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}accounts/login/`,
+    url: `${base_url}token/`,
     data: {
       email,
       password,
     },
-    headers:{
-      Authorization: undefined
-    }
   })
-    .then((res: any) => res)
+    .then((res: any) => {
+      if (res?.status === 200) {
+        localStorage.setItem("WeTooAccessToken", JSON.stringify(res.data));
+        updateLocalData();
+      }
+      return res;
+    })
     .catch((err: any) => err);
 };
 
