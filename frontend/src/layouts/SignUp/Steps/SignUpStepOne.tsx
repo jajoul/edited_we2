@@ -72,10 +72,9 @@ const SignUpStepOne = (props: {
         setLoading(false);
         console.log("Registration response:", res);
         if (res?.status === 201) {
-          console.log("Storing tokens:", res.data);
-          // Use the same approach as login
-          localStorage.setItem("WeTooAccessToken", JSON.stringify(res.data));
-          updateLocalData();
+          console.log("Registration successful:", res.data);
+          // For session authentication, we don't need to store tokens
+          // The session cookie is automatically handled by the browser
           setStep((pre) => pre + 1);
         } else {
           let errorMessage: any = lang["toast_error"];

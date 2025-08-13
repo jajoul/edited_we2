@@ -75,8 +75,7 @@ const Form = () => {
         setLoading(false);
         if (res.status === 200) {
           const data = res.data;
-          localStorage.setItem("WeTooAccessToken", JSON.stringify(data));
-          updateLocalData()
+          // For session authentication, we don't need to store tokens
           dispatch({ type: CHANGE_IS_LOGIN, data: { isLogin: true } });
           if (data.destination === 0) {
             history.push("/insight-web");

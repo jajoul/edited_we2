@@ -10,8 +10,8 @@ export let accessToken = userDataObject?.access;
 
 let defaultApi = axios.create({
   baseURL: base_url,
+  withCredentials: true, // This enables sending cookies with requests
   headers: {
-    Authorization: !!accessToken ? `Bearer ${accessToken}` : undefined,
     // "Access-Control-Allow-Origin": "*",
   },
 });
@@ -42,15 +42,8 @@ export const updateLocalData = () => {
 };
 
 defaultApi.interceptors.request.use((config) => {
-  if (typeof localStorage !== "undefined") {
-    user = JSON.parse(localStorage.getItem("WeTooAccessToken") || "{}");
-  }
-  if (user && user.access) {
-    config.headers.Authorization = `Bearer ${user.access}`;
-    console.log("Request interceptor - Setting Authorization header for:", config.url);
-  } else {
-    console.log("Request interceptor - No access token available for:", config.url);
-  }
+  // For session authentication, we don't need to set any headers
+  // The session cookie will be sent automatically with withCredentials: true
   return config;
 });
 
@@ -184,10 +177,8 @@ export const loginUser = (email: string, password: string) => {
     },
   })
     .then((res: any) => {
-      if (res?.status === 200) {
-        localStorage.setItem("WeTooAccessToken", JSON.stringify(res.data));
-        updateLocalData();
-      }
+      // For session authentication, we don't need to store tokens
+      // The session cookie is automatically handled by the browser
       return res;
     })
     .catch((err: any) => err);

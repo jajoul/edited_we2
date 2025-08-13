@@ -4,9 +4,7 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.db.models import Subquery, OuterRef
 from website.models import User, ProfileQuestion, ProfileAnswer
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.authentication import JWTAuthentication
+
 
 from django.contrib.auth import login
 from rest_framework.decorators import api_view, permission_classes
@@ -16,44 +14,47 @@ from .serializers import (
 )
 from website.services import ForgetPasswordAuthenticationService
 
-class DebugJWTAuthentication(JWTAuthentication):
-    def authenticate(self, request):
-        print(f"DebugJWTAuthentication - Authorization header: {request.headers.get('Authorization')}")
-        try:
-            # First, let's decode the token manually to see what's in it
-            auth_header = request.headers.get('Authorization')
-            if auth_header and auth_header.startswith('Bearer '):
-                token = auth_header.split(' ')[1]
-                print(f"DebugJWTAuthentication - Token: {token}")
-                
-                # Decode the token to see the payload
-                from rest_framework_simplejwt.tokens import AccessToken
-                try:
-                    access_token = AccessToken(token)
-                    print(f"DebugJWTAuthentication - Token payload: {access_token.payload}")
-                    user_id = access_token.payload.get('user_id')
-                    print(f"DebugJWTAuthentication - User ID from token: {user_id}")
-                    
-                    # Try to find the user manually
-                    from website.models import User
-                    try:
-                        user = User.objects.get(id=user_id)
-                        print(f"DebugJWTAuthentication - Found user: {user}")
-                    except User.DoesNotExist:
-                        print(f"DebugJWTAuthentication - User with ID {user_id} not found in database")
-                except Exception as decode_error:
-                    print(f"DebugJWTAuthentication - Token decode error: {decode_error}")
-            
-            result = super().authenticate(request)
-            print(f"DebugJWTAuthentication - Authentication result: {result}")
-            return result
-        except Exception as e:
-            print(f"DebugJWTAuthentication - Authentication error: {e}")
-            return None
 
 
-class MyTokenObtainPairView(TokenObtainPairView):
-    serializer_class = MyTokenObtainPairSerializer
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def login_view(request):
+    from django.contrib.auth import authenticate, login
+    from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+    
+    email = request.data.get('email')
+    password = request.data.get('password')
+    
+    if not email or not password:
+        return Response({
+            "detail": "Email and password are required"
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Authenticate user
+    user = authenticate(request, username=email, password=password)
+    
+    if user is None:
+        return Response({
+            "detail": "Invalid credentials"
+        }, status=status.HTTP_401_UNAUTHORIZED)
+    
+    # Login user (creates session)
+    login(request, user)
+    
+    # Check user profile status
+    destination = 0
+    if not hasattr(user, 'profile'):
+        destination = 1
+    elif not hasattr(user.profile, 'personal_detail'):
+        destination = 2
+    
+    return Response({
+        "detail": "Login successful",
+        "user_id": user.id,
+        "username": user.username,
+        "destination": destination
+    }, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -63,16 +64,11 @@ def register(request):
     user = serializer.save()
     login(request, user)
     
-    # Generate JWT tokens for the newly created user
-    refresh = RefreshToken.for_user(user)
-    
-    response_data = {
+    return Response({
         "detail": "Successfully registered.",
-        "access": str(refresh.access_token),
-        "refresh": str(refresh)
-    }
-    print(f"Registration - Returning tokens: {response_data}")
-    return Response(response_data, status=status.HTTP_201_CREATED)
+        "user_id": user.id,
+        "username": user.username
+    }, status=status.HTTP_201_CREATED)
 
 
 class CreateProfileView(GenericAPIView):
@@ -80,7 +76,6 @@ class CreateProfileView(GenericAPIView):
     Signup Step2: update profile info
     """
     permission_classes = [IsAuthenticated]
-    authentication_classes = [DebugJWTAuthentication]
     serializer_class = ProfileCreationSerializer
 
     def post(self, request, *args, **kwargs):
