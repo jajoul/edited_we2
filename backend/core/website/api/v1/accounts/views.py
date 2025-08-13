@@ -28,7 +28,6 @@ class CreateProfileView(GenericAPIView):
     """
     Signup Step2: update profile info
     """
-    permission_classes = [IsAuthenticated]
     serializer_class = ProfileCreationSerializer
 
     def post(self, request, *args, **kwargs):
@@ -42,7 +41,6 @@ class CreatePersonalDetailView(GenericAPIView):
     """
     Create detail user info view
     """
-    permission_classes = [IsAuthenticated]
     serializer_class = PersonalDetailCreationSerializer
 
     def post(self, request, *args, **kwargs):
