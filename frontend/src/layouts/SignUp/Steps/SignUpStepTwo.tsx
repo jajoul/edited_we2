@@ -56,6 +56,7 @@ const SignUpStepTwo = (props: {
   const goNext = () => {
     if (info.first_name.trim().length > 1 && info.last_name.trim().length > 1 && props.userId) {
       setLoading(true);
+      console.log("User ID being sent:", props.userId);
       createProfile(
         props.userId,
         info.first_name,
