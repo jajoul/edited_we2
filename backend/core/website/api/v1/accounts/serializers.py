@@ -15,7 +15,7 @@ from website.tools.auth import check_username_validation
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    username_field = User.EMAIL_FIELD
+    username_field = User.USERNAME_FIELD
 
 
 class UserCreationSerializer(serializers.ModelSerializer):
