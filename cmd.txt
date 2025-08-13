@@ -1,20 +1,14 @@
-(venv) root@vm-163079:/home/edited_we2/backend/core# sudo systemctl status gunicorn.service
-× gunicorn.service - gunicorn daemon
-     Loaded: loaded (/etc/systemd/system/gunicorn.service; enabled; vendor preset: enabled)
-     Active: failed (Result: exit-code) since Tue 2025-08-12 23:08:24 UTC; 15s ago
-TriggeredBy: × gunicorn.socket
-    Process: 868167 ExecStart=/home/edited_we2/backend/venv/bin/gunicorn --pythonpath /home/edited_we2/backend --access>
-   Main PID: 868167 (code=exited, status=1/FAILURE)
-        CPU: 1.580s
-
-Aug 12 23:08:23 vm-163079 gunicorn[868167]:   File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/gunicorn>
-Aug 12 23:08:23 vm-163079 gunicorn[868167]:     time.sleep(0.1)
-Aug 12 23:08:23 vm-163079 gunicorn[868167]:   File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/gunicorn>
-Aug 12 23:08:23 vm-163079 gunicorn[868167]:     self.reap_workers()
-Aug 12 23:08:23 vm-163079 gunicorn[868167]:   File "/home/edited_we2/backend/venv/lib/python3.10/site-packages/gunicorn>
-Aug 12 23:08:24 vm-163079 gunicorn[868167]:     raise HaltServer(reason, self.WORKER_BOOT_ERROR)
-Aug 12 23:08:24 vm-163079 gunicorn[868167]: gunicorn.errors.HaltServer: <HaltServer 'Worker failed to boot.' 3>
-Aug 12 23:08:24 vm-163079 systemd[1]: gunicorn.service: Main process exited, code=exited, status=1/FAILURE
-Aug 12 23:08:24 vm-163079 systemd[1]: gunicorn.service: Failed with result 'exit-code'.
-Aug 12 23:08:24 vm-163079 systemd[1]: gunicorn.service: Consumed 1.580s CPU time.
-lines 1-18/18 (END)
+(venv) root@vm-163079:/home/edited_we2# sudo systemctl restart gunicorn
+(venv) root@vm-163079:/home/edited_we2# sudo journalctl -f -u gunicorn.service
+Aug 13 13:37:26 vm-163079 systemd[1]: gunicorn.service: Deactivated successfully.
+Aug 13 13:37:26 vm-163079 systemd[1]: Stopped gunicorn daemon.
+Aug 13 13:37:26 vm-163079 systemd[1]: gunicorn.service: Consumed 5.361s CPU time.
+Aug 13 13:37:26 vm-163079 systemd[1]: Started gunicorn daemon.
+Aug 13 13:37:27 vm-163079 gunicorn[934739]: [2025-08-13 13:37:27 +0000] [934739] [INFO] Starting gunicorn 20.1.0
+Aug 13 13:37:27 vm-163079 gunicorn[934739]: [2025-08-13 13:37:27 +0000] [934739] [INFO] Listening at: unix:/run/gunicorn.sock (934739)
+Aug 13 13:37:27 vm-163079 gunicorn[934739]: [2025-08-13 13:37:27 +0000] [934739] [INFO] Using worker: sync
+Aug 13 13:37:27 vm-163079 gunicorn[934740]: [2025-08-13 13:37:27 +0000] [934740] [INFO] Booting worker with pid: 934740
+Aug 13 13:37:27 vm-163079 gunicorn[934741]: [2025-08-13 13:37:27 +0000] [934741] [INFO] Booting worker with pid: 934741
+Aug 13 13:37:27 vm-163079 gunicorn[934742]: [2025-08-13 13:37:27 +0000] [934742] [INFO] Booting worker with pid: 934742
+Aug 13 13:38:00 vm-163079 gunicorn[934741]: Not Found: /api/website/v1/accounts/user/create/
+Aug 13 13:38:00 vm-163079 gunicorn[934741]:  - - [13/Aug/2025:13:38:00 +0000] "POST /api/website/v1/accounts/user/create/ HTTP/1.0" 404 3553 "https://social.me2we2.com/signup" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"

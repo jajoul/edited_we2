@@ -117,8 +117,13 @@ export const createUser = (
     }
   })
     .then((res: any) => {
-      if (res?.status === 201) {
-        return loginUser(email, password)
+      if (res?.status === 201 && res?.data?.access) {
+        // Store the JWT tokens returned from registration
+        localStorage.setItem("WeTooAccessToken", JSON.stringify({
+          access: res.data.access,
+          refresh: res.data.refresh
+        }));
+        updateLocalData();
       }
       return res;
     })
@@ -142,9 +147,6 @@ export const createProfile = (
     method: "post",
     url: `website/v1/accounts/profile/create/`,
     data: bodyFormData,
-    headers: {
-      "Content-Type": " multipart/form-data",
-    },
   })
     .then((res: any) => res)
     .catch((err: any) => err);

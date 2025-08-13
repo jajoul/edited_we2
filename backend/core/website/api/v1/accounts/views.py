@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.db.models import Subquery, OuterRef
 from website.models import User, ProfileQuestion, ProfileAnswer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from django.contrib.auth import login
 from rest_framework.decorators import api_view, permission_classes
@@ -25,7 +26,15 @@ def register(request):
     serializer.is_valid(raise_exception=True)
     user = serializer.save()
     login(request, user)
-    return Response({"detail": "Successfully registered."}, status=status.HTTP_201_CREATED)
+    
+    # Generate JWT tokens for the newly created user
+    refresh = RefreshToken.for_user(user)
+    
+    return Response({
+        "detail": "Successfully registered.",
+        "access": str(refresh.access_token),
+        "refresh": str(refresh)
+    }, status=status.HTTP_201_CREATED)
 
 
 class CreateProfileView(GenericAPIView):
