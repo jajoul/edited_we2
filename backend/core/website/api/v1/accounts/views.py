@@ -76,6 +76,7 @@ class CreateProfileView(GenericAPIView):
     Signup Step2: update profile info
     """
     permission_classes = [AllowAny]
+    authentication_classes = [] # Add this line
     serializer_class = ProfileCreationSerializer
 
     def post(self, request, *args, **kwargs):
