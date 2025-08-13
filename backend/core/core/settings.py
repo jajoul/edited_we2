@@ -242,6 +242,10 @@ if config("DISABLE_BROWSEABLE_API", cast=bool, default=False):
         "rest_framework.renderers.JSONRenderer",)
 
 
+SESSION_COOKIE_DOMAIN = ".me2we2.com"
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True
+
 # cors headers config
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
