@@ -272,8 +272,8 @@ SPECTACULAR_SETTINGS = {
     "SCHEMA_PROTOCOL": ["https"],
 }
 
-
-
-
-
-
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'https://social.me2we2.com',
+]
