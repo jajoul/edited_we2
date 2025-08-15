@@ -11,7 +11,7 @@ import { getFilesBaseOnLanguages } from "@/layouts/language/language";
 import { Context } from "@/assets/Provider/Provider";
 import { CHANGE_IS_LOGIN } from "@/assets/Provider/types";
 
-const SignUpStepThree = () => {
+const SignUpStepThree = ({ userId }: { userId: number | null }) => {
   const lang = getFilesBaseOnLanguages();
 
   type keyType = "favorites" | "difficulties" | "experiences" | "about_you";
@@ -58,7 +58,8 @@ const SignUpStepThree = () => {
         info.favorites.value,
         info.difficulties.value,
         info.experiences.value,
-        info.about_you.value
+        info.about_you.value,
+        userId
       ).then((res) => {
         setLoading(false);
         if (res.status === 201) {

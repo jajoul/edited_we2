@@ -19,7 +19,7 @@ const SignUpForm = () => {
   const stepComponents = [
     <SignUpStepOne setStep={setStep} setUserId={setUserId} />,
     <SignUpStepTwo setStep={setStep} userId={userId} />,
-    <SignUpStepThree />,
+    <SignUpStepThree userId={userId} />,
   ];
 
   const lang = getFilesBaseOnLanguages();

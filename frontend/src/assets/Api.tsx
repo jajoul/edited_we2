@@ -156,7 +156,8 @@ export const createUserDetail = (
   favorites: string,
   difficulties: string,
   experiences: string,
-  about: string
+  about: string,
+  user_id: number | null
 ) => {
   return defaultApi({
     method: "post",
@@ -166,6 +167,7 @@ export const createUserDetail = (
       difficulties,
       experiences,
       about,
+      user_id,
     },
   })
     .then((res: any) => res)

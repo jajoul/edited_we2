@@ -3,7 +3,6 @@ import { defineConfig } from "umi";
 export default defineConfig({
   ssr: false,
   hash: true,
-  
   routes: [
     { path: "/", component: "index", exact: "true" },
     { path: "/login", component: "Login/Login" },

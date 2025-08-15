@@ -9,6 +9,7 @@ import { Link } from "umi";
 
 const SignUpStepOne = (props: {
   setStep: React.Dispatch<React.SetStateAction<number>>;
+  setUserId: React.Dispatch<React.SetStateAction<number | null>>;
 }) => {
   const { setStep } = props;
   const lang = getFilesBaseOnLanguages();
@@ -82,7 +83,12 @@ const SignUpStepOne = (props: {
           if (res?.response?.data) {
             const errorValues = Object.values(res.response?.data);
             if (errorValues.length > 0) {
-              errorMessage = errorValues.map((error: any) => error.join(' ')).join('\n');
+              errorMessage = errorValues.map((error: any) => {
+                if (Array.isArray(error)) {
+                  return error.join(' ');
+                }
+                return error;
+              }).join('\n');
             }
           }
 

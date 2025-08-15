@@ -76,8 +76,8 @@ class ProfileCreationSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("User does not exist")
         else:
             raise serializers.ValidationError("Authentication required or user_id must be provided")
-        validated_data["user"] = user
-        profile = super().create(validated_data)
+        
+        profile = Profile.objects.create(user=user, **validated_data)
         return {"message": "user profile created successfully"}
     
 
@@ -103,25 +103,32 @@ class PersonalDetailCreationSerializer(serializers.ModelSerializer):
     """
     Creating an object for users detail info
     """
+    user_id = serializers.IntegerField(write_only=True, required=False, help_text="User ID from registration step if not authenticated.")
+
     class Meta:
         model = PersonalDetail
-        fields = ('favorites', 'difficulties', 'experiences', 'about')
+        fields = ('favorites', 'difficulties', 'experiences', 'about', 'user_id')
 
-    def validate(self, attrs):
+    def create(self, validated_data):
+        request = self.context.get('request')
+        user = None
+        if request and hasattr(request, 'user') and request.user.is_authenticated:
+            user = request.user
+        elif 'user_id' in validated_data:
+            from website.models import User
+            try:
+                user = User.objects.get(id=validated_data.pop('user_id'))
+            except User.DoesNotExist:
+                raise serializers.ValidationError("User does not exist")
+        else:
+            raise serializers.ValidationError("Authentication required or user_id must be provided")
+        
+        try:
+            profile = user.profile
+        except Profile.DoesNotExist:
+            raise serializers.ValidationError("No profile created for user")
 
-        user = self.context["request"].user
-        if not hasattr(user, 'profile'):
-            raise CustomException(
-                "No profile created for user",
-                "error",
-                status_code=status.HTTP_401_UNAUTHORIZED,
-            )
-
-        return super().validate(attrs)
-
-    def create(self, validated_data, user=None):
-        # attach user (as required field) to profile validated data
-        validated_data["profile"] = self.context["request"].user.profile
+        validated_data["profile"] = profile
         super().create(validated_data)
         return {"message": "user detail created successfully"}
     

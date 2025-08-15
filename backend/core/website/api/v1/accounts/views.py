@@ -91,15 +91,7 @@ class CreatePersonalDetailView(GenericAPIView):
     """
     Create detail user info view
     """
-    
-
-
-
-class CreatePersonalDetailView(GenericAPIView):
-    """
-    Create detail user info view
-    """
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     serializer_class = PersonalDetailCreationSerializer
 
     def post(self, request, *args, **kwargs):
