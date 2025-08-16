@@ -108,7 +108,7 @@ export const createUser = (
 ) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}website/v1/accounts/register/`,
+  url: `website/v1/accounts/register/`,
     data: {
       username,
       email,
@@ -253,7 +253,7 @@ export const getChannelsList = () => {
 export const getChannel = (id: string) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}website/v1/channels/channel/${id}/`,
+  url: `website/v1/channels/channel/${id}/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -275,7 +275,7 @@ export const createChannel = (data: {
 
   return defaultApi({
     method: "post",
-    url: `${base_url}website/v1/channels/channel/`,
+  url: `website/v1/channels/channel/`,
     data: bodyFormData,
     headers: {
       "Content-Type": " multipart/form-data",
@@ -304,7 +304,7 @@ export const updateChannel = (
 
   return defaultApi({
     method: "patch",
-    url: `${base_url}website/v1/channels/channel/${id}/`,
+  url: `website/v1/channels/channel/${id}/`,
     data: bodyFormData,
     headers: {
       "Content-Type": " multipart/form-data",
@@ -317,7 +317,7 @@ export const updateChannel = (
 export const deleteChannel = (id: string) => {
   return defaultApi({
     method: "delete",
-    url: `${base_url}website/v1/channels/channel/${id}/`,
+  url: `website/v1/channels/channel/${id}/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -326,7 +326,7 @@ export const deleteChannel = (id: string) => {
 export const getDailyQuestion = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}website/v1/daily_questions/question`,
+  url: `website/v1/daily_questions/question`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -339,7 +339,7 @@ export const answerDailyQuestion = (data: {
 }) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}website/v1/daily_questions/answer/`,
+  url: `website/v1/daily_questions/answer/`,
     data: {
       content: data.content,
       question_id: data.question_id,
@@ -353,7 +353,7 @@ export const answerDailyQuestion = (data: {
 export const advertise = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}website/v1/site_behavior/advertisement/`,
+  url: `website/v1/site_behavior/advertisement/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -376,7 +376,7 @@ export const createEditTopic = (
 
   return defaultApi({
     method: edit ? "patch" : "post",
-    url: `${base_url}website/v1/site_behavior/topic/${id ? id + "/" : ""}`,
+  url: `website/v1/site_behavior/topic/${id ? id + "/" : ""}`,
     data: {
       ...data,
       tags: data.tags.join(","),
@@ -393,7 +393,7 @@ export const createEditTopic = (
 export const chanelTopicList = (id: string) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}website/v1/site_behavior/topic/channel/${id}/`,
+  url: `website/v1/site_behavior/topic/channel/${id}/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -402,7 +402,7 @@ export const chanelTopicList = (id: string) => {
 export const deleteImage = (id:string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}website/v1/site_behavior/topic/remove/image/${id}`,
+  url: `website/v1/site_behavior/topic/remove/image/${id}`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -411,7 +411,7 @@ export const deleteImage = (id:string) => {
 export const deleteVideo = (id:string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}website/v1/site_behavior/topic/remove/video/${id}`,
+  url: `website/v1/site_behavior/topic/remove/video/${id}`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -420,7 +420,7 @@ export const deleteVideo = (id:string) => {
 export const deletePDF = (id:string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}website/v1/site_behavior/topic/remove/pdf/${id}`,
+  url: `website/v1/site_behavior/topic/remove/pdf/${id}`,
   })
     .then((res) => res)
     .catch((err) => err);
