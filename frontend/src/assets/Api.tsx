@@ -108,7 +108,7 @@ export const createUser = (
 ) => {
   return defaultApi({
     method: "post",
-    url: `/api/v1/accounts/register/`,
+    url: `website/v1/accounts/user/create/`,
     data: {
       username,
       email,
