@@ -112,24 +112,28 @@ class PersonalDetailCreationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         request = self.context.get('request')
         user = None
+
+        # Safely pop user_id if it exists in validated_data
+        user_id_from_data = validated_data.pop('user_id', None)
+
         if request and hasattr(request, 'user') and request.user.is_authenticated:
             user = request.user
-        elif 'user_id' in validated_data:
+        elif user_id_from_data: # Use the popped user_id
             from website.models import User
             try:
-                user = User.objects.get(id=validated_data.pop('user_id'))
+                user = User.objects.get(id=user_id_from_data)
             except User.DoesNotExist:
                 raise serializers.ValidationError("User does not exist")
         else:
             raise serializers.ValidationError("Authentication required or user_id must be provided")
-        
+
         try:
             profile = user.profile
         except Profile.DoesNotExist:
             raise serializers.ValidationError("No profile created for user")
 
         validated_data["profile"] = profile
-        super().create(validated_data)
+        instance = super().create(validated_data)
         return {"message": "user detail created successfully"}
     
 
