@@ -60,6 +60,8 @@ INSTALLED_APPS = [
     'django_elasticsearch_dsl_drf',
 ]
 
+AUTH_USER_MODEL = 'website.User'
+
 
 
 SITE_ID = config("SITE_ID", cast=int, default=1)
