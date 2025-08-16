@@ -239,7 +239,7 @@ export const forgotPassConfirmNewPass = (
 export const getChannelsList = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}channel/`,
+    url: `${base_url}website/v1/channel/`,
   })
     .then((res) => res)
     .catch((error) => error);
@@ -248,7 +248,7 @@ export const getChannelsList = () => {
 export const getChannel = (id: string) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}channel/${id}`,
+    url: `${base_url}website/v1/channel/${id}`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -299,7 +299,7 @@ export const updateChannel = (
 
   return defaultApi({
     method: "patch",
-    url: `${base_url}channel/${id}/`,
+    url: `${base_url}website/v1/channel/${id}/`,
     data: bodyFormData,
     headers: {
       "Content-Type": " multipart/form-data",
@@ -312,7 +312,7 @@ export const updateChannel = (
 export const deleteChannel = (id: string) => {
   return defaultApi({
     method: "delete",
-    url: `${base_url}channel/${id}`,
+    url: `${base_url}website/v1/channel/${id}`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -348,7 +348,7 @@ export const answerDailyQuestion = (data: {
 export const advertise = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}site_behavior/advertisement/`,
+    url: `${base_url}website/v1/site_behavior/advertisement/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -424,7 +424,7 @@ export const deletePDF = (id:string) => {
 export const followedTopics = (limit?: number | string) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}site_behavior/topic/list/followed/${
+    url: `${base_url}website/v1/site_behavior/topic/list/followed/${
       limit ? "?limit=" + limit : ""
     }`,
   })
@@ -435,7 +435,7 @@ export const followedTopics = (limit?: number | string) => {
 export const newestTopicsList = (limit?: number) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}site_behavior/topic/list/newest/${
+    url: `${base_url}website/v1/site_behavior/topic/list/newest/${
       limit ? "?limit=" + limit : ""
     }`,
   })
@@ -455,7 +455,7 @@ export const allTopics = () => {
 export const topTopics = (limit?: number) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}site_behavior/topic/list/top/${
+    url: `${base_url}website/v1/site_behavior/topic/list/top/${
       limit ? "?limit=" + limit : ""
     }`,
   })
@@ -502,7 +502,7 @@ export const getAccount = () => {
 export const trendTags = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}site_behavior/tags/trend/`,
+    url: `${base_url}website/v1/site_behavior/tags/trend/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -599,7 +599,7 @@ export const getCommentReplies = (commentId: string) => {
 export const followChannel = (id: string, follow: boolean) => {
   return defaultApi({
     method: follow ? "post" : "delete",
-    url: `${base_url}channel/${id}/follow`,
+    url: `${base_url}website/v1/channel/${id}/follow`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -617,7 +617,7 @@ export const filterTopicsByTag = (id: string) => {
 export const myChannels = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}channel/list/owner`,
+    url: `${base_url}website/v1/channel/list/owner`,
   })
     .then((res) => res)
     .catch((err) => err);
