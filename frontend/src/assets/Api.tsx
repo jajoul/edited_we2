@@ -2,7 +2,7 @@ import axios from "axios";
 import { logout } from "./functions";
 import { newChannelData } from "./Provider/types";
 
-export const base_url = `https://social.me2we2.com/api/`;
+export const base_url = `/api/`;
 
 let localStorageData = localStorage.getItem("WeTooAccessToken");
 let userDataObject = localStorageData ? JSON.parse(localStorageData) : {};
@@ -42,8 +42,9 @@ export const updateLocalData = () => {
 };
 
 defaultApi.interceptors.request.use((config) => {
-  // For session authentication, we don't need to set any headers
-  // The session cookie will be sent automatically with withCredentials: true
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
+  }
   return config;
 });
 
@@ -58,7 +59,7 @@ defaultApi.interceptors.response.use(
     if (
       (response?.status === 401 || response?.status === 403) &&
       counter <= 5 &&
-      !config.url.includes(`${base_url}token/refresh`)
+      !config.url.includes(`token/refresh`)
     ) {
       counter++;
       if (!isAlreadyFetchingAccessToken && user?.refresh) {
@@ -107,7 +108,7 @@ export const createUser = (
 ) => {
   return defaultApi({
     method: "post",
-    url: `website/v1/accounts/user/create/`,
+  url: `website/v1/accounts/register/`,
     data: {
       username,
       email,
@@ -119,6 +120,9 @@ export const createUser = (
     }
   })
     .then((res: any) => {
+      if (res.data.access) {
+        updateAccessToken(res.data);
+      }
       return res;
     })
     .catch((err: any) => err);
@@ -184,8 +188,9 @@ export const loginUser = (email: string, password: string) => {
     },
   })
     .then((res: any) => {
-      // For session authentication, we don't need to store tokens
-      // The session cookie is automatically handled by the browser
+      if (res.data.access) {
+        updateAccessToken(res.data);
+      }
       return res;
     })
     .catch((err: any) => err);
@@ -194,7 +199,7 @@ export const loginUser = (email: string, password: string) => {
 export const forgotPasswordCreate = (email: string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}accounts/forget-password/`,
+    url: `website/v1/accounts/forget-password/`,
     data: {
       email,
     },
@@ -206,7 +211,7 @@ export const forgotPasswordCreate = (email: string) => {
 export const confirmForgotPasswordCode = (email: string, token: string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}accounts/forget-password/token/`,
+    url: `website/v1/accounts/forget-password/token/`,
     data: {
       email,
       token,
@@ -224,7 +229,7 @@ export const forgotPassConfirmNewPass = (
 ) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}accounts/forget-password/change/`,
+    url: `website/v1/accounts/forget-password/change/`,
     data: {
       email,
       token,
@@ -239,7 +244,7 @@ export const forgotPassConfirmNewPass = (
 export const getChannelsList = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}website/v1/channel/`,
+  url: `${base_url}website/v1/channels/channel/`,
   })
     .then((res) => res)
     .catch((error) => error);
@@ -248,7 +253,7 @@ export const getChannelsList = () => {
 export const getChannel = (id: string) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}website/v1/channel/${id}`,
+    url: `${base_url}website/v1/channels/channel/${id}/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -270,7 +275,7 @@ export const createChannel = (data: {
 
   return defaultApi({
     method: "post",
-    url: `${base_url}website/v1/channel/`,
+    url: `${base_url}website/v1/channels/channel/`,
     data: bodyFormData,
     headers: {
       "Content-Type": " multipart/form-data",
@@ -299,7 +304,7 @@ export const updateChannel = (
 
   return defaultApi({
     method: "patch",
-    url: `${base_url}website/v1/channel/${id}/`,
+    url: `${base_url}website/v1/channels/channel/${id}/`,
     data: bodyFormData,
     headers: {
       "Content-Type": " multipart/form-data",
@@ -312,7 +317,7 @@ export const updateChannel = (
 export const deleteChannel = (id: string) => {
   return defaultApi({
     method: "delete",
-    url: `${base_url}website/v1/channel/${id}`,
+    url: `${base_url}website/v1/channels/channel/${id}/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -321,7 +326,7 @@ export const deleteChannel = (id: string) => {
 export const getDailyQuestion = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}website/v1/daily_questions/question/`,
+    url: `${base_url}website/v1/daily_questions/question`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -334,7 +339,7 @@ export const answerDailyQuestion = (data: {
 }) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}daily_questions/answer/`,
+    url: `${base_url}website/v1/daily_questions/answer/`,
     data: {
       content: data.content,
       question_id: data.question_id,
@@ -371,7 +376,7 @@ export const createEditTopic = (
 
   return defaultApi({
     method: edit ? "patch" : "post",
-    url: `${base_url}site_behavior/topic/${id ? id + "/" : ""}`,
+    url: `${base_url}website/v1/site_behavior/topic/${id ? id + "/" : ""}`,
     data: {
       ...data,
       tags: data.tags.join(","),
@@ -388,7 +393,7 @@ export const createEditTopic = (
 export const chanelTopicList = (id: string) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}site_behavior/topic/channel/${id}/`,
+    url: `${base_url}website/v1/site_behavior/topic/channel/${id}/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -397,7 +402,7 @@ export const chanelTopicList = (id: string) => {
 export const deleteImage = (id:string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}site_behavior/topic/remove/image/${id}`,
+    url: `${base_url}website/v1/site_behavior/topic/remove/image/${id}`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -406,7 +411,7 @@ export const deleteImage = (id:string) => {
 export const deleteVideo = (id:string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}site_behavior/topic/remove/video/${id}`,
+    url: `${base_url}website/v1/site_behavior/topic/remove/video/${id}`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -415,7 +420,7 @@ export const deleteVideo = (id:string) => {
 export const deletePDF = (id:string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}site_behavior/topic/remove/pdf/${id}`,
+    url: `${base_url}website/v1/site_behavior/topic/remove/pdf/${id}`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -424,7 +429,7 @@ export const deletePDF = (id:string) => {
 export const followedTopics = (limit?: number | string) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}website/v1/site_behavior/topic/list/followed/${
+    url: `website/v1/site_behavior/topic/list/followed/${
       limit ? "?limit=" + limit : ""
     }`,
   })
@@ -435,7 +440,7 @@ export const followedTopics = (limit?: number | string) => {
 export const newestTopicsList = (limit?: number) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}website/v1/site_behavior/topic/list/newest/${
+    url: `website/v1/site_behavior/topic/list/newest/${
       limit ? "?limit=" + limit : ""
     }`,
   })
@@ -446,7 +451,7 @@ export const newestTopicsList = (limit?: number) => {
 export const allTopics = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}site_behavior/topic/`,
+    url: `website/v1/site_behavior/topic/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -455,7 +460,7 @@ export const allTopics = () => {
 export const topTopics = (limit?: number) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}website/v1/site_behavior/topic/list/top/${
+    url: `website/v1/site_behavior/topic/list/top/${
       limit ? "?limit=" + limit : ""
     }`,
   })
@@ -466,7 +471,7 @@ export const topTopics = (limit?: number) => {
 export const recommendedTopics = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}site_behavior/topic/list/recommended/`,
+    url: `website/v1/site_behavior/topic/list/recommended/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -475,7 +480,7 @@ export const recommendedTopics = () => {
 export const getTopicById = (id: string) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}site_behavior/topic/${id}/`,
+    url: `website/v1/site_behavior/topic/${id}/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -484,7 +489,7 @@ export const getTopicById = (id: string) => {
 export const getTags = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}site_behavior/tags/`,
+    url: `website/v1/site_behavior/tags/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -493,7 +498,7 @@ export const getTags = () => {
 export const getAccount = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}accounts/user/full-info/`,
+    url: `website/v1/accounts/user/full-info/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -502,7 +507,7 @@ export const getAccount = () => {
 export const trendTags = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}website/v1/site_behavior/tags/trend/`,
+    url: `website/v1/site_behavior/tags/trend/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -515,7 +520,7 @@ export const sendTopicComment = (
 ) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}site_behavior/comments/topic/${topicId}/`,
+    url: `website/v1/site_behavior/comments/topic/${topicId}/`,
     data: {
       score,
       content,
@@ -528,7 +533,7 @@ export const sendTopicComment = (
 export const getTopicComments = (topicId: string) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}site_behavior/comments/topic/${topicId}/`,
+    url: `website/v1/site_behavior/comments/topic/${topicId}/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -537,7 +542,7 @@ export const getTopicComments = (topicId: string) => {
 export const toggleTopicLike = (topicId: string, like: boolean) => {
   return defaultApi({
     method: like ? "post" : "delete",
-    url: `${base_url}site_behavior/like/${topicId}/`,
+    url: `website/v1/site_behavior/like/${topicId}/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -546,7 +551,7 @@ export const toggleTopicLike = (topicId: string, like: boolean) => {
 export const getTopicLike = (topicId: string) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}site_behavior/like/${topicId}/`,
+    url: `website/v1/site_behavior/like/${topicId}/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -555,7 +560,7 @@ export const getTopicLike = (topicId: string) => {
 export const searchTopics = (search: string) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}search/topic/?q=${search}`,
+    url: `website/v1/search/topic/?q=${search}`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -564,7 +569,7 @@ export const searchTopics = (search: string) => {
 export const searchChannels = (search: string) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}search/channel/?q=${search}`,
+    url: `website/v1/search/channel/?q=${search}`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -577,7 +582,7 @@ export const replyComment = (
 ) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}site_behavior/comments/reply/${commentId}/`,
+    url: `website/v1/site_behavior/comments/reply/${commentId}/`,
     data: {
       content,
       score,
@@ -590,7 +595,7 @@ export const replyComment = (
 export const getCommentReplies = (commentId: string) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}site_behavior/comments/reply/${commentId}/`,
+    url: `website/v1/site_behavior/comments/reply/${commentId}/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -599,7 +604,7 @@ export const getCommentReplies = (commentId: string) => {
 export const followChannel = (id: string, follow: boolean) => {
   return defaultApi({
     method: follow ? "post" : "delete",
-    url: `${base_url}website/v1/channel/${id}/follow`,
+  url: `${base_url}website/v1/channels/channel/${id}/follow`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -608,7 +613,7 @@ export const followChannel = (id: string, follow: boolean) => {
 export const filterTopicsByTag = (id: string) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}site_behavior/topic/list/by-tag/${id}/`,
+    url: `website/v1/site_behavior/topic/list/by-tag/${id}/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -617,7 +622,7 @@ export const filterTopicsByTag = (id: string) => {
 export const myChannels = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}website/v1/channel/list/owner`,
+  url: `${base_url}website/v1/channels/channel/list/owner`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -626,7 +631,7 @@ export const myChannels = () => {
 export const lastActivity = (limit?: number) => {
   return defaultApi({
     method: "get",
-    url: `${base_url}my_world/last-activities/${
+    url: `website/v1/my_world/last-activities/${
       limit ? "?limit=" + limit : ""
     }`,
   })
@@ -637,7 +642,7 @@ export const lastActivity = (limit?: number) => {
 export const followingChannels = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}my_world/following/channels/`,
+    url: `website/v1/my_world/following/channels/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -646,7 +651,7 @@ export const followingChannels = () => {
 export const commentedChannels = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}my_world/commented/topics/`,
+    url: `website/v1/my_world/commented/topics/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -655,7 +660,7 @@ export const commentedChannels = () => {
 export const likedChannels = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}my_world/liked/topics`,
+    url: `website/v1/my_world/liked/topics`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -669,7 +674,7 @@ export const editProfile = (
 ) => {
   return defaultApi({
     method: "patch",
-    url: `${base_url}accounts/setting/edit/profile/`,
+    url: `website/v1/accounts/setting/edit/profile/`,
     data: {
       show_name_in_chat,
       first_name,
@@ -687,7 +692,7 @@ export const editAvatar = (avatar: File) => {
 
   return defaultApi({
     method: "patch",
-    url: `${base_url}accounts/setting/edit/profile/avatar/`,
+    url: `website/v1/accounts/setting/edit/profile/avatar/`,
     data: myFormData,
     headers: {
       "Content-Type": " multipart/form-data",
@@ -700,7 +705,7 @@ export const editAvatar = (avatar: File) => {
 export const sendResetEmailToken = () => {
   return defaultApi({
     method: "post",
-    url: `${base_url}accounts/setting/edit/email/send_email/`,
+    url: `website/v1/accounts/setting/edit/email/send_email/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -709,7 +714,7 @@ export const sendResetEmailToken = () => {
 export const sendResetUsernameToken = () => {
   return defaultApi({
     method: "post",
-    url: `${base_url}accounts/setting/edit/username/send_email/`,
+    url: `website/v1/accounts/setting/edit/username/send_email/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -718,7 +723,7 @@ export const sendResetUsernameToken = () => {
 export const editEmail = (email: string, token: string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}accounts/setting/edit/email/`,
+    url: `website/v1/accounts/setting/edit/email/`,
     data: {
       token,
       email,
@@ -731,7 +736,7 @@ export const editEmail = (email: string, token: string) => {
 export const editUsername = (username: string, token: string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}accounts/setting/edit/username/`,
+    url: `website/v1/accounts/setting/edit/username/`,
     data: {
       token,
       username,
@@ -744,7 +749,7 @@ export const editUsername = (username: string, token: string) => {
 export const getPersonalQuestions = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}accounts/setting/profile`,
+    url: `website/v1/accounts/setting/profile`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -753,7 +758,7 @@ export const getPersonalQuestions = () => {
 export const createLive = (title: string, description: string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}live/init/`,
+    url: `website/v1/live/init/`,
     data: {
       title,
       description,
@@ -766,7 +771,7 @@ export const createLive = (title: string, description: string) => {
 export const createProduceTransport = (room_id: string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}live/producer/create/`,
+    url: `website/v1/live/producer/create/`,
     data: {
       room_id,
     },
@@ -778,7 +783,7 @@ export const createProduceTransport = (room_id: string) => {
 export const connectTransport = (dtls_parameter: any) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}live/producer/connect/`,
+    url: `website/v1/live/producer/connect/`,
     data: {
       dtls_parameter,
     },
@@ -791,7 +796,7 @@ export const connectTransport = (dtls_parameter: any) => {
 export const createConsumerTransport = () => {
   return defaultApi({
     method: "post",
-    url: `${base_url}live/consumer/create/`,
+    url: `website/v1/live/consumer/create/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -800,7 +805,7 @@ export const createConsumerTransport = () => {
 export const connectConsumer = () => {
   return defaultApi({
     method: "post",
-    url: `${base_url}live/consumer/connect/`,
+    url: `website/v1/live/consumer/connect/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -809,7 +814,7 @@ export const connectConsumer = () => {
 export const resumeConsume = () => {
   return defaultApi({
     method: "post",
-    url: `${base_url}live/consumer/resume/`,
+    url: `website/v1/live/consumer/resume/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -818,7 +823,7 @@ export const resumeConsume = () => {
 export const produceTransport = (kind: any, rtp_parameters: any) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}live/producer/produce/`,
+    url: `website/v1/live/producer/produce/`,
     data: {
       kind,
       rtp_parameters,
@@ -842,7 +847,7 @@ export const scheduleMeet = (
 
   return defaultApi({
     method: "post",
-    url: `${base_url}live/scheduled/`,
+    url: `website/v1/live/scheduled/`,
     data: bodyFormData,
     headers: {
       "Content-Type": " multipart/form-data",
@@ -865,7 +870,7 @@ export const uploadVideoRequest = (
   bodyFormData.append("description", description);
   return defaultApi({
     method: "post",
-    url: `${base_url}live/upload/`,
+    url: `website/v1/live/upload/`,
     data: bodyFormData,
     headers: {
       "Content-Type": " multipart/form-data",
@@ -878,7 +883,7 @@ export const uploadVideoRequest = (
 export const createMeet = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}my_world/create-meet/`,
+    url: `website/v1/my_world/create-meet/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -887,7 +892,7 @@ export const createMeet = () => {
 export const endLive = (room_id: string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}live/end/`,
+    url: `website/v1/live/end/`,
     data: {
       room_id: room_id,
     },
@@ -899,7 +904,7 @@ export const endLive = (room_id: string) => {
 export const startLive = (room_id: string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}live/start/`,
+    url: `website/v1/live/start/`,
     data: {
       room_id: room_id,
     },
@@ -911,7 +916,7 @@ export const startLive = (room_id: string) => {
 export const addMember = (room_id: string) => {
   return defaultApi({
     method: "post",
-    url: `${base_url}live/add-member/`,
+    url: `website/v1/live/add-member/`,
     data: {
       room_id: room_id,
     },
@@ -923,7 +928,7 @@ export const addMember = (room_id: string) => {
 export const getScheduleList = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}live/scheduled/`,
+    url: `website/v1/live/scheduled/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -932,7 +937,7 @@ export const getScheduleList = () => {
 export const uploadedList = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}live/upload/`,
+    url: `website/v1/live/upload/`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -941,7 +946,7 @@ export const uploadedList = () => {
 export const onlineLives = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}live/online-lives/`,
+    url: `website/v1/live/online-lives/`,
   })
     .then((res) => res)
     .catch((err) => err);
