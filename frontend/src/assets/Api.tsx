@@ -4,6 +4,22 @@ import { newChannelData } from "./Provider/types";
 
 export const base_url = `https://social.me2we2.com`;
 
+function getCookie(name: string) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 let localStorageData = localStorage.getItem("WeTooAccessToken");
 let userDataObject = localStorageData ? JSON.parse(localStorageData) : {};
 export let accessToken = userDataObject?.access;
@@ -42,9 +58,17 @@ export const updateLocalData = () => {
 };
 
 defaultApi.interceptors.request.use((config) => {
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
+  // For session authentication, we don't need to set any headers
+  // The session cookie will be sent automatically with withCredentials: true
+
+  // Add CSRF token for non-GET requests
+  if (config.method && !['get', 'head', 'options'].includes(config.method.toLowerCase())) {
+    const csrfToken = getCookie('csrftoken');
+    if (csrfToken) {
+      config.headers['X-CSRFToken'] = csrfToken;
+    }
   }
+
   return config;
 });
 
