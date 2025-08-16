@@ -321,7 +321,7 @@ export const deleteChannel = (id: string) => {
 export const getDailyQuestion = () => {
   return defaultApi({
     method: "get",
-    url: `${base_url}daily_questions/question`,
+    url: `${base_url}website/v1/daily_questions/question/`,
   })
     .then((res) => res)
     .catch((err) => err);
