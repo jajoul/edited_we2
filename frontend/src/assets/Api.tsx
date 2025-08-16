@@ -12,7 +12,7 @@ let defaultApi = axios.create({
   baseURL: base_url,
   withCredentials: true, // This enables sending cookies with requests
   headers: {
-    // "Access-Control-Allow-Origin": "*",
+    Authorization: accessToken ? `Bearer ${accessToken}` : undefined
   },
 });
 
@@ -108,20 +108,22 @@ export const createUser = (
 ) => {
   return defaultApi({
     method: "post",
-  url: `website/v1/accounts/register/`,
+    url: `website/v1/accounts/register/`,
     data: {
       username,
       email,
       password,
       password2,
     },
-    headers:{
-      Authorization: undefined
+    headers: {
+      Authorization: undefined // Explicitly remove auth header for registration
     }
   })
     .then((res: any) => {
       if (res.data.access) {
         updateAccessToken(res.data);
+        // Update default headers after getting new token
+        defaultApi.defaults.headers.Authorization = `Bearer ${res.data.access}`;
       }
       return res;
     })
@@ -166,6 +168,9 @@ export const createUserDetail = (
   return defaultApi({
     method: "post",
     url: `website/v1/accounts/user-detail/create/`,
+    headers: {
+      Authorization: accessToken ? `Bearer ${accessToken}` : undefined
+    },
     data: {
       favorites,
       difficulties,
