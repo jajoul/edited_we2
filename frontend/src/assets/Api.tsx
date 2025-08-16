@@ -2,7 +2,7 @@ import axios from "axios";
 import { logout } from "./functions";
 import { newChannelData } from "./Provider/types";
 
-export const base_url = `/api/`;
+export const base_url = `https://social.me2we2.com`;
 
 let localStorageData = localStorage.getItem("WeTooAccessToken");
 let userDataObject = localStorageData ? JSON.parse(localStorageData) : {};
@@ -108,7 +108,7 @@ export const createUser = (
 ) => {
   return defaultApi({
     method: "post",
-    url: `website/v1/accounts/register/`,
+    url: `/api/v1/accounts/register/`,
     data: {
       username,
       email,
