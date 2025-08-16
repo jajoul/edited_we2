@@ -2,7 +2,7 @@ import axios from "axios";
 import { logout } from "./functions";
 import { newChannelData } from "./Provider/types";
 
-export const base_url = `https://social.me2we2.com`;
+export const base_url = `https://social.me2we2.com/api/`;
 
 function getCookie(name: string) {
     let cookieValue = null;
