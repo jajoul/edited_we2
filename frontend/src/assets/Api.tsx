@@ -270,7 +270,7 @@ export const createChannel = (data: {
 
   return defaultApi({
     method: "post",
-    url: `${base_url}channel/`,
+    url: `${base_url}website/v1/channel/`,
     data: bodyFormData,
     headers: {
       "Content-Type": " multipart/form-data",
