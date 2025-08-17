@@ -10,6 +10,7 @@ app_name = 'v1/channels'
 
 urlpatterns = [
     path('', include(endpoints)),
+    path('channel/', ChannelViewSet.as_view({'post': 'create'}), name='channel-create'),
     path('channel/list/owner/', ChannelOwnerView.as_view(), name="owner"),
     path('channel/<int:pk>/follow', FollowChannelView.as_view(), name="follow"),
 ]
