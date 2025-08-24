@@ -4,6 +4,11 @@ from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.db.models import Subquery, OuterRef
 from website.models import User, ProfileQuestion, ProfileAnswer
+from django.http import HttpResponse
+
+
+def test_view(request):
+    return HttpResponse("OK")
 
 
 from django.contrib.auth import login

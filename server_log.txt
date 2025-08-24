@@ -1,0 +1,90 @@
+Request URL
+https://social.me2we2.com/api/website/v1/accounts/user/create/
+Request Method
+POST
+Status Code
+405 Method Not Allowed
+Remote Address
+188.114.97.3:443
+Referrer Policy
+strict-origin-when-cross-origin
+access-control-allow-credentials
+true
+access-control-allow-origin
+https://social.me2we2.com
+allow
+GET, HEAD, OPTIONS
+alt-svc
+h3=":443"; ma=86400
+cf-cache-status
+DYNAMIC
+cf-ray
+97418370180f79b8-LHR
+content-type
+text/html; charset=utf-8
+date
+Sun, 24 Aug 2025 08:34:56 GMT
+nel
+{"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
+priority
+u=1,i
+referrer-policy
+same-origin
+report-to
+{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=WN%2FgPgM%2FCc8wvbGz75Zoi3%2B%2BAbLDXRaNsDbTvmYqZvqBdMGWkuQ15dCkxjSlFpQlxnLAG0wDnps%2BiJImu%2BLbZMnkd8sQBhiFR3pznC2Ds1WI"}]}
+server
+cloudflare
+server-timing
+cfExtPri
+vary
+origin
+x-content-type-options
+nosniff
+x-frame-options
+DENY
+:authority
+social.me2we2.com
+:method
+POST
+:path
+/api/website/v1/accounts/user/create/
+:scheme
+https
+accept
+application/json, text/plain, */*
+accept-encoding
+gzip, deflate, br, zstd
+accept-language
+en-US,en;q=0.9,fa;q=0.8
+cache-control
+no-cache
+content-length
+127
+content-type
+application/json
+cookie
+sessionid=ws3nwiy3iln764w5v65449xwaihsepon; csrftoken=Ner1jtTPfeVAJh3W8n8HT8ObgaAO71o5FAvWFjKrRQ8FJUwo77xCsV3x4WRPpfPV
+origin
+https://social.me2we2.com
+pragma
+no-cache
+priority
+u=1, i
+referer
+https://social.me2we2.com/signup
+sec-ch-ua
+"Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"
+sec-ch-ua-mobile
+?0
+sec-ch-ua-platform
+"Windows"
+sec-fetch-dest
+empty
+sec-fetch-mode
+cors
+sec-fetch-site
+same-origin
+user-agent
+Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
+x-csrftoken
+Ner1jtTPfeVAJh3W8n8HT8ObgaAO71o5FAvWFjKrRQ8FJUwo77xCsV3x4WRPpfPV
