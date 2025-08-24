@@ -23,10 +23,14 @@ export const logout = async () => {
 
   // If no token exists, just clear local storage and redirect
   if (!token) {
+    console.log('No token found in localStorage. Skipping backend logout API call.');
     localStorage.removeItem("WeTooAccessToken");
     window.location.href = '/login';
     return; // Exit the function
   }
+
+  console.log('Token found:', token);
+  console.log('CSRF Token found:', csrftoken);
 
   try {
     const response = await fetch('/api-auth/logout/', {
