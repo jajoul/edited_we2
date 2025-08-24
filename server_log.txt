@@ -1,25 +1,10 @@
-SHOW_DEBUGGER_TOOLBAR=False
-SITE_URL = https://www.social.me2we2.com
-DEBUG=True
-DEBUG_DB=True
-DJANGO_SETTINGS_MODULE=core.settings
-DB_ENGINE=django.db.backends.mysql
-DB_NAME=wetoo_db
-DB_USER=wetoo_db
-DB_PASS=z16TN1j|7t3;
-DB_HOST=localhost
-DB_PORT=3306
-
-# MONGODB_ENGINE=djongo
-# MONGODB_NAME=goodopet
-# MONGODB_USER=admin
-# MONGODB_PASS=admin
-# MONGODB_HOST=mongodb
-# MONGODB_PORT=27017
-
-#ELASTIC_URI=https://elastic:XkHDusGf1OqP3IsfpkqntV1Wy4E9mjGJ@wetoo-elasticsearch.darkube.app/
-
-REDIS_NAME=wetoo_redis
-REDIS_PASSWORD=1qMmZRPq02TmDAW4lIjlOy3YMy9KsDpe
-REDIS_URL=redis://wetoo-redis.we2-social-network.svc
-REDIS_PORT=6379
+.WeTooInput input, .WeTooInput textarea {
+    border: none;
+    padding: 10px;
+    outline: none;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    color: #535353;
+    width: 100%;
+}

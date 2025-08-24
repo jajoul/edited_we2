@@ -58,7 +58,7 @@ const Inputs = (props: {
         {label && <label className="WeTooPersianText">{label}</label>}
         <span className="WeTooInput__body">
           {isTextArea ? (
-            <textarea {...inputProps} rows={5} />
+            <textarea {...inputProps} rows={5} className={`${inputProps.className} WeTooInput__textarea`} />
           ) : (
             <input
               ref={inputRef}
