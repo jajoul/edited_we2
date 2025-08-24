@@ -21,6 +21,13 @@ export const logout = async () => {
   const token = localStorage.getItem("WeTooAccessToken");
   const csrftoken = getCookie('csrftoken'); // Get CSRF token
 
+  // If no token exists, just clear local storage and redirect
+  if (!token) {
+    localStorage.removeItem("WeTooAccessToken");
+    window.location.href = '/login';
+    return; // Exit the function
+  }
+
   try {
     const response = await fetch('/api-auth/logout/', {
       method: 'POST',
