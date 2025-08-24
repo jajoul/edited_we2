@@ -90,15 +90,7 @@ if settings.SHOW_SWAGGER:
         ),
     ]
 
-# list your api urls here
-urlpatterns += [
-    path("api/website/",include('website.urls')),
-]
 
-urlpatterns += [
-    path('api/token/', login_view, name='token_obtain_pair'),
-    path('api/', include(api_urlpatterns))
-]
     
 
 handler400 = "core.error_views.error_400"  # bad_request
