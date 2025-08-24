@@ -41,6 +41,9 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("api/admin/", admin.site.urls),
+    path("api/website/",include('website.urls')),
+    path('api/token/', login_view, name='token_obtain_pair'),
+    path('api/', include(api_urlpatterns))
 ]
 
 if settings.DEBUG is False:

@@ -5,8 +5,7 @@ from .views import (
     ForgetPasswordView, GetUserTokenView, ChangePasswordView, GetUserTypeView,
     UserFullInfoView, SettingEditProfileView, SettingUsernameSendEmailView,
     SettingEditUsernameView, SettingProfileView, SettingEditProfileAvatarView,
-    SettingEmailSendEmailView, SettingEditEmailView, SettingProfileAnswerView,
-    test_view
+    SettingEmailSendEmailView, SettingEditEmailView, SettingProfileAnswerView
 )
 
 
@@ -38,5 +37,4 @@ urlpatterns = [
     
     # question
     path("setting/profile/answer/", SettingProfileAnswerView.as_view(), name="setting-profile-answer"),
-    path("test/", test_view, name="test_view"),
 ]
