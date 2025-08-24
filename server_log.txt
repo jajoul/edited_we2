@@ -1,77 +1,61 @@
 Request URL
-https://social.me2we2.com/api/website/v1/accounts/user/create/
+https://social.me2we2.com/signup
 Request Method
-POST
+GET
 Status Code
-405 Method Not Allowed
+200 OK
 Remote Address
-188.114.97.3:443
+188.114.96.7:443
 Referrer Policy
 strict-origin-when-cross-origin
-access-control-allow-credentials
-true
-access-control-allow-origin
-https://social.me2we2.com
-allow
-GET, HEAD, OPTIONS
 alt-svc
 h3=":443"; ma=86400
 cf-cache-status
 DYNAMIC
 cf-ray
-97418370180f79b8-LHR
+9741e4c098aa8a0e-LHR
+content-encoding
+zstd
 content-type
-text/html; charset=utf-8
+text/html
 date
-Sun, 24 Aug 2025 08:34:56 GMT
+Sun, 24 Aug 2025 09:41:22 GMT
+last-modified
+Sun, 24 Aug 2025 08:59:07 GMT
 nel
 {"report_to":"cf-nel","success_fraction":0.0,"max_age":604800}
 priority
-u=1,i
-referrer-policy
-same-origin
+u=0,i
 report-to
-{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=WN%2FgPgM%2FCc8wvbGz75Zoi3%2B%2BAbLDXRaNsDbTvmYqZvqBdMGWkuQ15dCkxjSlFpQlxnLAG0wDnps%2BiJImu%2BLbZMnkd8sQBhiFR3pznC2Ds1WI"}]}
+{"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=vzjDB1vK7sX8bkJHylcSeuIJYus4TfaTLjn6vm0ItK6Z%2FCJt4ZZE%2B8xgmAAxkX%2Bl0AVK%2Fxgyy1FYcFo0xAiYiwGrlO35nyE5Rvi65wj%2BhAGA"}]}
 server
 cloudflare
 server-timing
 cfExtPri
 vary
-origin
-x-content-type-options
-nosniff
-x-frame-options
-DENY
+accept-encoding
 :authority
 social.me2we2.com
 :method
-POST
+GET
 :path
-/api/website/v1/accounts/user/create/
+/signup
 :scheme
 https
 accept
-application/json, text/plain, */*
+text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
 accept-encoding
 gzip, deflate, br, zstd
 accept-language
 en-US,en;q=0.9,fa;q=0.8
 cache-control
 no-cache
-content-length
-127
-content-type
-application/json
 cookie
-sessionid=ws3nwiy3iln764w5v65449xwaihsepon; csrftoken=Ner1jtTPfeVAJh3W8n8HT8ObgaAO71o5FAvWFjKrRQ8FJUwo77xCsV3x4WRPpfPV
-origin
-https://social.me2we2.com
+sessionid=ws3nwiy3iln764w5v65449xwaihsepon; sessionid=k6hwysu18ffdxifnjkme7euvholjhhhe; csrftoken=pKGNgoQU9gVuIm1IMPv4p9Qrwng9RBKK8N4DVGdVi73cXRqRgLUUlsgTpH9gEeYu
 pragma
 no-cache
 priority
-u=1, i
-referer
-https://social.me2we2.com/signup
+u=0, i
 sec-ch-ua
 "Not)A;Brand";v="8", "Chromium";v="138", "Google Chrome";v="138"
 sec-ch-ua-mobile
@@ -79,12 +63,14 @@ sec-ch-ua-mobile
 sec-ch-ua-platform
 "Windows"
 sec-fetch-dest
-empty
+document
 sec-fetch-mode
-cors
+navigate
 sec-fetch-site
 same-origin
+sec-fetch-user
+?1
+upgrade-insecure-requests
+1
 user-agent
 Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
-x-csrftoken
-Ner1jtTPfeVAJh3W8n8HT8ObgaAO71o5FAvWFjKrRQ8FJUwo77xCsV3x4WRPpfPV

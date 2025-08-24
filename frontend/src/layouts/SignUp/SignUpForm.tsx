@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./SignUpForm.less";
 import SignUpStepOne from "./Steps/SignUpStepOne";
 import "./Steps/SignUpStep.less";
@@ -14,6 +14,10 @@ const SignUpForm = () => {
   const weTooSignUpStep = localStorage.getItem("WeTooSignUpStep")
   const [step, setStep] = useState<number>(Number(weTooSignUpStep) || 0);
   const [userId, setUserId] = useState<number | null>(null);
+
+  useEffect(() => {
+    localStorage.removeItem("WeTooSignUpStep");
+  }, []);
 
   const stepComponents = [
     <SignUpStepOne setStep={setStep} setUserId={setUserId} />,
