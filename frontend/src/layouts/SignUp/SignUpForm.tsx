@@ -14,7 +14,6 @@ const SignUpForm = () => {
   const weTooSignUpStep = localStorage.getItem("WeTooSignUpStep")
   const [step, setStep] = useState<number>(Number(weTooSignUpStep) || 0);
   const [userId, setUserId] = useState<number | null>(null);
-  localStorage.removeItem("weTooSignUpStep")
 
   const stepComponents = [
     <SignUpStepOne setStep={setStep} setUserId={setUserId} />,

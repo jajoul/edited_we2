@@ -3,7 +3,7 @@ import Buttons, { buttonTheme } from "@/components/Buttons/Buttons";
 import Inputs, { inputType } from "@/components/Inputs/Inputs";
 import SwitchButton from "@/components/SwitchButton/SwitchButton";
 import { getFilesBaseOnLanguages } from "@/layouts/language/language";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Link } from "umi";
 
@@ -13,6 +13,10 @@ const SignUpStepOne = (props: {
 }) => {
   const { setStep } = props;
   const lang = getFilesBaseOnLanguages();
+
+  useEffect(() => {
+    localStorage.removeItem("WeTooSignUpStep");
+  }, []);
 
   type keyType = "username" | "email" | "password" | "password2";
 
