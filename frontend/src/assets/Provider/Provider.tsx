@@ -39,7 +39,7 @@ export type stateType = {
 const initialState: stateType = {
   lng: EN,
   page: null,
-  isLogin: false, //!!accessToken
+  isLogin: localStorage.getItem("isLogin") === "true", //!!accessToken
   question: null,
   ads: null,
   getUserLoading: !!accessToken,
@@ -93,6 +93,7 @@ const Provider = (props: { children: JSX.Element | JSX.Element[] }) => {
           dispatch({ type: SET_USER_INFO, data: { userInfo: res.data } });
         } else {
           localStorage.removeItem("WeTooAccessToken");
+          localStorage.removeItem("isLogin");
           dispatch({ type: CHANGE_IS_LOGIN, data: { isLogin: false } });
         }
       });
