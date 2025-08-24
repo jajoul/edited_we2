@@ -1,9 +1,28 @@
 import { Navigate } from "umi";
 
-export const logout = () => {
-  console.log('log out func')
-  localStorage.removeItem("WeTooAccessToken");
-  window.location.href = '/login'
+export const logout = async () => {
+  console.log('log out func');
+  const token = localStorage.getItem("WeTooAccessToken");
+  try {
+    const response = await fetch('/api-auth/logout/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${token}` // Assuming Token-based authentication
+      },
+    });
+
+    if (response.ok) {
+      console.log('Logged out successfully from backend.');
+    } else {
+      console.error('Backend logout failed:', response.status, response.statusText);
+    }
+  } catch (error) {
+    console.error('Error during backend logout:', error);
+  } finally {
+    localStorage.removeItem("WeTooAccessToken");
+    window.location.href = '/login';
+  }
 };
 
 export const downloadObject = (url:string, name:string) => {
