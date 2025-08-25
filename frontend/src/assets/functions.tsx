@@ -17,7 +17,9 @@ function getCookie(name: string) {
 }
 
 export const logout = async () => {
+  console.log('logout function called');
   debugger;
+  return;
   console.log('log out func');
   const token = localStorage.getItem("WeTooAccessToken");
   const csrftoken = getCookie('csrftoken'); // Get CSRF token
