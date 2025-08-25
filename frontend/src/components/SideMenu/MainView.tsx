@@ -51,7 +51,7 @@ const MainView = (props: {
         {child}
       </Link>
     ) : (
-      <div onClick={func} key={index} className="WeTooSideMenu__list__item">
+      <div onClick={() => {debugger; func();}} key={index} className="WeTooSideMenu__list__item">
         {child}
       </div>
     );
