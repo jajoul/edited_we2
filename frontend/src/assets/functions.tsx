@@ -19,6 +19,8 @@ function getCookie(name: string) {
 export const logout = async () => {
   console.log('logout function called');
   debugger;
+  await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay
+  debugger;
   return;
   console.log('log out func');
   const token = localStorage.getItem("WeTooAccessToken");
