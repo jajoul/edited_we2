@@ -18,42 +18,56 @@ function getCookie(name: string) {
 
 export const logout = async () => {
   console.log('logout function called');
-  console.log('log out func');
   const token = localStorage.getItem("WeTooAccessToken");
-  const csrftoken = getCookie('csrftoken'); // Get CSRF token
+  const csrftoken = getCookie('csrftoken');
 
-  // If no token exists, just clear local storage and redirect
-  if (!token) {
-    console.log('No token found in localStorage. Skipping backend logout API call.');
-    localStorage.removeItem("WeTooAccessToken");
-    window.location.href = '/login';
-    return; // Exit the function
-  }
-
-  console.log('Token found:', token);
-  console.log('CSRF Token found:', csrftoken);
-
-  console.log('Before fetch');
   try {
-    const response = await fetch('/api-auth/logout/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${token}`, // Assuming Token-based authentication
-        'X-CSRFToken': csrftoken || '', // Include CSRF token
-      },
-    });
+    if (token) {
+      // First, try to logout from the backend
+      const logoutResponse = await fetch('https://social.me2we2.com/api/token/logout/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${JSON.parse(token).access}`,
+          'X-CSRFToken': csrftoken || '',
+        },
+        credentials: 'include', // Include cookies
+      });
 
-    if (response.ok) {
-      console.log('Logged out successfully from backend.');
-    } else {
-      console.error('Backend logout failed:', response.status, response.statusText);
+      if (logoutResponse.ok) {
+        console.log('Successfully logged out from backend');
+      } else {
+        console.error('Backend logout failed:', logoutResponse.status);
+      }
     }
   } catch (error) {
-    console.error('Error during backend logout:', error);
-  } finally {
-    debugger; // This will pause execution if developer tools are open
-    localStorage.removeItem("WeTooAccessToken");
+    console.error('Logout request failed:', error);
+  }
+
+  // Cleanup all storage and session data
+  try {
+    // Clear all storage
+    localStorage.clear();
+    sessionStorage.clear();
+    
+    // Clear all cookies
+    document.cookie.split(";").forEach((c) => {
+      document.cookie = c
+        .replace(/^ +/, "")
+        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
+
+    // Prevent navigation back to authenticated pages
+    window.history.pushState(null, '', '/login');
+    window.addEventListener('popstate', () => {
+      window.history.pushState(null, '', '/login');
+    });
+
+    // Force redirect to login page
+    window.location.replace('/login');
+  } catch (e) {
+    console.error('Error during cleanup:', e);
+    // If all else fails, try a simple redirect
     window.location.href = '/login';
   }
 };
