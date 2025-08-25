@@ -50,6 +50,7 @@ export const logout = async () => {
   } catch (error) {
     console.error('Error during backend logout:', error);
   } finally {
+    debugger; // This will pause execution if developer tools are open
     localStorage.removeItem("WeTooAccessToken");
     window.location.href = '/login';
   }
