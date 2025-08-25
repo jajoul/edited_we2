@@ -32,6 +32,7 @@ export const logout = async () => {
   console.log('Token found:', token);
   console.log('CSRF Token found:', csrftoken);
 
+  console.log('Before fetch');
   try {
     const response = await fetch('/api-auth/logout/', {
       method: 'POST',
