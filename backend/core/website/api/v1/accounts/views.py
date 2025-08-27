@@ -1,3 +1,4 @@
+import logging
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
@@ -14,7 +15,7 @@ from .serializers import (
 )
 from website.services import ForgetPasswordAuthenticationService
 
-
+logger = logging.getLogger(__name__)
 
 
 @api_view(['POST'])
@@ -60,6 +61,7 @@ def login_view(request):
 @permission_classes([AllowAny])
 @authentication_classes([])
 def register(request):
+    logger.error(f"Register view called with method: {request.method}")
     serializer = UserCreationSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     user = serializer.save()
