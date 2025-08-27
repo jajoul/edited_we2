@@ -7,7 +7,7 @@ from website.models import User, ProfileQuestion, ProfileAnswer
 
 
 from django.contrib.auth import login
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 
 from .serializers import (
     MyTokenObtainPairSerializer, UserCreationSerializer, ProfileCreationSerializer, PersonalDetailCreationSerializer, ForgetPasswordSerializer, GetUserTokenSerializer, ChangePasswordSerializer, UserSerializer, ProfileSerializer, SettingProfileInfoSerializer, SettingProfileChangeSerializer, SettingUsernameSendEmailSerializer, SettingEditUsernameSerializer, SettingProfileSerializer, SettingEditProfileAvatarSerializer, SettingEmailSendEmailSerializer, SettingEditEmailSerializer, ProfileAnswerSerializer, SettingProfileAnswerSerializer
@@ -58,6 +58,7 @@ def login_view(request):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
+@authentication_classes([])
 def register(request):
     serializer = UserCreationSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
