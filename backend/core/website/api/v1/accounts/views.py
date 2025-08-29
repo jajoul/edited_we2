@@ -14,6 +14,8 @@ from .serializers import (
     MyTokenObtainPairSerializer, UserCreationSerializer, ProfileCreationSerializer, PersonalDetailCreationSerializer, ForgetPasswordSerializer, GetUserTokenSerializer, ChangePasswordSerializer, UserSerializer, ProfileSerializer, SettingProfileInfoSerializer, SettingProfileChangeSerializer, SettingUsernameSendEmailSerializer, SettingEditUsernameSerializer, SettingProfileSerializer, SettingEditProfileAvatarSerializer, SettingEmailSendEmailSerializer, SettingEditEmailSerializer, ProfileAnswerSerializer, SettingProfileAnswerSerializer
 )
 from website.services import ForgetPasswordAuthenticationService
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.http import JsonResponse
 
 logger = logging.getLogger(__name__)
 
@@ -342,3 +344,10 @@ class SettingProfileAnswerView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    return JsonResponse({"detail": "CSRF cookie set"})

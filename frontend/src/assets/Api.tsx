@@ -124,6 +124,15 @@ export const generate_refresh_token = (refresh: string) => {
     .catch((err) => err);
 };
 
+export const getCsrfToken = () => {
+  return defaultApi({
+    method: "get",
+    url: `get-csrf-token/`,
+  })
+    .then((res) => res)
+    .catch((err) => err);
+};
+
 export const createUser = (
   username: string,
   email: string,

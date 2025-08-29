@@ -1,4 +1,6 @@
 import Provider from "@/assets/Provider/Provider";
+import { getCsrfToken } from "@/assets/Api";
+import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import { Helmet, Outlet } from "umi";
 import "./index.less";
@@ -8,6 +10,10 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function Layout() {
   const lang = getFilesBaseOnLanguages();
+
+  useEffect(() => {
+    getCsrfToken();
+  }, []);
 
   return (
     <Provider>

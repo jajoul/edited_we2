@@ -22,7 +22,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from website.api.v1.accounts.views import login_view
+from website.api.v1.accounts.views import login_view, get_csrf_token
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -65,6 +65,7 @@ urlpatterns = [
     path("api/admin/", admin.site.urls),
     path("api/website/",include('website.urls')),
     path('api/token/', login_view, name='token_obtain_pair'),
+    path('api/get-csrf-token/', get_csrf_token, name='get-csrf-token'),
     path('api/', include(api_urlpatterns))
 ]
 
