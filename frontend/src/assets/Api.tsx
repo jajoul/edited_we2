@@ -403,26 +403,20 @@ export const createEditTopic = (
   id?: string
 ) => {
   var bodyFormData = new FormData();
-  if (!!data.picture) bodyFormData.append("picture", data.picture);
-  else data.picture = undefined;
-
-  if (!!data.pdf) bodyFormData.append("pdf", data.pdf);
-  else data.pdf = undefined;
-
-  if (!!data.video) bodyFormData.append("video", data.video);
-  else data.video = undefined;
+  if (!!data.picture) bodyFormData.append("picture", data.picture as any);
+  if (!!data.pdf) bodyFormData.append("pdf", data.pdf as any);
+  if (!!data.video) bodyFormData.append("video", data.video as any);
+  if (data.name) bodyFormData.append("name", data.name);
+  if (data.description) bodyFormData.append("description", data.description);
+  if (data.channel) bodyFormData.append("channel", data.channel);
+  if (typeof data.which_type !== "undefined") bodyFormData.append("which_type", String(data.which_type));
+  if (data.location) bodyFormData.append("location", data.location);
+  if (data.tags && data.tags.length) bodyFormData.append("tags", data.tags.join(","));
 
   return defaultApi({
     method: edit ? "patch" : "post",
-  url: `website/v1/site_behavior/topic/${id ? id + "/" : ""}`,
-    data: {
-      ...data,
-      tags: data.tags.join(","),
-      ...bodyFormData,
-    },
-    headers: {
-      "Content-Type": " multipart/form-data",
-    },
+    url: `website/v1/site_behavior/topic/${id ? id + "/" : ""}`,
+    data: bodyFormData,
   })
     .then((res) => res)
     .catch((err) => err);
