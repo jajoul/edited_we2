@@ -58,6 +58,8 @@ const SignUpStepOne = (props: {
       !checkEmail(info.email.value) ||
       !checkPassIsStrong(info.password.value) ||
       info.password.value !== info.password2.value ||
+      info.password.value === info.username.value ||
+      info.password.value === info.email.value ||
       !accept;
     if (errorValue) {
       setError(errorValue);
