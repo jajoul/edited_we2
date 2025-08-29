@@ -16,7 +16,10 @@ const SignUpForm = () => {
   const [userId, setUserId] = useState<number | null>(null);
 
   useEffect(() => {
-    localStorage.removeItem("WeTooSignUpStep");
+    const weTooUserId = localStorage.getItem("WeTooUserId");
+    if (weTooUserId) {
+      setUserId(Number(weTooUserId));
+    }
   }, []);
 
   const stepComponents = [
