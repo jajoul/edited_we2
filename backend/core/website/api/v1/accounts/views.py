@@ -1,9 +1,10 @@
 import logging
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, serializers
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from django.db.models import Subquery, OuterRef
+from django.db.models import Subquery, OuterRef, Q
+from django.db import transaction
 from website.models import User, ProfileQuestion, ProfileAnswer
 
 
@@ -63,35 +64,61 @@ def login_view(request):
 @permission_classes([AllowAny])
 @authentication_classes([])
 def register(request):
-    logger.error(f"Register view called with method: {request.method}")
-    logger.error(f"Request data: {request.data}")
-    serializer = UserCreationSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    user = serializer.save()
-    if user:
-        try:
-            logger.info(f"Attempting to log in user: {user.username}")
-            login(request, user)
-            logger.info(f"User {user.username} logged in successfully.")
-            return Response({
-                "detail": "Successfully registered.",
-                "user_id": user.id,
-                "username": user.username
-            }, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            logger.error(f"Error during user login for {user.username}: {e}", exc_info=True)
-            # Optionally, you could delete the user if login fails to allow them to try again
-            # user.delete() 
-            return Response(
-                {"detail": f"Your account was created, but login failed. Please try to log in manually. Error: {e}"},
-                status=status.HTTP_201_CREATED
-            )
-    else:
-        logger.error("Serializer saved, but no user object was returned.")
-        return Response(
-            {"detail": "An unexpected error occurred: user object not created."},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR
-        )
+    logger.info(f"Register view called with method: {request.method}")
+    logger.info(f"Request data: {request.data}")
+    
+    try:
+        with transaction.atomic():
+            serializer = UserCreationSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            user = serializer.save()
+            
+            if user:
+                try:
+                    logger.info(f"Attempting to log in user: {user.username}")
+                    login(request, user)
+                    logger.info(f"User {user.username} logged in successfully.")
+                    return Response({
+                        "detail": "Successfully registered.",
+                        "user_id": user.id,
+                        "username": user.username
+                    }, status=status.HTTP_201_CREATED)
+                except Exception as e:
+                    logger.error(f"Error during user login for {user.username}: {e}", exc_info=True)
+                    # Return success since user was created, but login failed
+                    return Response({
+                        "detail": "Your account was created, but login failed. Please try to log in manually.",
+                        "user_id": user.id,
+                        "username": user.username
+                    }, status=status.HTTP_201_CREATED)
+            else:
+                logger.error("Serializer saved, but no user object was returned.")
+                return Response(
+                    {"detail": "An unexpected error occurred: user object not created."},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+    except serializers.ValidationError as e:
+        logger.error(f"Validation error during registration: {e}")
+        # Check if this is the "already exists" error from UserManager
+        if "detail" in e.detail and "already exists" in str(e.detail["detail"]):
+            # Try to find the existing user and return success
+            try:
+                existing_user = User.objects.get(
+                    Q(username__iexact=request.data.get('username', '')) | 
+                    Q(email__iexact=request.data.get('email', ''))
+                )
+                logger.info(f"Found existing user: {existing_user.username}")
+                return Response({
+                    "detail": "User already exists. Please log in instead.",
+                    "user_id": existing_user.id,
+                    "username": existing_user.username
+                }, status=status.HTTP_200_OK)
+            except User.DoesNotExist:
+                pass
+        raise e
+    except Exception as e:
+        logger.error(f"Unexpected error during registration: {e}", exc_info=True)
+        raise e
 
 
 class CreateProfileView(GenericAPIView):

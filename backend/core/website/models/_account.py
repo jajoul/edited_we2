@@ -36,9 +36,18 @@ class UserManager(BaseUserManager):
             user.save()
             return user
         except IntegrityError:
-            raise serializers.ValidationError(
-                {"detail": "User with this username or email already exists."}
-            )
+            # Check if the user actually exists now (might have been created by another request)
+            try:
+                existing_user = self.model.objects.get(
+                    models.Q(username__iexact=username) | models.Q(email__iexact=email)
+                )
+                # If user exists, return it instead of raising an error
+                return existing_user
+            except self.model.DoesNotExist:
+                # If user doesn't exist, then it's a real integrity error
+                raise serializers.ValidationError(
+                    {"detail": "User with this username or email already exists."}
+                )
         
 
     def create_superuser(self, username, email, password, **extra_fields):

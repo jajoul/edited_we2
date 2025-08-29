@@ -31,34 +31,54 @@ class UserCreationSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, attrs):
+        import logging
+        logger = logging.getLogger(__name__)
+        
+        logger.info(f"Validating user creation for username: {attrs.get('username')}, email: {attrs.get('email')}")
+        
         # check if username is unique
         if User.objects.filter(username__iexact=attrs['username']).exists():
+            logger.warning(f"Username already exists: {attrs['username']}")
             raise serializers.ValidationError({"username": "Username already exists."})
 
         # check if email is unique
         if User.objects.filter(email__iexact=attrs['email']).exists():
+            logger.warning(f"Email already exists: {attrs['email']}")
             raise serializers.ValidationError({"email": "Email already exists."})
             
         # check if password2 is the same as password
         if attrs["password2"] != attrs["password"]:
+            logger.warning("Passwords do not match")
             raise serializers.ValidationError({"password": "Passwords do not match"})
 
         # validate password
         try:
             validate_password(attrs["password"])
         except Exception as e:
+            logger.warning(f"Password validation failed: {e}")
             raise serializers.ValidationError({"password": e.args})
-            
+        
+        logger.info("Validation passed successfully")
         attrs.pop('password2')
         return attrs
     
     def create(self, validated_data):
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password']
-        )
-        return user
+        import logging
+        logger = logging.getLogger(__name__)
+        
+        logger.info(f"Creating user with username: {validated_data['username']}, email: {validated_data['email']}")
+        
+        try:
+            user = User.objects.create_user(
+                username=validated_data['username'],
+                email=validated_data['email'],
+                password=validated_data['password']
+            )
+            logger.info(f"User created successfully: {user.username} (ID: {user.id})")
+            return user
+        except Exception as e:
+            logger.error(f"Error creating user: {e}", exc_info=True)
+            raise
 
 
 class ProfileCreationSerializer(serializers.ModelSerializer):
