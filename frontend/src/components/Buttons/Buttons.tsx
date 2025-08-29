@@ -48,6 +48,7 @@ const Buttons = (props: buttonProps) => {
       }
       ${theme === buttonTheme.white && "WeTooBtn--white"}`}
       onClick={(e) => clickFunc(e)}
+      type="button"
     >
       {loading && <Spinner className="WeTooBtn__spinner" width="15px" />}
       {label}

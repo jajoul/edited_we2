@@ -62,6 +62,7 @@ def login_view(request):
 @authentication_classes([])
 def register(request):
     logger.error(f"Register view called with method: {request.method}")
+    logger.error(f"Request data: {request.data}")
     serializer = UserCreationSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     user = serializer.save()

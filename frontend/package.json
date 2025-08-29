@@ -11,7 +11,7 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "axios": "^1.4.0",
+    "axios": "0.27.2",
     "httpolyglot": "^0.1.2",
     "mediasoup": "^3.13.2",
     "mediasoup-client": "^3.7.0",

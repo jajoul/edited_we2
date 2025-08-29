@@ -1,5 +1,10 @@
-insight-web:1 [Intervention] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://social.me2we2.com/static/Poppins-Bold.8001a01b.ttf
-insight-web:1 [Intervention] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://social.me2we2.com/static/Poppins-SemiBold.98512bf8.ttf
-insight-web:1 [Intervention] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://social.me2we2.com/static/Poppins-Medium.a52d0bf0.ttf
-insight-web:1 [Intervention] Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://social.me2we2.com/static/Poppins-Regular.4b4ebe20.ttf
-657.ceffe13f.async.js:1 logout function called
+Register
+GET /api/website/v1/accounts/user/create/
+HTTP 405 Method Not Allowed
+Allow: OPTIONS, POST
+Content-Type: application/json
+Vary: Accept
+
+{
+    "detail": "Method \"GET\" not allowed."
+}
