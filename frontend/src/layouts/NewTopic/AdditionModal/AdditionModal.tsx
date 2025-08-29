@@ -5,7 +5,7 @@ import pdf from "@/assets/images/smallIcons/pdf.svg";
 import picture from "@/assets/images/smallIcons/picture.svg";
 import Buttons, { buttonTheme } from "@/components/Buttons/Buttons";
 import Title, { size } from "@/components/Title/Title";
-import MapPicker from "react-google-map-picker";
+import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import "./AdditionModal.less";
 
 import mapPreviewImage from "@/assets/images/mapPreview.png";
@@ -36,26 +36,18 @@ const AdditionModal = (props: {
   const { saveAndClose, initialData } = props;
   const [locationPicker, setLocationPicker] = useState(false);
 
-  const [location, setLocation] = useState(DefaultLocation);
-  const [zoom, setZoom] = useState(DefaultZoom);
+  const [marker, setMarker] = useState(DefaultLocation);
   const lang = getFilesBaseOnLanguages();
-
-  function handleChangeLocation(lat: number, lng: number) {
-    setLocation({ lat: lat, lng: lng });
-  }
-  function handleChangeZoom(newZoom: number) {
-    setZoom(newZoom);
-  }
 
   const [additions, setAdditions] = useState<AdditionDataType>(
     initialData || {
-      // location: {
-      //   title: lang["location"],
-      //   icon: Location,
-      //   preview: (<></>) as JSX.Element,
-      //   click: () => setLocationPicker(true),
-      //   value: null as any,
-      // },
+      location: {
+        title: lang["location"],
+        icon: Location,
+        preview: (<></>) as JSX.Element,
+        click: () => setLocationPicker(true),
+        value: null as any,
+      },
       video: {
         title: lang["video"],
         icon: Movie,
@@ -84,7 +76,7 @@ const AdditionModal = (props: {
     const mapPreview = <img src={mapPreviewImage} />;
     setAdditions((pre) => ({
       ...pre,
-      location: { ...pre.location, value: location, preview: mapPreview },
+      location: { ...pre.location, value: marker, preview: mapPreview },
     }));
     setLocationPicker(false);
   };
@@ -116,11 +108,13 @@ const AdditionModal = (props: {
     }
   };
 
+  const handleMapClick = (event: any) => {
+    setMarker(event.detail.latLng);
+  };
+
   return (
     <div
-      className={`WeTooAdditionModal ${locationPicker && "WeTooAdditionModal--map"
-        }`}
-    >
+      className={`WeTooAdditionModal ${locationPicker && "WeTooAdditionModal--map"}`}>
       {locationPicker ? (
         <>
           <div
@@ -129,14 +123,16 @@ const AdditionModal = (props: {
           >
             <img src={arrowLeft} />
           </div>
-          <MapPicker
-            defaultLocation={DefaultLocation}
-            zoom={zoom}
-            style={{ height: "700px" }}
-            onChangeLocation={handleChangeLocation}
-            onChangeZoom={handleChangeZoom}
-            apiKey="AIzaSyD07E1VvpsN_0FvsmKAj4nK9GnLq-9jtj8"
-          />
+          <APIProvider apiKey="AIzaSyD07E1VvpsN_0FvsmKAj4nK9GnLq-9jtj8">
+            <Map
+              defaultCenter={DefaultLocation}
+              defaultZoom={DefaultZoom}
+              style={{ height: "700px" }}
+              onClick={handleMapClick}
+            >
+              <Marker position={marker} />
+            </Map>
+          </APIProvider>
         </>
       ) : (
         <>

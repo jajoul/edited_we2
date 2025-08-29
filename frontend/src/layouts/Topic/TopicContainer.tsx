@@ -10,7 +10,7 @@ import ReactPlayer from "react-player/lazy";
 // import mapPreview from "@/assets/images/mapPreview.png";
 import pdfPreViewer from "@/assets/images/pdfPreview.png";
 import Modal from "@/components/Modal/Modal";
-import MapPicker from "react-google-map-picker";
+import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import { Link, useParams } from "umi";
 import EditIcon from "@/assets/images/smallIcons/BlueEdit.svg";
 import {
@@ -76,12 +76,15 @@ const TopicContainer = () => {
       );
     } else if (modal === "map") {
       return (
-        <MapPicker
-          defaultLocation={DefaultLocation}
-          zoom={DefaultZoom}
-          style={{ height: "100%", width: "100%" }}
-          apiKey="AIzaSyD07E1VvpsN_0FvsmKAj4nK9GnLq-9jtj8"
-        />
+        <APIProvider apiKey="AIzaSyD07E1VvpsN_0FvsmKAj4nK9GnLq-9jtj8">
+          <Map
+            defaultCenter={DefaultLocation}
+            defaultZoom={DefaultZoom}
+            style={{ height: "100%", width: "100%" }}
+          >
+            <Marker position={topicData.location} />
+          </Map>
+        </APIProvider>
       );
     }
     return <></>;
