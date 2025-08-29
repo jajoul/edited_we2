@@ -105,8 +105,12 @@ class ProfileCreationSerializer(serializers.ModelSerializer):
         else:
             raise serializers.ValidationError("Authentication required or user_id must be provided")
         
-        profile = Profile.objects.create(user=user, **validated_data)
-        return {"message": "user profile created successfully"}
+        # Update existing auto-created profile or create if missing
+        profile, created = Profile.objects.get_or_create(user=user)
+        for field, value in validated_data.items():
+            setattr(profile, field, value)
+        profile.save()
+        return {"message": "user profile saved successfully", "created": created}
     
 
 class ProfileSerializer(serializers.ModelSerializer):
