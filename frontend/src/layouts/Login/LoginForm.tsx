@@ -78,15 +78,13 @@ const Form = () => {
           // For session authentication, we don't need to store tokens
           localStorage.setItem("isLogin", "true");
           dispatch({ type: CHANGE_IS_LOGIN, data: { isLogin: true } });
-          setTimeout(() => {
-            if (data.destination === 0) {
-              history.push("/insight-web");
-            }
-            else {
-              localStorage.setItem("WeTooSignUpStep", JSON.stringify(2 - Number(data.destination)));
-              history.push("/signup");
-            }
-          }, 100);
+          if (data.destination === 0) {
+            window.location.href = "/insight-web";
+          }
+          else {
+            localStorage.setItem("WeTooSignUpStep", JSON.stringify(2 - Number(data.destination)));
+            window.location.href = "/signup";
+          }
 
         } else {
           const message = res.response?.data
