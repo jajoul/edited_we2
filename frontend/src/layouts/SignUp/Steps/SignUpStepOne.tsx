@@ -65,7 +65,7 @@ const SignUpStepOne = (props: {
       setError(false);
       setLoading(true);
       createUser(
-        info.username.value,
+        info.username.value.trim(),
         info.email.value,
         info.password.value,
         info.password2.value
@@ -81,14 +81,18 @@ const SignUpStepOne = (props: {
         } else {
           let errorMessage: any = lang["toast_error"];
           if (res?.response?.data) {
-            const errorValues = Object.values(res.response?.data);
-            if (errorValues.length > 0) {
-              errorMessage = errorValues.map((error: any) => {
-                if (Array.isArray(error)) {
-                  return error.join(' ');
-                }
-                return error;
-              }).join('\n');
+            const errorData = res.response.data;
+            const messages = [];
+            for (const key in errorData) {
+              const error = errorData[key];
+              if (Array.isArray(error)) {
+                messages.push(error.join(' '));
+              } else {
+                messages.push(error);
+              }
+            }
+            if (messages.length > 0) {
+              errorMessage = messages.join('\n');
             }
           }
 

@@ -1,10 +1,1 @@
-Register
-GET /api/website/v1/accounts/user/create/
-HTTP 405 Method Not Allowed
-Allow: OPTIONS, POST
-Content-Type: application/json
-Vary: Accept
-
-{
-    "detail": "Method \"GET\" not allowed."
-}
+945.0680f830.async.js:1  POST https://social.me2we2.com/api/website/v1/accounts/user/create/ 400 (Bad Request)
