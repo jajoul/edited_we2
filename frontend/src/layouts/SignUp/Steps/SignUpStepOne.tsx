@@ -53,6 +53,7 @@ const SignUpStepOne = (props: {
   };
 
   const goNext = () => {
+    console.log("info:", info);
     const errorValue =
       info.username.value.trim().length < 5 ||
       !checkEmail(info.email.value) ||
@@ -61,6 +62,7 @@ const SignUpStepOne = (props: {
       info.password.value === info.username.value ||
       info.password.value === info.email.value ||
       !accept;
+    console.log("errorValue:", errorValue);
     if (errorValue) {
       setError(errorValue);
     } else {
