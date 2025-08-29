@@ -33,6 +33,7 @@
   "sign_up_username_error": "Username should be more than 5 character",
   "sign_up_password_error": "At least 8 characters with capital and small letters, number, special character",
   "sign_up_confirm_password_error": "Passwords don't match",
+  "sign_up_password_similarity_error": "Password cannot be the same as username or email",
   "sign_up_first_name_error": "First name should be at least 2 character",
   "sign_up_last_name_error": "Last name should be at least 2 character",
   "sign_up_form_step_2_error": "Should be more than 3 character.",

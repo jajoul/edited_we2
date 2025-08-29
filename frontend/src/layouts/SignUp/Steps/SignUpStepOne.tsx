@@ -137,6 +137,12 @@ const SignUpStepOne = (props: {
       info.password.value !== info.password2.value
     )
       return lang["sign_up_confirm_password_error"];
+    else if (
+      key === "password" &&
+      (info.password.value === info.username.value ||
+        info.password.value === info.email.value)
+    )
+      return lang["sign_up_password_similarity_error"];
     return undefined;
   };
 
