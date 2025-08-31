@@ -82,7 +82,7 @@ const SignUpStepOne = (props: {
           // The session cookie is automatically handled by the browser
           props.setUserId(res.data.user_id);
           localStorage.setItem("WeTooUserId", res.data.user_id);
-          localStorage.setItem("WeTooSignUpStep", "1");
+          // Don't store step in localStorage - let user start fresh if they leave
           setStep((pre) => pre + 1);
         } else {
           let errorMessage: any = lang["toast_error"];

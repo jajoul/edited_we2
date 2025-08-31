@@ -65,6 +65,30 @@ const SignUpForm = () => {
       return 0;
     }
     
+    // If step is 3, registration is complete - clear data and start from step 1
+    if (step >= 3) {
+      console.log("Registration completed, clearing data and starting fresh");
+      localStorage.removeItem("WeTooSignUpStep");
+      localStorage.removeItem("WeTooUserId");
+      return 0;
+    }
+    
+    // If user has started registration but not completed it, reset to step 1
+    // This ensures users always start from the beginning if they leave mid-registration
+    if (step >= 1) {
+      console.log("Incomplete registration detected, clearing data and starting from step 1");
+      localStorage.removeItem("WeTooSignUpStep");
+      localStorage.removeItem("WeTooUserId");
+      return 0;
+    }
+    
+    // If we have a userId but no step, clear the userId and start fresh
+    if (!step && userId) {
+      console.log("UserId found but no step, clearing data and starting fresh");
+      localStorage.removeItem("WeTooUserId");
+      return 0;
+    }
+    
     console.log("Registration data is valid, starting at step:", step);
     return step;
   };
@@ -79,11 +103,44 @@ const SignUpForm = () => {
     }
   }, []);
 
+  // Clear any orphaned registration data on mount
+  useEffect(() => {
+    const weTooSignUpStep = localStorage.getItem("WeTooSignUpStep");
+    const weTooUserId = localStorage.getItem("WeTooUserId");
+    
+    // If we have a userId but no step, or if step is invalid, clear everything
+    if ((weTooUserId && !weTooSignUpStep) || (weTooSignUpStep && Number(weTooSignUpStep) >= 3)) {
+      console.log("Clearing orphaned registration data on mount");
+      localStorage.removeItem("WeTooSignUpStep");
+      localStorage.removeItem("WeTooUserId");
+    }
+  }, []);
+
   // Cleanup function to clear registration data when registration is completed
   const clearRegistrationData = () => {
     localStorage.removeItem("WeTooSignUpStep");
     localStorage.removeItem("WeTooUserId");
   };
+
+  // Cleanup on component unmount or when user navigates away
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Clear incomplete registration data when user leaves the page
+      if (!state.isLogin) {
+        clearRegistrationData();
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      // Also clear data when component unmounts (user navigates away)
+      if (!state.isLogin) {
+        clearRegistrationData();
+      }
+    };
+  }, [state.isLogin]);
 
   const stepComponents = [
     <SignUpStepOne setStep={setStep} setUserId={setUserId} />,
