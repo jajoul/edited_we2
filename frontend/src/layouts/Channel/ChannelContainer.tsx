@@ -7,13 +7,13 @@ import TopicCard from "../InsightWeb/InsightExplore/RowView/TopicCard.tsx/TopicC
 import { Link, useParams } from "umi";
 import { chanelTopicList, followChannel, getChannel } from "@/assets/Api";
 import { getFilesBaseOnLanguages } from "../language/language";
-import { TOGGLE_TOPIC_FOLLOW_LIST, channelData } from "@/assets/Provider/types";
+import { TOGGLE_TOPIC_FOLLOW_LIST, channelData, Topic } from "@/assets/Provider/types";
 import Spinner from "@/components/Spinner/Spinner";
 import Buttons, { buttonTheme } from "@/components/Buttons/Buttons";
 import { Context } from "@/assets/Provider/Provider";
 
 const ChannelContainer = () => {
-  const [topics, setTopic] = useState([]);
+  const [topics, setTopic] = useState<Topic[]>([]);
   const [followLoading, setFollowLoading] = useState(false);
   const [channelData, setChannelData] = useState<channelData>(
     {} as channelData
@@ -24,6 +24,11 @@ const ChannelContainer = () => {
   const { dispatch } = useContext(Context);
 
   const { id } = useParams();
+
+  const handleDeleteTopic = (topicId: number) => {
+    // Remove the deleted topic from the current list
+    setTopic(prevTopics => prevTopics.filter(topic => topic.id !== topicId));
+  };
 
   useEffect(() => {
     if (id) {
@@ -113,6 +118,7 @@ const ChannelContainer = () => {
                 data={item}
                 key={index}
                 className="WeTooChannelContainer__list__card"
+                onDelete={handleDeleteTopic}
               />
             ))
           ) : (

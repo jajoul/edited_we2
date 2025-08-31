@@ -5,10 +5,23 @@ import logo from "../../../../../assets/images/logo.png";
 import { Link } from "umi";
 import { getFilesBaseOnLanguages } from "../../../../language/language";
 import { Topic } from "@/assets/Provider/types";
+import { deleteTopic } from "@/assets/Api";
 
-const TopicCard = (props: { data: Topic; className?: string }) => {
+const TopicCard = (props: { data: Topic; className?: string; onDelete?: (topicId: number) => void }) => {
   const lang = getFilesBaseOnLanguages();
-  const { data, className } = props;
+  const { data, className, onDelete } = props;
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (window.confirm("Are you sure you want to delete this topic?")) {
+      deleteTopic(data.id.toString()).then((res) => {
+        if (res.status === 204 && onDelete) {
+          onDelete(data.id);
+        }
+      });
+    }
+  };
 
   return (
     <Link to={`/topic/${data.id}`} className={`WeTooTopicCard ${className}`}>
@@ -33,6 +46,14 @@ const TopicCard = (props: { data: Topic; className?: string }) => {
         </div>
         {data.which_type === 0 && (
           <img className="WeTooTopicCard__logo" src={logo} />
+        )}
+        {data.is_editable && (
+          <button 
+            className="WeTooTopicCard__deleteBtn" 
+            onClick={handleDelete}
+          >
+            Delete
+          </button>
         )}
       </div>
       {data.description && (

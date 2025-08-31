@@ -518,6 +518,15 @@ export const getTopicById = (id: string) => {
     .catch((err) => err);
 };
 
+export const deleteTopic = (id: string) => {
+  return defaultApi({
+    method: "delete",
+    url: `website/v1/site_behavior/topic/${id}/`,
+  })
+    .then((res) => res)
+    .catch((err) => err);
+};
+
 export const getTags = () => {
   return defaultApi({
     method: "get",

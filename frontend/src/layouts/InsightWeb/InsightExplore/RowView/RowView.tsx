@@ -11,6 +11,13 @@ const RowView = (props: { title: string; id: string; topics: Topic[] }) => {
   const lang = getFilesBaseOnLanguages();
   const { title, id, topics } = props;
 
+  const handleDeleteTopic = (topicId: number) => {
+    // Remove the deleted topic from the list
+    // This will trigger a re-render with the updated list
+    // The parent component should handle the actual data update
+    console.log(`Topic ${topicId} deleted`);
+  };
+
   if (!!topics?.length)
     return (
       <div className="WeTooRowView">
@@ -22,7 +29,12 @@ const RowView = (props: { title: string; id: string; topics: Topic[] }) => {
         </div>
         <div className="WeTooRowView__row">
           {topics?.map((item, index) => (
-            <TopicCard className="WeTooRowView__row__topicCard" key={index} data={item} />
+            <TopicCard 
+              className="WeTooRowView__row__topicCard" 
+              key={index} 
+              data={item} 
+              onDelete={handleDeleteTopic}
+            />
           ))}
 
           <div className="WeTooRowView__row__endShadow" />

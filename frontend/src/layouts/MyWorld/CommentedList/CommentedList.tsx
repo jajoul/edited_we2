@@ -14,6 +14,11 @@ const CommentedList = (props: { searchValue?: string }) => {
 
   const location = history.location.pathname;
   const [loading, setLoading] = useState(true);
+
+  const handleDeleteTopic = (topicId: number) => {
+    // Remove the deleted topic from the current list
+    setChannels(prevChannels => prevChannels.filter(channel => channel.id !== topicId));
+  };
   const [channels, setChannels] = useState<
     {
       picture: string;
@@ -85,7 +90,7 @@ const CommentedList = (props: { searchValue?: string }) => {
               !searchValue ||
               data.name?.toLowerCase()?.includes(searchValue?.toLowerCase())
             )
-              return <TopicCard data={data} key={item.id} />;
+              return <TopicCard data={data} key={item.id} onDelete={handleDeleteTopic} />;
             else return <></>;
           })
         ) : (

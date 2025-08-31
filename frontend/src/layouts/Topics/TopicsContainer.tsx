@@ -25,6 +25,11 @@ const TopicsContainer = () => {
 
   const { state } = useContext(Context);
 
+  const handleDeleteTopic = (topicId: number) => {
+    // Remove the deleted topic from the current list
+    setTopics(prevTopics => prevTopics.filter(topic => topic.id !== topicId));
+  };
+
   useEffect(() => {
     if (filter) {
       if (filter === "all") {
@@ -81,8 +86,10 @@ const TopicsContainer = () => {
           ) : topics?.length > 0 ? (
             topics.map((topic) => (
               <TopicCard
+                key={topic.id}
                 data={topic}
                 className="WeTooTopicsContainer__list__topicCard"
+                onDelete={handleDeleteTopic}
               />
             ))
           ) : (

@@ -7,6 +7,7 @@ import { getSearchParam } from "@/components/MenuBar/MenuBar";
 import { getFilesBaseOnLanguages } from "../language/language";
 import { searchChannels, searchTopics } from "@/assets/Api";
 import Spinner from "@/components/Spinner/Spinner";
+import { Topic } from "@/assets/Provider/types";
 
 let timer: any = null;
 
@@ -15,7 +16,7 @@ const InsightWebSearchContainer = (props: { searchValue: string }) => {
   const lang = getFilesBaseOnLanguages();
 
   const [loading, setLoading] = useState(true);
-  const [topics, setTopics] = useState([]);
+  const [topics, setTopics] = useState<Topic[]>([]);
   const [channels, setChannels] = useState([]);
 
   const startSearch = (value: string) => {
@@ -51,6 +52,11 @@ const InsightWebSearchContainer = (props: { searchValue: string }) => {
       }
     }, 500);
   }, [props.searchValue]);
+
+  const handleDeleteTopic = (topicId: number) => {
+    // Remove the deleted topic from the current list
+    setTopics(prevTopics => prevTopics.filter(topic => topic.id !== topicId));
+  };
 
   const emptyState = (
     <div className="WeTooInsightWebSearchContainer__emptyState">There isn't any result. please search another thing.</div>
@@ -100,7 +106,7 @@ const InsightWebSearchContainer = (props: { searchValue: string }) => {
             />
           ) : active === "topic" ? (
             topics.length > 0 ? (
-              topics.map((item, index) => <TopicCard data={item} key={index} />)
+              topics.map((item, index) => <TopicCard data={item} key={index} onDelete={handleDeleteTopic} />)
             ) : (
               emptyState
             )

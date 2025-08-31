@@ -11,7 +11,7 @@ import ReactPlayer from "react-player/lazy";
 import pdfPreViewer from "@/assets/images/pdfPreview.png";
 import Modal from "@/components/Modal/Modal";
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
-import { Link, useParams } from "umi";
+import { Link, useParams, history } from "umi";
 import EditIcon from "@/assets/images/smallIcons/BlueEdit.svg";
 import {
   getTopicById,
@@ -19,6 +19,7 @@ import {
   getTopicLike,
   sendTopicComment,
   toggleTopicLike,
+  deleteTopic,
 } from "@/assets/Api";
 import { getFilesBaseOnLanguages } from "../language/language";
 import { Comment, Topic } from "@/assets/Provider/types";
@@ -60,6 +61,17 @@ const TopicContainer = () => {
     sendTopicComment(id || "", score, comment).then((res) => {
       if (res.data) setComments((pre) => [...pre, res.data]);
     });
+  };
+
+  const handleDeleteTopic = () => {
+    if (window.confirm("Are you sure you want to delete this topic?")) {
+      deleteTopic(id || "").then((res) => {
+        if (res.status === 204) {
+          // Topic deleted successfully, redirect to channel page
+          history.push(`/channel/${topicData.channel_id}`);
+        }
+      });
+    }
   };
 
   const modalContent = () => {
@@ -110,9 +122,19 @@ const TopicContainer = () => {
                       new Date(topicData?.created_at).toDateString()}
                   </div>
                 </div>
-                {topicData.is_editable && <Link className="WeTooTopicContainer__template__editIcon" to={`/topic/edit/${topicData.id}`}>
-                  <img src={EditIcon} />
-                </Link>}
+                {topicData.is_editable && (
+                  <>
+                    <Link className="WeTooTopicContainer__template__editIcon" to={`/topic/edit/${topicData.id}`}>
+                      <img src={EditIcon} />
+                    </Link>
+                    <button 
+                      className="WeTooTopicContainer__template__deleteBtn" 
+                      onClick={handleDeleteTopic}
+                    >
+                      Delete
+                    </button>
+                  </>
+                )}
                 {topicData?.which_type === 0 && (
                   <img
                     src={logo}
