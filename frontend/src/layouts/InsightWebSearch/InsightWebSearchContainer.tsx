@@ -1,31 +1,50 @@
 import React, { useEffect, useState } from "react";
 import "./InsightWebSearchContainer.less";
-import { history } from "umi";
-import TopicCard from "../InsightWeb/InsightExplore/RowView/TopicCard.tsx/TopicCard";
-import CannelCard from "./CannelCard/CannelCard";
-import { getSearchParam } from "@/components/MenuBar/MenuBar";
-import { getFilesBaseOnLanguages } from "../language/language";
-import { searchChannels, searchTopics } from "@/assets/Api";
+import { searchTopics, searchChannels } from "@/assets/Api";
 import Spinner from "@/components/Spinner/Spinner";
+import TopicCard from "@/layouts/InsightWeb/InsightExplore/RowView/TopicCard.tsx/TopicCard";
+import CannelCard from "./CannelCard/CannelCard";
 import { Topic } from "@/assets/Provider/types";
+import { getFilesBaseOnLanguages } from "../language/language";
+import { getSearchParam } from "@/assets/functions";
 
-let timer: any = null;
-
-const InsightWebSearchContainer = (props: { searchValue: string }) => {
+const InsightWebSearchContainer = (props: { searchValue?: string }) => {
+  let timer: NodeJS.Timeout;
   const [active, setActive] = useState("topic");
   const lang = getFilesBaseOnLanguages();
 
   const [loading, setLoading] = useState(true);
   const [topics, setTopics] = useState<Topic[]>([]);
   const [channels, setChannels] = useState([]);
+  const [error, setError] = useState("");
 
   const startSearch = (value: string) => {
+    setError("");
     searchTopics(value).then((res) => {
-      if (res.data) setTopics(res.data);
+      if (res && res.status >= 200 && res.status < 300 && res.data) {
+        setTopics(res.data);
+      } else {
+        setTopics([]);
+        console.error("Error searching topics:", res);
+      }
+      if (active === "topic") setLoading(false);
+    }).catch((err) => {
+      setTopics([]);
+      console.error("Error searching topics:", err);
       if (active === "topic") setLoading(false);
     });
+    
     searchChannels(value).then((res) => {
-      if (res.data) setChannels(res.data);
+      if (res && res.status >= 200 && res.status < 300 && res.data) {
+        setChannels(res.data);
+      } else {
+        setChannels([]);
+        console.error("Error searching channels:", res);
+      }
+      if (active === "channel") setLoading(false);
+    }).catch((err) => {
+      setChannels([]);
+      console.error("Error searching channels:", err);
       if (active === "channel") setLoading(false);
     });
   };
@@ -104,6 +123,10 @@ const InsightWebSearchContainer = (props: { searchValue: string }) => {
               width="80px"
               className="WeTooInsightWebSearchContainer__list__spinner"
             />
+          ) : error ? (
+            <div className="WeTooInsightWebSearchContainer__error">
+              {error}
+            </div>
           ) : active === "topic" ? (
             topics.length > 0 ? (
               topics.map((item, index) => <TopicCard data={item} key={index} onDelete={handleDeleteTopic} />)
@@ -112,7 +135,7 @@ const InsightWebSearchContainer = (props: { searchValue: string }) => {
             )
           ) : channels.length > 0 ? (
             channels.map((item, index) => (
-              <CannelCard data={item} key={index} />
+              <CannelCard key={index} data={item} />
             ))
           ) : (
             emptyState

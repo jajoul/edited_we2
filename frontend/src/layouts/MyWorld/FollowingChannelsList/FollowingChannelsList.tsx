@@ -15,11 +15,26 @@ const FollowingChannelsList = (props: { searchValue?: string }) => {
     { title: string; id: string; image: string }[]
   >([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     followingChannels().then((res) => {
       setLoading(false);
-      if (res.data) setChannels(res.data);
+      // Check if response is successful and has data
+      if (res && res.status >= 200 && res.status < 300 && res.data) {
+        setChannels(res.data);
+        setError("");
+      } else {
+        // Handle errors
+        setChannels([]);
+        setError("Failed to load following channels. Please try again.");
+        console.error("Error loading following channels:", res);
+      }
+    }).catch((err) => {
+      setLoading(false);
+      setChannels([]);
+      setError("Failed to load following channels. Please try again.");
+      console.error("Error loading following channels:", err);
     });
   }, []);
 
@@ -38,6 +53,10 @@ const FollowingChannelsList = (props: { searchValue?: string }) => {
         </div>
         {loading ? (
           <Spinner purple={true} width="80px" />
+        ) : error ? (
+          <div className="WeTooFollowingChannelsList__error">
+            {error}
+          </div>
         ) : (
           <div>
             {channels.length > 0 ? (

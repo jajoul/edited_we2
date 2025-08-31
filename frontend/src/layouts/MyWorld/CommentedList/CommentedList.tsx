@@ -14,6 +14,7 @@ const CommentedList = (props: { searchValue?: string }) => {
 
   const location = history.location.pathname;
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const handleDeleteTopic = (topicId: number) => {
     // Remove the deleted topic from the current list
@@ -35,12 +36,40 @@ const CommentedList = (props: { searchValue?: string }) => {
     if (location.includes("commented")) {
       commentedChannels().then((res) => {
         setLoading(false);
-        if (res.data) setChannels(res.data);
+        // Check if response is successful and has data
+        if (res && res.status >= 200 && res.status < 300 && res.data) {
+          setChannels(res.data);
+          setError("");
+        } else {
+          // Handle errors
+          setChannels([]);
+          setError("Failed to load commented topics. Please try again.");
+          console.error("Error loading commented topics:", res);
+        }
+      }).catch((err) => {
+        setLoading(false);
+        setChannels([]);
+        setError("Failed to load commented topics. Please try again.");
+        console.error("Error loading commented topics:", err);
       });
     } else {
       likedChannels().then((res) => {
         setLoading(false);
-        if (res.data) setChannels(res.data);
+        // Check if response is successful and has data
+        if (res && res.status >= 200 && res.status < 300 && res.data) {
+          setChannels(res.data);
+          setError("");
+        } else {
+          // Handle errors
+          setChannels([]);
+          setError("Failed to load liked topics. Please try again.");
+          console.error("Error loading liked topics:", res);
+        }
+      }).catch((err) => {
+        setLoading(false);
+        setChannels([]);
+        setError("Failed to load liked topics. Please try again.");
+        console.error("Error loading liked topics:", err);
       });
     }
   }, []);
@@ -64,6 +93,10 @@ const CommentedList = (props: { searchValue?: string }) => {
         </div>
         {loading ? (
           <Spinner purple={true} width="80px" />
+        ) : error ? (
+          <div className="WeTooCommentedList__error">
+            {error}
+          </div>
         ) : channels.length > 0 ? (
           channels.map((item:any) => {
             const data: Topic = {
