@@ -62,7 +62,7 @@ class GetChannelSerializer(serializers.ModelSerializer):
         user_profile = self.context['request'].user.profile
         if user_profile == obj.creator:
             return 2
-        if user_profile in obj.members.all():
+        if obj.members.filter(pk=user_profile.pk).count() > 0:
             return 1
         else:
             return 0

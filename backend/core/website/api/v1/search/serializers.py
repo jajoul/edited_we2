@@ -36,7 +36,7 @@ class SearchChannelSerializer(esSerializer.DocumentSerializer):
         
         if channel.creator == user_profile:
             return 2
-        elif channel.members.filter(pk=user_profile.pk).exists():
+        elif channel.members.filter(pk=user_profile.pk).count() > 0:
             return 1
         else:
             return 0
@@ -79,7 +79,7 @@ class SearchChannel2Serializer(serializers.ModelSerializer):
         
         if obj.creator == user_profile:
             return 2
-        elif obj.members.filter(pk=user_profile.pk).exists():
+        elif obj.members.filter(pk=user_profile.pk).count() > 0:
             return 1
         else:
             return 0

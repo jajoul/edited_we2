@@ -120,6 +120,12 @@ else:
                 "PASSWORD": config("DB_PASS", default="mysql"),
                 "HOST": config("DB_HOST", default="db"),
                 "PORT": config("DB_PORT", cast=int, default=3306),
+                "OPTIONS": {
+                    "init_command": "SET sql_mode='STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO'",
+                    "charset": "utf8mb4",
+                    "autocommit": True,
+                    "sql_mode": "STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO",
+                },
             }
     }
 
