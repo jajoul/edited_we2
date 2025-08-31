@@ -6,7 +6,7 @@ import TopicCard from "@/layouts/InsightWeb/InsightExplore/RowView/TopicCard.tsx
 import CannelCard from "./CannelCard/CannelCard";
 import { Topic } from "@/assets/Provider/types";
 import { getFilesBaseOnLanguages } from "../language/language";
-import { getSearchParam } from "@/assets/functions";
+import { getSearchParam } from "@/components/MenuBar/MenuBar";
 
 const InsightWebSearchContainer = (props: { searchValue?: string }) => {
   let timer: NodeJS.Timeout;
