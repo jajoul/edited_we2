@@ -74,7 +74,9 @@ class UserLastActivitiesView(GenericAPIView):
         # check if any limit is requested
         limit = self.request.query_params.get('limit')
         if limit:
-            last_activities = last_activities.order_by("-id")[:int(limit)]
+            # MySQL-compatible way to limit queryset
+            ids = list(last_activities.order_by("-id").values_list('id', flat=True)[:int(limit)])
+            last_activities = profile.last_activities.filter(id__in=ids).order_by("-id")
         return last_activities
     
     def set_is_seen_true(self, query):

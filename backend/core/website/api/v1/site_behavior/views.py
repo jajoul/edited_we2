@@ -32,7 +32,9 @@ class TopicViewSet(ModelViewSet):
         limit = self.request.query_params.get('limit', None)
 
         if limit:
-            queryset = self.queryset[:int(limit)]
+            # MySQL-compatible way to limit queryset
+            ids = list(queryset.values_list('id', flat=True)[:int(limit)])
+            queryset = self.queryset.filter(id__in=ids)
 
         return queryset
 
@@ -60,7 +62,9 @@ class NewTopicListView(ListAPIView):
         queryset = Topic.objects.all().order_by('-created_at')
 
         if limit:
-            queryset = queryset[:int(limit)]
+            # MySQL-compatible way to limit queryset
+            ids = list(queryset.values_list('id', flat=True)[:int(limit)])
+            queryset = Topic.objects.filter(id__in=ids).order_by('-created_at')
 
         return queryset
 
@@ -99,7 +103,14 @@ class RecommendedTopicsListView(ListAPIView):
         # limit returned topics if there is any limit
         limit = self.request.query_params.get('limit', None)
         if limit:
-            return topics[:int(limit)]
+            # MySQL-compatible way to limit queryset
+            ids = list(topics.values_list('id', flat=True)[:int(limit)])
+            return all_topics.filter(id__in=ids).annotate(
+                id_order=Case(
+                *[When(id=id_val, then=index) for index, id_val in enumerate(topic_index)],
+                default=len(all_topics)
+                )
+            ).order_by('id_order')
         return topics
 
     def get_serializer_context(self):
@@ -120,7 +131,9 @@ class ChannelTopicListView(ListAPIView):
         # limit the queryset if there is any limit param
         limit = self.request.query_params.get('limit', None)
         if limit:
-            queryset = queryset[:int(limit)]
+            # MySQL-compatible way to limit queryset
+            ids = list(queryset.values_list('id', flat=True)[:int(limit)])
+            queryset = channel.topics.filter(id__in=ids)
         return queryset
 
 
@@ -149,7 +162,9 @@ class TrendTagsView(ListAPIView):
     serializer_class = TagListSerializer
 
     def get_queryset(self):
-        return Tag.objects.annotate(trend_rate=Count('topic')).order_by('-trend_rate')[:5]
+        # MySQL-compatible way to limit queryset
+        ids = list(Tag.objects.annotate(trend_rate=Count('topic')).order_by('-trend_rate').values_list('id', flat=True)[:5])
+        return Tag.objects.filter(id__in=ids).annotate(trend_rate=Count('topic')).order_by('-trend_rate')
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -162,16 +177,19 @@ class TopTopicsListView(ListAPIView):
     serializer_class = DetailTopicSerializer
 
     def get_queryset(self):
-        tags = Tag.objects.annotate(
+        # MySQL-compatible way to get top tags
+        tag_ids = list(Tag.objects.annotate(
             trend_rate=Count('topic')
-            ).order_by('-trend_rate')[:5].values_list('id', flat=True)
+            ).order_by('-trend_rate').values_list('id', flat=True)[:5])
         
-        queryset = Topic.objects.filter(tags__in=tags).distinct()
+        queryset = Topic.objects.filter(tags__in=tag_ids).distinct()
         
         # limit the queryset if there is any limit param
         limit = self.request.query_params.get('limit', None)
         if limit:
-            queryset = queryset[:int(limit)]
+            # MySQL-compatible way to limit queryset
+            ids = list(queryset.values_list('id', flat=True)[:int(limit)])
+            queryset = Topic.objects.filter(id__in=ids, tags__in=tag_ids).distinct()
         return queryset
     
     def get_serializer_context(self):
@@ -191,7 +209,9 @@ class TopicsYouFollowedListView(ListAPIView):
         # limit the queryset if there is any limit param
         limit = self.request.query_params.get('limit', None)
         if limit:
-            queryset = queryset[:int(limit)]
+            # MySQL-compatible way to limit queryset
+            ids = list(queryset.values_list('id', flat=True)[:int(limit)])
+            queryset = Topic.objects.filter(id__in=ids, channel__in=channels)
         return queryset
         
 

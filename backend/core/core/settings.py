@@ -124,7 +124,7 @@ else:
                     "init_command": "SET sql_mode='STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO'",
                     "charset": "utf8mb4",
                     "autocommit": True,
-                    "sql_mode": "STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO",
+                    "use_unicode": True,
                 },
             }
     }
@@ -194,6 +194,11 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# MySQL compatibility settings
+if not DEBUG:
+    # Disable Django's automatic query optimization that can cause MySQL issues
+    DATABASES['default']['OPTIONS']['init_command'] += "; SET SESSION sql_mode='STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO'"
 
 # messages configuration for notification handeling in pages
 MESSAGE_TAGS = {
