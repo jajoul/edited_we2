@@ -63,10 +63,15 @@ const SignUpStepThree = ({ userId }: { userId: number | null }) => {
       ).then((res) => {
         setLoading(false);
         if (res.status === 201) {
+          // Mark registration as complete
+          localStorage.setItem("WeTooSignUpStep", "3");
           localStorage.setItem(
             "WeTooAccessToken",
             JSON.stringify(accessRefreshData)
           );
+          // Clear registration data since registration is now complete
+          localStorage.removeItem("WeTooSignUpStep");
+          localStorage.removeItem("WeTooUserId");
           dispatch({type: CHANGE_IS_LOGIN, data:{isLogin: true}})
           setShowModal(true);
           updateLocalData()

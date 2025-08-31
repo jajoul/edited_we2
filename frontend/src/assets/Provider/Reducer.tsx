@@ -22,6 +22,8 @@ export const Reducer = (
         document.getElementById("root")?.classList.add("WeTooPersianBody");
       else
         document.getElementById("root")?.classList.remove("WeTooPersianBody");
+      // Persist language selection to localStorage
+      localStorage.setItem("WeTooLanguage", action.data.lng);
       return {
         ...state,
         lng: action.data.lng,

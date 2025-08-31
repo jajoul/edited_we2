@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Logo from "../../../assets/images/logo.png";
 import whiteLogo from "../../../assets/images/logo-white.svg";
 import { CHANGE_LANGUAGE, EN } from "@/assets/Provider/types";
@@ -13,6 +13,15 @@ const LanguageSelection = (props: { goNext: () => void }) => {
   const goNext = props.goNext;
 
   const { dispatch, state } = useContext(Context);
+
+  // Ensure a default language is selected
+  useEffect(() => {
+    console.log("LanguageSelection: Current language state:", state.lng);
+    if (!state.lng) {
+      console.log("LanguageSelection: No language selected, setting default to EN");
+      dispatch({ type: CHANGE_LANGUAGE, data: { lng: EN } });
+    }
+  }, [state.lng, dispatch]);
 
   const languages = [
     {
@@ -32,7 +41,18 @@ const LanguageSelection = (props: { goNext: () => void }) => {
   ];
 
   const selectLng = (lng: string) => {
+    console.log("LanguageSelection: User selected language:", lng);
     dispatch({ type: CHANGE_LANGUAGE, data: { lng } });
+  };
+
+  const handleNext = () => {
+    console.log("LanguageSelection: Next button clicked, current language:", state.lng);
+    // Ensure a language is selected before proceeding
+    if (state.lng) {
+      goNext();
+    } else {
+      console.log("LanguageSelection: No language selected, cannot proceed");
+    }
   };
 
   const lang = getFilesBaseOnLanguages();
@@ -86,7 +106,7 @@ const LanguageSelection = (props: { goNext: () => void }) => {
             className="WeTooLanguageSelection__box__btn"
             label={lang["next"]}
             theme={buttonTheme.gradient}
-            onClick={goNext}
+            onClick={handleNext}
           />
         </div>
       </div>

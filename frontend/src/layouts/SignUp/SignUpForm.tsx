@@ -11,9 +11,66 @@ import { getFilesBaseOnLanguages } from "../language/language";
 import { Context } from "../../assets/Provider/Provider";
 
 const SignUpForm = () => {
-  const weTooSignUpStep = localStorage.getItem("WeTooSignUpStep")
-  const [step, setStep] = useState<number>(Number(weTooSignUpStep) || 0);
-  const [userId, setUserId] = useState<number | null>(null);
+  const { state } = useContext(Context);
+  
+  // Check if user is already logged in - if so, they shouldn't be in registration
+  useEffect(() => {
+    if (state.isLogin) {
+      // Clear any incomplete registration data
+      localStorage.removeItem("WeTooSignUpStep");
+      localStorage.removeItem("WeTooUserId");
+      // Redirect to home or dashboard
+      window.location.href = "/insight-web";
+    }
+  }, [state.isLogin]);
+
+  // Get registration step from localStorage
+  const weTooSignUpStep = localStorage.getItem("WeTooSignUpStep");
+  const weTooUserId = localStorage.getItem("WeTooUserId");
+  
+  // Determine initial step: if user has started but not completed registration, start from step 1
+  const getInitialStep = () => {
+    // If no step stored, start from step 1
+    if (!weTooSignUpStep) return 0;
+    
+    const step = Number(weTooSignUpStep);
+    // If step is 2 or higher but no user ID, something went wrong - reset to step 1
+    if (step >= 1 && !weTooUserId) {
+      localStorage.removeItem("WeTooSignUpStep");
+      return 0;
+    }
+    
+    // If step is 3, registration is complete - clear data and start from step 1
+    if (step >= 3) {
+      localStorage.removeItem("WeTooSignUpStep");
+      localStorage.removeItem("WeTooUserId");
+      return 0;
+    }
+    
+    return step;
+  };
+
+  // Validate and reset incomplete registration data
+  const validateRegistrationData = () => {
+    const step = Number(weTooSignUpStep);
+    const userId = weTooUserId;
+    
+    console.log("Validating registration data:", { step, userId, weTooSignUpStep, weTooUserId });
+    
+    // If we have a step but no user ID, or step is invalid, reset everything
+    if ((step >= 1 && !userId) || step < 0 || step > 3) {
+      console.log("Invalid registration data detected, resetting to step 0");
+      localStorage.removeItem("WeTooSignUpStep");
+      localStorage.removeItem("WeTooUserId");
+      return 0;
+    }
+    
+    console.log("Registration data is valid, starting at step:", step);
+    return step;
+  };
+
+  const [step, setStep] = useState<number>(validateRegistrationData());
+  const [userId, setUserId] = useState<number | null>(weTooUserId ? Number(weTooUserId) : null);
 
   useEffect(() => {
     const weTooUserId = localStorage.getItem("WeTooUserId");
@@ -21,6 +78,12 @@ const SignUpForm = () => {
       setUserId(Number(weTooUserId));
     }
   }, []);
+
+  // Cleanup function to clear registration data when registration is completed
+  const clearRegistrationData = () => {
+    localStorage.removeItem("WeTooSignUpStep");
+    localStorage.removeItem("WeTooUserId");
+  };
 
   const stepComponents = [
     <SignUpStepOne setStep={setStep} setUserId={setUserId} />,

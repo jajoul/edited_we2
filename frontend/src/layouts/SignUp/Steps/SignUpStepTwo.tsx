@@ -75,6 +75,7 @@ const SignUpStepTwo = (props: SignUpStepTwoProps) => {
       ).then((res) => {
         setLoading(false);
         if (res?.status === 201) {
+          localStorage.setItem("WeTooSignUpStep", "2");
           setStep((pre) => pre + 1);
         } else {
           let errorMessage: any = lang;

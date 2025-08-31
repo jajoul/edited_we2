@@ -37,7 +37,7 @@ export type stateType = {
 };
 
 const initialState: stateType = {
-  lng: EN,
+  lng: localStorage.getItem("WeTooLanguage") as "fa" | "en" || EN,
   page: null,
   isLogin: localStorage.getItem("isLogin") === "true", //!!accessToken
   question: null,
