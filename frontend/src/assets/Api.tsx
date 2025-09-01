@@ -300,7 +300,7 @@ export const forgotPassConfirmNewPass = (
 export const getChannelsList = () => {
   return defaultApi({
     method: "get",
-  url: `${base_url}website/v1/channels/channel/`,
+    url: `website/v1/channels/channel/`,
   })
     .then((res) => res)
     .catch((error) => error);
@@ -663,7 +663,7 @@ export const getCommentReplies = (commentId: string) => {
 export const followChannel = (id: string, follow: boolean) => {
   return defaultApi({
     method: follow ? "post" : "delete",
-  url: `${base_url}website/v1/channels/channel/${id}/follow`,
+    url: `website/v1/channels/channel/${id}/follow`,
   })
     .then((res) => res)
     .catch((err) => err);
@@ -679,7 +679,7 @@ export const filterTopicsByTag = (id: string) => {
 };
 
 export const myChannels = () => {
-  console.log("myChannels: Making API request to:", `website/v1/channels/channel/list/owner`);
+  console.log("myChannels: Making API request to:", `website/v1/channels/channel/list/owner/`);
   
   // Get current token from localStorage
   const currentAccessToken = localStorage.getItem("WeTooAccessToken");
@@ -690,7 +690,7 @@ export const myChannels = () => {
   
   return defaultApi({
     method: "get",
-    url: `website/v1/channels/channel/list/owner`,
+    url: `website/v1/channels/channel/list/owner/`,
   })
     .then((res) => {
       console.log("myChannels: API response:", res);
