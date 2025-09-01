@@ -55,8 +55,17 @@ export const updateLocalData = () => {
   accessToken = userDataObject?.access;
   // Also update the global user variable that the interceptor uses
   user = userDataObject;
+  
+  // Update the default headers for future requests
+  if (accessToken) {
+    defaultApi.defaults.headers.Authorization = `Bearer ${accessToken}`;
+  } else {
+    delete defaultApi.defaults.headers.Authorization;
+  }
+  
   console.log("updateLocalData: Updated accessToken:", accessToken);
   console.log("updateLocalData: Updated user:", user);
+  console.log("updateLocalData: Updated default headers:", defaultApi.defaults.headers);
 };
 
 defaultApi.interceptors.request.use((config) => {

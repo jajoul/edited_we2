@@ -12,6 +12,15 @@ const MyChannelContainer = () => {
 
   useEffect(() => {
     console.log("MyChannelContainer: Starting to fetch channels...");
+    
+    // Debug: Check all localStorage items
+    console.log("MyChannelContainer: All localStorage items:");
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      const value = localStorage.getItem(key!);
+      console.log(`  ${key}: ${value}`);
+    }
+    
     // Update local data to ensure we have the latest access token
     updateLocalData();
     
@@ -21,6 +30,7 @@ const MyChannelContainer = () => {
     const userToken = tokenData?.access;
     
     console.log("MyChannelContainer: Current access token:", userToken);
+    console.log("MyChannelContainer: Token data:", tokenData);
     
     // Check if user is authenticated
     if (!userToken) {
