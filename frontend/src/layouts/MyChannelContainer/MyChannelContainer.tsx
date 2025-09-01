@@ -15,7 +15,7 @@ const MyChannelContainer = () => {
       setLoading(false);
       // Check if response is successful and has data
       if (res && res.status >= 200 && res.status < 300 && res.data) {
-        setChannels(res.data);
+        setChannels(Array.isArray(res.data) ? res.data : res.data.results || []);
         setError("");
       } else if (res && res.response && res.response.status === 404) {
         // Handle 404 case (no channels found) - set empty array
