@@ -2,9 +2,7 @@ import axios from "axios";
 import { logout } from "./functions";
 import { newChannelData } from "./Provider/types";
 
-// For local development, use localhost
-export const base_url = `http://localhost:8000/api/`;
-// For production, use: https://social.me2we2.com/api/
+export const base_url = `https://social.me2we2.com/api/`;
 
 function getCookie(name: string) {
     let cookieValue = null;
