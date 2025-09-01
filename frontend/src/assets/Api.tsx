@@ -2,7 +2,9 @@ import axios from "axios";
 import { logout } from "./functions";
 import { newChannelData } from "./Provider/types";
 
-export const base_url = `https://social.me2we2.com/api/`;
+// For local development, use localhost
+export const base_url = `http://localhost:8000/api/`;
+// For production, use: https://social.me2we2.com/api/
 
 function getCookie(name: string) {
     let cookieValue = null;
@@ -55,6 +57,8 @@ export const updateLocalData = () => {
   accessToken = userDataObject?.access;
   // Also update the global user variable that the interceptor uses
   user = userDataObject;
+  console.log("updateLocalData: Updated accessToken:", accessToken);
+  console.log("updateLocalData: Updated user:", user);
 };
 
 defaultApi.interceptors.request.use((config) => {

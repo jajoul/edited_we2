@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./MyChannelContainer.less";
 import TopicList from "../NewChanel/TopicList/TopicList";
-import { myChannels } from "@/assets/Api";
+import { myChannels, updateLocalData } from "@/assets/Api";
 import Spinner from "@/components/Spinner/Spinner";
 import CannelCard from "../InsightWebSearch/CannelCard/CannelCard";
 
@@ -12,6 +12,8 @@ const MyChannelContainer = () => {
 
   useEffect(() => {
     console.log("MyChannelContainer: Starting to fetch channels...");
+    // Update local data to ensure we have the latest access token
+    updateLocalData();
     myChannels().then((res) => {
       console.log("MyChannelContainer: API response received:", res);
       setLoading(false);
