@@ -226,16 +226,25 @@ class UserFullInfoView(GenericAPIView):
     def get_queryset(self):
         user = User.objects.get(id=self.request.user.id)
         profile = user.profile
-        personal_detail = profile.personal_detail
+        try:
+            personal_detail = profile.personal_detail
+        except:
+            personal_detail = None
         return user, profile, personal_detail
 
     def get(self, request, *args, **kwargs):
         user, profile, personal_detail = self.get_queryset()
-        return Response({
+        response_data = {
             "user": UserSerializer(user).data,
             "profile": ProfileSerializer(profile, context={'request': request}).data,
-            "personal_detail": PersonalDetailCreationSerializer(personal_detail).data
-        })
+        }
+        
+        if personal_detail:
+            response_data["personal_detail"] = PersonalDetailCreationSerializer(personal_detail).data
+        else:
+            response_data["personal_detail"] = None
+            
+        return Response(response_data)
 
 
 class SettingEditProfileView(GenericAPIView):
