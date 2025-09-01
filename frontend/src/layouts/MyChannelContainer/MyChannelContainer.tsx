@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./MyChannelContainer.less";
 import TopicList from "../NewChanel/TopicList/TopicList";
-import { myChannels, updateLocalData } from "@/assets/Api";
+import { myChannels, updateLocalData, accessToken } from "@/assets/Api";
 import Spinner from "@/components/Spinner/Spinner";
 import CannelCard from "../InsightWebSearch/CannelCard/CannelCard";
 
@@ -14,6 +14,15 @@ const MyChannelContainer = () => {
     console.log("MyChannelContainer: Starting to fetch channels...");
     // Update local data to ensure we have the latest access token
     updateLocalData();
+    
+    // Check if user is authenticated
+    if (!accessToken) {
+      console.log("MyChannelContainer: User not authenticated, redirecting to login");
+      setLoading(false);
+      setError("Please log in to view your channels");
+      return;
+    }
+    
     myChannels().then((res) => {
       console.log("MyChannelContainer: API response received:", res);
       setLoading(false);
@@ -29,13 +38,19 @@ const MyChannelContainer = () => {
         console.log("MyChannelContainer: 404 - No channels found");
         setChannels([]);
         setError("");
-      } else {
-        // Handle other errors
-        console.log("MyChannelContainer: Error response:", res);
-        setChannels([]);
-        setError("Failed to load channels. Please try again.");
-        console.error("Error loading channels:", res);
-      }
+              } else {
+          // Handle other errors
+          console.log("MyChannelContainer: Error response:", res);
+          setChannels([]);
+          
+          // Check if response is HTML (backend server not running)
+          if (typeof res.data === 'string' && res.data.includes('<!DOCTYPE html>')) {
+            setError("Backend server is not running. Please contact support.");
+          } else {
+            setError("Failed to load channels. Please try again.");
+          }
+          console.error("Error loading channels:", res);
+        }
     }).catch((err) => {
       console.log("MyChannelContainer: Exception caught:", err);
       setLoading(false);
