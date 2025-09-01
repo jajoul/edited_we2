@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./MyChannelContainer.less";
 import TopicList from "../NewChanel/TopicList/TopicList";
-import { myChannels, updateLocalData, accessToken } from "@/assets/Api";
+import { myChannels, updateLocalData } from "@/assets/Api";
 import Spinner from "@/components/Spinner/Spinner";
 import CannelCard from "../InsightWebSearch/CannelCard/CannelCard";
 
@@ -15,8 +15,15 @@ const MyChannelContainer = () => {
     // Update local data to ensure we have the latest access token
     updateLocalData();
     
+    // Get the current access token dynamically
+    const currentAccessToken = localStorage.getItem("WeTooAccessToken");
+    const tokenData = currentAccessToken ? JSON.parse(currentAccessToken) : {};
+    const userToken = tokenData?.access;
+    
+    console.log("MyChannelContainer: Current access token:", userToken);
+    
     // Check if user is authenticated
-    if (!accessToken) {
+    if (!userToken) {
       console.log("MyChannelContainer: User not authenticated, redirecting to login");
       setLoading(false);
       setError("Please log in to view your channels");

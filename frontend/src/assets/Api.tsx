@@ -60,8 +60,15 @@ export const updateLocalData = () => {
 };
 
 defaultApi.interceptors.request.use((config) => {
-  // For session authentication, we don't need to set any headers
-  // The session cookie will be sent automatically with withCredentials: true
+  // Update access token from localStorage on each request
+  const currentAccessToken = localStorage.getItem("WeTooAccessToken");
+  const tokenData = currentAccessToken ? JSON.parse(currentAccessToken) : {};
+  const userToken = tokenData?.access;
+  
+  // Set Authorization header if token exists
+  if (userToken && config.headers) {
+    config.headers['Authorization'] = `Bearer ${userToken}`;
+  }
 
   // Add CSRF token for non-GET requests
   if (config.method && !['get', 'head', 'options'].includes(config.method.toLowerCase())) {
@@ -664,7 +671,14 @@ export const filterTopicsByTag = (id: string) => {
 
 export const myChannels = () => {
   console.log("myChannels: Making API request to:", `website/v1/channels/channel/list/owner`);
-  console.log("myChannels: Current accessToken:", accessToken);
+  
+  // Get current token from localStorage
+  const currentAccessToken = localStorage.getItem("WeTooAccessToken");
+  const tokenData = currentAccessToken ? JSON.parse(currentAccessToken) : {};
+  const userToken = tokenData?.access;
+  
+  console.log("myChannels: Current accessToken from localStorage:", userToken);
+  
   return defaultApi({
     method: "get",
     url: `website/v1/channels/channel/list/owner`,
