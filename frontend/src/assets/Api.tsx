@@ -28,7 +28,7 @@ let defaultApi = axios.create({
   baseURL: base_url,
   withCredentials: true, // This enables sending cookies with requests
   headers: {
-    Authorization: accessToken ? `Bearer ${accessToken}` : undefined
+    ...(accessToken && { Authorization: `Bearer ${accessToken}` })
   },
 });
 
@@ -64,7 +64,7 @@ defaultApi.interceptors.request.use((config) => {
   // Add CSRF token for non-GET requests
   if (config.method && !['get', 'head', 'options'].includes(config.method.toLowerCase())) {
     const csrfToken = getCookie('csrftoken');
-    if (csrfToken) {
+    if (csrfToken && config.headers) {
       config.headers['X-CSRFToken'] = csrfToken;
     }
   }
@@ -661,12 +661,20 @@ export const filterTopicsByTag = (id: string) => {
 };
 
 export const myChannels = () => {
+  console.log("myChannels: Making API request to:", `website/v1/channels/channel/list/owner`);
+  console.log("myChannels: Current accessToken:", accessToken);
   return defaultApi({
     method: "get",
     url: `website/v1/channels/channel/list/owner`,
   })
-    .then((res) => res)
-    .catch((err) => err);
+    .then((res) => {
+      console.log("myChannels: API response:", res);
+      return res;
+    })
+    .catch((err) => {
+      console.log("myChannels: API error:", err);
+      return err;
+    });
 };
 
 export const lastActivity = (limit?: number) => {

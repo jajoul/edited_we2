@@ -11,24 +11,31 @@ const MyChannelContainer = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
+    console.log("MyChannelContainer: Starting to fetch channels...");
     myChannels().then((res) => {
+      console.log("MyChannelContainer: API response received:", res);
       setLoading(false);
       // Check if response is successful and has data
       if (res && res.status >= 200 && res.status < 300 && res.data) {
         console.log("MyChannelContainer res.data:", res.data);
+        console.log("MyChannelContainer res.data type:", typeof res.data);
+        console.log("MyChannelContainer res.data is array:", Array.isArray(res.data));
         setChannels(Array.isArray(res.data) ? res.data : res.data.results || []);
         setError("");
       } else if (res && res.response && res.response.status === 404) {
         // Handle 404 case (no channels found) - set empty array
+        console.log("MyChannelContainer: 404 - No channels found");
         setChannels([]);
         setError("");
       } else {
         // Handle other errors
+        console.log("MyChannelContainer: Error response:", res);
         setChannels([]);
         setError("Failed to load channels. Please try again.");
         console.error("Error loading channels:", res);
       }
     }).catch((err) => {
+      console.log("MyChannelContainer: Exception caught:", err);
       setLoading(false);
       setChannels([]);
       setError("Failed to load channels. Please try again.");

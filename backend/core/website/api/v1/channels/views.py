@@ -122,24 +122,17 @@ class ChannelOwnerView(GenericAPIView):
     """
     permission_classes = [IsAuthenticated]
     serializer_class = ChannelOwnerSerializer
-    
-    def get_queryset(self):
-        user_profile = self.request.user.profile
-        channels = Channel.objects.filter(creator=user_profile)
-        if not channels.exists():
-            raise CustomException(
-                "You have no active channel, try to add new one",
-                "error",
-                status_code=status.HTTP_404_NOT_FOUND
-            )
-        return channels
-    
+
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context['request'] = self.request
         return context
-    
+
     def get(self, request, *args, **kwargs):
-        channels = self.get_queryset()
+        user_profile = request.user.profile
+        channels = Channel.objects.filter(creator=user_profile)
+        if not channels.exists():
+            return Response([], status=status.HTTP_200_OK)
+        
         serializer = self.get_serializer(channels, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
