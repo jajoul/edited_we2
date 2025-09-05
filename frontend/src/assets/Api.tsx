@@ -58,9 +58,9 @@ export const updateLocalData = () => {
   
   // Update the default headers for future requests
   if (accessToken) {
-    defaultApi.defaults.headers.Authorization = `Bearer ${accessToken}`;
+    defaultApi.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
   } else {
-    delete defaultApi.defaults.headers.Authorization;
+    delete defaultApi.defaults.headers.common['Authorization'];
   }
   
   console.log("updateLocalData: Updated accessToken:", accessToken);
@@ -111,12 +111,20 @@ defaultApi.interceptors.response.use(
           if (data?.data?.access) {
             user = {
               access: data?.data?.access,
-              refresh: user.refresh,
+              refresh: data?.data?.refresh || user.refresh, // Use new refresh token if provided
             };
             localStorage.setItem("WeTooAccessToken", JSON.stringify(user));
+            // Update the global accessToken variable
+            accessToken = user.access;
+            defaultApi.defaults.headers.common['Authorization'] = `Bearer ${user.access}`;
           } else {
+            console.error('Token refresh failed, logging out');
             logout();
           }
+        }).catch((error) => {
+          isAlreadyFetchingAccessToken = false;
+          console.error('Token refresh error:', error);
+          logout();
         });
       }
 
@@ -167,14 +175,14 @@ export const createUser = (
       password2,
     },
     headers: {
-      Authorization: undefined // Explicitly remove auth header for registration
+      Authorization: undefined as any // Explicitly remove auth header for registration
     }
   })
     .then((res: any) => {
       if (res.data.access) {
         updateAccessToken(res.data);
         // Update default headers after getting new token
-        defaultApi.defaults.headers.Authorization = `Bearer ${res.data.access}`;
+        defaultApi.defaults.headers.common['Authorization'] = `Bearer ${res.data.access}`;
       }
       return res;
     })
@@ -202,7 +210,7 @@ export const createProfile = (
     url: `website/v1/accounts/profile/create/`,
     data: bodyFormData,
     headers:{
-      Authorization: undefined
+      Authorization: undefined as any
     }
   })
     .then((res: any) => res)
@@ -220,7 +228,7 @@ export const createUserDetail = (
     method: "post",
     url: `website/v1/accounts/user-detail/create/`,
     headers: {
-      Authorization: accessToken ? `Bearer ${accessToken}` : undefined
+      Authorization: accessToken ? `Bearer ${accessToken}` : undefined as any
     },
     data: {
       favorites,
