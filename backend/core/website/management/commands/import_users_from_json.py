@@ -125,29 +125,49 @@ class Command(BaseCommand):
             return 'error'
         
         # Check if user already exists
-        if User.objects.filter(email=email).exists():
-            if skip_existing:
-                self.stdout.write(
-                    self.style.WARNING(f"User with email {email} already exists - skipping")
-                )
-                return 'skipped'
-            else:
-                self.stdout.write(
-                    self.style.ERROR(f"User with email {email} already exists")
-                )
-                return 'error'
+        existing_user_by_email = User.objects.filter(email=email).first()
+        existing_user_by_username = User.objects.filter(username=username).first()
         
-        if User.objects.filter(username=username).exists():
-            if skip_existing:
-                self.stdout.write(
-                    self.style.WARNING(f"User with username {username} already exists - skipping")
-                )
-                return 'skipped'
+        if existing_user_by_email or existing_user_by_username:
+            existing_user = existing_user_by_email or existing_user_by_username
+            
+            # Check if user has a profile
+            if hasattr(existing_user, 'profile') and existing_user.profile:
+                if skip_existing:
+                    self.stdout.write(
+                        self.style.WARNING(f"User {username} already exists with profile - skipping")
+                    )
+                    return 'skipped'
+                else:
+                    self.stdout.write(
+                        self.style.ERROR(f"User {username} already exists with profile")
+                    )
+                    return 'error'
             else:
-                self.stdout.write(
-                    self.style.ERROR(f"User with username {username} already exists")
-                )
-                return 'error'
+                # User exists but no profile - create profile for existing user
+                if dry_run:
+                    self.stdout.write(
+                        f"Would create profile for existing user: {username} ({email})"
+                    )
+                    return 'created'
+                
+                try:
+                    Profile.objects.create(
+                        user=existing_user,
+                        first_name=first_name,
+                        last_name=last_name,
+                        gender=gender,
+                        show_name_in_chat=True
+                    )
+                    self.stdout.write(
+                        self.style.SUCCESS(f"Created profile for existing user: {username}")
+                    )
+                    return 'created'
+                except Exception as e:
+                    self.stdout.write(
+                        self.style.ERROR(f"Error creating profile for existing user {username}: {e}")
+                    )
+                    return 'error'
         
         # Parse full name into first and last name
         name_parts = full_name.strip().split(' ', 1)
@@ -179,14 +199,20 @@ class Command(BaseCommand):
                     is_active=True
                 )
                 
-                # Create Profile
-                Profile.objects.create(
-                    user=user,
-                    first_name=first_name,
-                    last_name=last_name,
-                    gender=gender,
-                    show_name_in_chat=True
-                )
+                # Check if profile already exists for this user
+                if hasattr(user, 'profile') and user.profile:
+                    self.stdout.write(
+                        self.style.WARNING(f"Profile already exists for user {username} - skipping profile creation")
+                    )
+                else:
+                    # Create Profile
+                    Profile.objects.create(
+                        user=user,
+                        first_name=first_name,
+                        last_name=last_name,
+                        gender=gender,
+                        show_name_in_chat=True
+                    )
                 
                 self.stdout.write(
                     self.style.SUCCESS(f"Created user: {username} ({email})")
@@ -194,7 +220,14 @@ class Command(BaseCommand):
                 return 'created'
                 
         except Exception as e:
-            self.stdout.write(
-                self.style.ERROR(f"Error creating user {username}: {e}")
-            )
-            return 'error'
+            # If it's a duplicate key error, try to handle it gracefully
+            if "Duplicate entry" in str(e) and "user_id" in str(e):
+                self.stdout.write(
+                    self.style.WARNING(f"User {username} may already exist with a profile - skipping")
+                )
+                return 'skipped'
+            else:
+                self.stdout.write(
+                    self.style.ERROR(f"Error creating user {username}: {e}")
+                )
+                return 'error'
